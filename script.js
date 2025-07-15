@@ -67,7 +67,26 @@ let produtos = [
     { id: 11, nome: "Esfiha de carne", preco: 1.20, descricao: "Salgado assado - valor por unidade" },
     { id: 12, nome: "Esfiha de frango", preco: 1.20, descricao: "Salgado assado - valor por unidade" },
     { id: 13, nome: "Folhado de frango", preco: 1.20, descricao: "Salgado assado - valor por unidade" },
-    { id: 14, nome: "Folhado de palmito", preco: 1.20, descricao: "Salgado assado - valor por unidade" }
+    { id: 14, nome: "Folhado de palmito", preco: 1.20, descricao: "Salgado assado - valor por unidade" },
+    { id: 15, nome: "Brigadeiro", preco: 1.40, descricao: "Doce - valor por unidade" },
+    { id: 16, nome: "Brigadeiro Branco", preco: 1.40, descricao: "Doce - valor por unidade" },
+    { id: 17, nome: "Beijinho", preco: 1.40, descricao: "Doce - valor por unidade" },
+    { id: 18, nome: "Dois Amores", preco: 1.40, descricao: "Doce - valor por unidade" },
+    { id: 19, nome: "Amendoim", preco: 1.40, descricao: "Doce - valor por unidade" },
+    { id: 20, nome: "Bicho de pé", preco: 1.40, descricao: "Doce - valor por unidade" },
+    { id: 21, nome: "Brigadeiro de Churros", preco: 1.50, descricao: "Doce - valor por unidade" },
+    { id: 22, nome: "Olho de Sogra", preco: 1.50, descricao: "Doce - valor por unidade" },
+    { id: 23, nome: "Rosinha Napolitana", preco: 1.50, descricao: "Doce - valor por unidade" },
+    { id: 24, nome: "Leite ninho com nutella", preco: 1.60, descricao: "Doce - valor por unidade" },
+    { id: 25, nome: "Surpresa de Uva", preco: 1.70, descricao: "Doce - valor por unidade" },
+    { id: 26, nome: "Brigadeiro ao leite c/Split Callebaut", preco: 2.00, descricao: "Doce - valor por unidade" },
+    { id: 27, nome: "Ouriço de coco queimado", preco: 2.00, descricao: "Doce - valor por unidade" },
+    { id: 28, nome: "Bombom Cereja", preco: 3.00, descricao: "Doce - valor por unidade" },
+    { id: 29, nome: "Bombom Uva", preco: 3.00, descricao: "Doce - valor por unidade" },
+    { id: 30, nome: "Bombom de Morango", preco: 3.00, descricao: "Doce - valor por unidade" },
+    { id: 31, nome: "Brigadeiro Ferreiro", preco: 2.00, descricao: "Doce - valor por unidade" },
+    { id: 32, nome: "Caixa Doce Mix 42un", preco: 60.00, descricao: "Caixa de doces - valor por caixa" },
+    { id: 33, nome: "Caixa Doce Mix 100un", preco: 150.00, descricao: "Caixa de doces - valor por caixa" }
 ];
 
 let pedidos = [];
