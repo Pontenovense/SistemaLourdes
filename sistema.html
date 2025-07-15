@@ -1,0 +1,293 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sistema Confeitaria Doce Sabor</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body class="bg-gray-50">
+    <div class="container mx-auto p-4 max-w-6xl">
+        <header class="mb-6 sm:mb-8">
+            <div class="flex flex-col sm:flex-row sm:justify-between sm:items-center space-y-4 sm:space-y-0">
+                <div class="text-center sm:text-left flex-1">
+                    <h1 class="text-2xl sm:text-3xl font-bold text-pink-600">Lourdes</h1>
+                    <p class="text-sm sm:text-base text-gray-600">Sistema de gerenciamento de produtos e pedidos</p>
+                </div>
+                <div class="flex flex-col sm:flex-row items-center space-y-2 sm:space-y-0 sm:space-x-4">
+                    <div class="text-center sm:text-right">
+                        <p class="text-xs sm:text-sm text-gray-600">Bem-vindo(a),</p>
+                        <p id="nomeUsuario" class="font-semibold text-pink-600 text-sm sm:text-base">Usuário</p>
+                    </div>
+                    <button id="btnLogout" class="inline-flex items-center px-3 py-2 bg-red-600 border border-transparent rounded-md font-medium text-white hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500 text-sm">
+                        <i class="fas fa-sign-out-alt mr-2"></i>Sair
+                    </button>
+                </div>
+            </div>
+        </header>
+
+        <div class="bg-white rounded-lg shadow-md overflow-hidden mb-8">
+            <div class="flex border-b border-gray-200 overflow-x-auto">
+                <button id="tabProdutos" class="tab-btn px-3 sm:px-4 py-2 sm:py-3 font-medium text-pink-600 border-b-2 border-pink-600 bg-pink-50 whitespace-nowrap text-sm sm:text-base">Produtos</button>
+                <button id="tabPedidos" class="tab-btn px-3 sm:px-4 py-2 sm:py-3 font-medium text-gray-500 hover:text-pink-600 whitespace-nowrap text-sm sm:text-base">Pedidos</button>
+            </div>
+
+            <!-- Seção Produtos -->
+            <div id="contentProdutos" class="tab-content active p-3 sm:p-6">
+                <div class="grid grid-cols-1 lg:grid-cols-2 gap-4 sm:gap-6">
+                    <!-- Formulário de Produto -->
+                    <div class="bg-gray-50 p-4 sm:p-6 rounded-lg">
+                        <h2 class="text-lg sm:text-xl font-semibold mb-3 sm:mb-4 text-pink-700">Cadastrar Novo Produto</h2>
+                        <form id="formProduto" class="space-y-3 sm:space-y-4">
+                            <div>
+                                <label for="nomeProduto" class="block text-sm font-medium text-gray-700 mb-1">Nome do Produto</label>
+                                <input type="text" id="nomeProduto" class="block w-full px-3 py-2 text-base rounded-md border-gray-300 shadow-sm focus:border-pink-500 focus:ring-pink-500" required>
+                            </div>
+                            <div>
+                                <label for="precoProduto" class="block text-sm font-medium text-gray-700 mb-1">Preço (R$)</label>
+                                <input type="number" id="precoProduto" step="0.01" min="0" class="block w-full px-3 py-2 text-base rounded-md border-gray-300 shadow-sm focus:border-pink-500 focus:ring-pink-500" required>
+                            </div>
+                            <div>
+                                <label for="descricaoProduto" class="block text-sm font-medium text-gray-700 mb-1">Descrição</label>
+                                <textarea id="descricaoProduto" rows="3" class="block w-full px-3 py-2 text-base rounded-md border-gray-300 shadow-sm focus:border-pink-500 focus:ring-pink-500"></textarea>
+                            </div>
+                            <button type="submit" class="inline-flex items-center px-4 py-2 bg-pink-600 border border-transparent rounded-md font-semibold text-white hover:bg-pink-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-pink-500">
+                                <i class="fas fa-plus mr-2"></i> Adicionar Produto
+                            </button>
+                        </form>
+                    </div>
+
+                    <!-- Calculadora -->
+                    <div class="bg-pink-50 p-4 sm:p-6 rounded-lg">
+                        <h2 class="text-lg sm:text-xl font-semibold mb-3 sm:mb-4 text-pink-700">Calculadora</h2>
+                        <div class="space-y-3 sm:space-y-4">
+                            <div>
+                                <label for="produtoSelecionado" class="block text-sm font-medium text-gray-700 mb-1">Produto</label>
+                                <select id="produtoSelecionado" class="block w-full px-3 py-2 text-base rounded-md border-gray-300 shadow-sm focus:border-pink-500 focus:ring-pink-500">
+                                    <option value="">Selecione um produto</option>
+                                </select>
+                            </div>
+                            <div>
+                                <label for="quantidadeCalculo" class="block text-sm font-medium text-gray-700 mb-1">Quantidade (kg, unidades, etc.)</label>
+                                <input type="number" id="quantidadeCalculo" step="0.1" min="0.1" value="1" class="block w-full px-3 py-2 text-base rounded-md border-gray-300 shadow-sm focus:border-pink-500 focus:ring-pink-500">
+                            </div>
+                            <div class="bg-white p-3 sm:p-4 rounded-md">
+                                <p class="text-xs sm:text-sm text-gray-500">Preço unitário:</p>
+                                <p id="precoUnitario" class="text-base sm:text-lg font-semibold text-pink-600">R$ 0,00</p>
+                                <p class="text-xs sm:text-sm text-gray-500">Total item:</p>
+                                <p id="totalCalculo" class="text-base sm:text-lg font-bold text-pink-700">R$ 0,00</p>
+                            </div>
+                            <button id="adicionarProdutoCalculadora" class="inline-flex items-center justify-center px-4 py-2.5 bg-pink-600 border border-transparent rounded-md font-semibold text-white hover:bg-pink-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-pink-500 w-full text-sm sm:text-base">
+                                <i class="fas fa-plus mr-2"></i> Adicionar Produto
+                            </button>
+                            
+                            <!-- Lista de produtos adicionados -->
+                            <div id="produtosCalculadora" class="bg-white p-3 sm:p-4 rounded-md mt-3 sm:mt-4">
+                                <h3 class="text-sm font-medium text-gray-700 mb-2">Produtos Adicionados:</h3>
+                                <div id="listaProdutosCalculadora" class="space-y-2 mb-3">
+                                    <p class="text-sm text-gray-500 italic">Nenhum produto adicionado</p>
+                                </div>
+                                <div class="border-t pt-2">
+                                    <div class="flex justify-between items-center">
+                                        <span class="font-bold text-base sm:text-lg">TOTAL GERAL:</span>
+                                        <span id="totalGeralCalculadora" class="font-bold text-lg sm:text-xl text-pink-700">R$ 0,00</span>
+                                    </div>
+                                </div>
+                                <button id="limparCalculadora" class="mt-2 inline-flex items-center justify-center px-3 py-2 bg-gray-500 border border-transparent rounded-md font-medium text-white hover:bg-gray-600 text-sm w-full">
+                                    <i class="fas fa-trash mr-2"></i> Limpar Lista
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Lista de Produtos -->
+                <div class="mt-6 sm:mt-8">
+                    <h2 class="text-lg sm:text-xl font-semibold mb-3 sm:mb-4 text-pink-700">Produtos Cadastrados</h2>
+                    <div class="overflow-x-auto">
+                        <table class="min-w-full divide-y divide-gray-200">
+                            <thead class="bg-gray-50">
+                                <tr>
+                                    <th class="px-3 sm:px-6 py-2 sm:py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Nome</th>
+                                    <th class="px-3 sm:px-6 py-2 sm:py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Preço</th>
+                                    <th class="hidden sm:table-cell px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Descrição</th>
+                                    <th class="px-3 sm:px-6 py-2 sm:py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Ações</th>
+                                </tr>
+                            </thead>
+                            <tbody id="listaProdutos" class="bg-white divide-y divide-gray-200">
+                                <!-- Produtos serão adicionados aqui via JavaScript -->
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Seção Pedidos -->
+            <div id="contentPedidos" class="tab-content p-3 sm:p-6">
+                <div class="grid grid-cols-1 lg:grid-cols-2 gap-4 sm:gap-6 mb-6 sm:mb-8">
+                    <!-- Formulário de Pedido -->
+                    <div class="bg-gray-50 p-4 sm:p-6 rounded-lg">
+                        <h2 class="text-lg sm:text-xl font-semibold mb-3 sm:mb-4 text-pink-700">Novo Pedido</h2>
+                        <form id="formPedido" class="space-y-3 sm:space-y-4">
+                            <div>
+                                <label for="clientePedido" class="block text-sm font-medium text-gray-700 mb-1">Nome do Cliente</label>
+                                <input type="text" id="clientePedido" class="block w-full px-3 py-2 text-base rounded-md border-gray-300 shadow-sm focus:border-pink-500 focus:ring-pink-500" required>
+                            </div>
+                            <div>
+                                <label for="horarioPedido" class="block text-sm font-medium text-gray-700 mb-1">Horário</label>
+                                <input type="datetime-local" id="horarioPedido" class="block w-full px-3 py-2 text-base rounded-md border-gray-300 shadow-sm focus:border-pink-500 focus:ring-pink-500" required>
+                            </div>
+                            <div>
+                                <label for="valorPedido" class="block text-sm font-medium text-gray-700 mb-1">Valor Total (R$)</label>
+                                <input type="number" id="valorPedido" step="0.01" min="0" class="block w-full px-3 py-2 text-base rounded-md border-gray-300 shadow-sm focus:border-pink-500 focus:ring-pink-500" required>
+                            </div>
+                            <div>
+                                <label for="descricaoPedido" class="block text-sm font-medium text-gray-700 mb-1">Descrição do Pedido</label>
+                                <textarea id="descricaoPedido" rows="5" placeholder="Ex: 1 Bolo de chocolate grande com cobertura de morango&#10;2 Cupcakes de baunilha com glacê rosa&#10;1 Torta de limão pequena" class="block w-full px-3 py-2 text-base rounded-md border-gray-300 shadow-sm focus:border-pink-500 focus:ring-pink-500" required></textarea>
+                            </div>
+                            <div>
+                                <label for="observacoesPedido" class="block text-sm font-medium text-gray-700 mb-1">Observações Especiais</label>
+                                <textarea id="observacoesPedido" rows="3" placeholder="Ex: Sem açúcar, entrega às 15h, embalagem especial..." class="block w-full px-3 py-2 text-base rounded-md border-gray-300 shadow-sm focus:border-pink-500 focus:ring-pink-500"></textarea>
+                            </div>
+                            
+                            <button type="submit" class="inline-flex items-center justify-center px-4 py-2.5 bg-pink-600 border border-transparent rounded-md font-semibold text-white hover:bg-pink-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-pink-500 w-full text-sm sm:text-base">
+                                <i class="fas fa-check-circle mr-2"></i> Finalizar Pedido
+                            </button>
+                        </form>
+                    </div>
+
+                    <!-- Pré-visualização da Comanda para Cozinha -->
+                    <div class="bg-white border border-gray-200 p-4 sm:p-6 rounded-lg">
+                        <h2 class="text-lg sm:text-xl font-semibold mb-3 sm:mb-4 text-center text-pink-700 no-print">Pré-visualização da Comanda</h2>
+                        <div id="previewNotinha" class="kitchen-receipt">
+                            <div class="text-center mb-4 border-b-2 border-dashed border-gray-400 pb-4">
+                                <h3 class="text-lg font-bold">🧁 CONFEITARIA LOURDES 🧁</h3>
+                                <p class="text-sm">COMANDA DE PRODUÇÃO</p>
+                                <p class="text-xs">Rua dos Doces, 123 - Centro</p>
+                                <p class="text-xs">(11) 98765-4321</p>
+                            </div>
+                            
+                            <div class="mb-4">
+                                <div class="flex justify-between border-b border-gray-300 pb-1">
+                                    <span class="font-bold">CLIENTE:</span>
+                                    <span id="previewCliente" class="font-bold">-</span>
+                                </div>
+                                <div class="flex justify-between border-b border-gray-300 pb-1 mt-2">
+                                    <span class="font-bold">DATA/HORA:</span>
+                                    <span id="previewHorario" class="font-bold">-</span>
+                                </div>
+                                <div class="flex justify-between border-b border-gray-300 pb-1 mt-2">
+                                    <span class="font-bold">VALOR:</span>
+                                    <span id="previewTotal" class="font-bold text-lg">R$ 0,00</span>
+                                </div>
+                            </div>
+                            
+                            <div class="mb-4">
+                                <h4 class="font-bold text-center mb-2 bg-gray-200 p-2">📋 ITENS PARA PRODUZIR:</h4>
+                                <div id="previewItens" class="text-sm leading-relaxed">
+                                    <p class="text-gray-500 italic">Aguardando descrição do pedido...</p>
+                                </div>
+                            </div>
+                            
+                            <div id="previewObservacoes" class="mb-4" style="display: none;">
+                                <h4 class="font-bold text-center mb-2 bg-yellow-200 p-2">⚠️ OBSERVAÇÕES ESPECIAIS:</h4>
+                                <div id="previewObservacoesTexto" class="text-sm leading-relaxed bg-yellow-50 p-2 border border-yellow-300">
+                                </div>
+                            </div>
+                            
+                        </div>
+                        
+                        <div class="text-center mt-3 sm:mt-4 no-print">
+                            <button onclick="imprimirComanda()" class="inline-flex items-center justify-center px-4 py-2.5 bg-blue-600 border border-transparent rounded-md font-semibold text-white hover:bg-blue-700 text-sm sm:text-base">
+                                <i class="fas fa-print mr-2"></i> Imprimir Comanda
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Lista de Pedidos -->
+                <div class="mt-6 sm:mt-8">
+                    <h2 class="text-lg sm:text-xl font-semibold mb-3 sm:mb-4 text-pink-700">Pedidos Realizados</h2>
+                    <div class="overflow-x-auto">
+                        <table class="min-w-full divide-y divide-gray-200">
+                            <thead class="bg-gray-50">
+                                <tr>
+                                    <th class="px-3 sm:px-6 py-2 sm:py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Cliente</th>
+                                    <th class="hidden sm:table-cell px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Horário</th>
+                                    <th class="px-3 sm:px-6 py-2 sm:py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Descrição</th>
+                                    <th class="px-3 sm:px-6 py-2 sm:py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Total</th>
+                                    <th class="px-3 sm:px-6 py-2 sm:py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Ações</th>
+                                </tr>
+                            </thead>
+                            <tbody id="listaPedidos" class="bg-white divide-y divide-gray-200">
+                                <!-- Pedidos serão adicionados aqui via JavaScript -->
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Container para Notificações -->
+    <div id="notificationContainer" class="notification-container"></div>
+
+    <script>
+        // Verificar autenticação ao carregar a página
+        document.addEventListener('DOMContentLoaded', function() {
+            verificarAutenticacao();
+        });
+
+        function verificarAutenticacao() {
+            const usuarioLogado = localStorage.getItem('usuarioLogado');
+            
+            if (!usuarioLogado) {
+                // Usuário não está logado, redirecionar para login
+                window.location.href = 'index.html';
+                return;
+            }
+
+            // Exibir nome do usuário
+            document.getElementById('nomeUsuario').textContent = usuarioLogado.charAt(0).toUpperCase() + usuarioLogado.slice(1);
+
+            // Configurar botão de logout
+            document.getElementById('btnLogout').addEventListener('click', function() {
+                if (confirm('Tem certeza que deseja sair do sistema?')) {
+                    logout();
+                }
+            });
+        }
+
+        function logout() {
+            // Limpar dados de autenticação
+            localStorage.removeItem('usuarioLogado');
+            localStorage.removeItem('dataLogin');
+            
+            // Redirecionar para login
+            window.location.href = 'index.html';
+        }
+
+        // Verificar se a sessão ainda é válida (opcional - pode implementar expiração)
+        function verificarSessao() {
+            const dataLogin = localStorage.getItem('dataLogin');
+            if (dataLogin) {
+                const agora = new Date();
+                const login = new Date(dataLogin);
+                const diferencaHoras = (agora - login) / (1000 * 60 * 60);
+                
+                // Se passou mais de 8 horas, fazer logout automático
+                if (diferencaHoras > 8) {
+                    alert('Sua sessão expirou. Faça login novamente.');
+                    logout();
+                }
+            }
+        }
+
+        // Verificar sessão a cada 30 minutos
+        setInterval(verificarSessao, 30 * 60 * 1000);
+    </script>
+    <script src="script.js"></script>
+</body>
+</html>

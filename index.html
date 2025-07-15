@@ -1,0 +1,332 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Login - Sistema Confeitaria Lourdes</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link
+        rel="stylesheet"
+        href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
+    />
+    <style>
+        .login-bg {
+            background: linear-gradient(135deg, #fce7f3 0%, #f3e8ff 100%);
+            min-height: 100vh;
+        }
+        .login-card {
+            backdrop-filter: blur(10px);
+            background: rgba(255, 255, 255, 0.9);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+        .floating-icon {
+            animation: float 3s ease-in-out infinite;
+        }
+        @keyframes float {
+            0%,
+            100% {
+                transform: translateY(0px);
+            }
+            50% {
+                transform: translateY(-10px);
+            }
+        }
+        .shake {
+            animation: shake 0.5s ease-in-out;
+        }
+        @keyframes shake {
+            0%,
+            100% {
+                transform: translateX(0);
+            }
+            25% {
+                transform: translateX(-5px);
+            }
+            75% {
+                transform: translateX(5px);
+            }
+        }
+
+        /* Responsividade Mobile */
+        @media (max-width: 768px) {
+            .login-card {
+                margin: 1rem;
+                padding: 1.5rem;
+            }
+            .floating-icon {
+                font-size: 3rem;
+            }
+            h1 {
+                font-size: 2rem;
+            }
+            .demo-info {
+                font-size: 0.75rem;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .login-card {
+                margin: 0.5rem;
+                padding: 1rem;
+            }
+            .floating-icon {
+                font-size: 2.5rem;
+                margin-bottom: 1rem;
+            }
+            h1 {
+                font-size: 1.75rem;
+            }
+            input,
+            button {
+                padding: 0.875rem;
+                font-size: 1rem;
+            }
+            .demo-info {
+                padding: 0.75rem;
+            }
+        }
+    </style>
+</head>
+<body class="login-bg">
+    <div class="min-h-screen flex items-center justify-center p-2 sm:p-4">
+        <div
+            class="login-card rounded-2xl shadow-2xl p-4 sm:p-6 md:p-8 w-full max-w-md"
+        >
+            <!-- Header -->
+            <div class="text-center mb-6 sm:mb-8">
+                <div
+                    class="floating-icon text-4xl sm:text-5xl md:text-6xl mb-3 sm:mb-4"
+                    >🧁</div
+                >
+                <h1 class="text-2xl sm:text-3xl font-bold text-pink-600 mb-2">
+                    Confeitaria Lourdes
+                </h1>
+                <p class="text-sm sm:text-base text-gray-600">
+                    Sistema de Gerenciamento
+                </p>
+            </div>
+
+            <!-- Formulário de Login -->
+            <form id="loginForm" class="space-y-4 sm:space-y-6">
+                <div>
+                    <label
+                        for="usuario"
+                        class="block text-sm font-medium text-gray-700 mb-2"
+                    >
+                        <i class="fas fa-user mr-2 text-pink-500"></i>Usuário
+                    </label>
+                    <input
+                        type="text"
+                        id="usuario"
+                        class="w-full px-3 sm:px-4 py-2.5 sm:py-3 text-base border border-gray-300 rounded-lg focus:ring-2 focus:ring-pink-500 focus:border-pink-500 transition-colors"
+                        placeholder="Digite seu usuário"
+                        required
+                    />
+                </div>
+
+                <div>
+                    <label
+                        for="senha"
+                        class="block text-sm font-medium text-gray-700 mb-2"
+                    >
+                        <i class="fas fa-lock mr-2 text-pink-500"></i>Senha
+                    </label>
+                    <div class="relative">
+                        <input
+                            type="password"
+                            id="senha"
+                            class="w-full px-3 sm:px-4 py-2.5 sm:py-3 text-base border border-gray-300 rounded-lg focus:ring-2 focus:ring-pink-500 focus:border-pink-500 transition-colors pr-12"
+                            placeholder="Digite sua senha"
+                            required
+                        />
+                        <button
+                            type="button"
+                            id="toggleSenha"
+                            class="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-500 hover:text-pink-500 transition-colors p-1"
+                        >
+                            <i class="fas fa-eye"></i>
+                        </button>
+                    </div>
+                </div>
+
+                <div
+                    class="flex flex-col sm:flex-row sm:items-center sm:justify-between space-y-2 sm:space-y-0"
+                >
+                    <label class="flex items-center">
+                        <input
+                            type="checkbox"
+                            id="lembrarMe"
+                            class="rounded border-gray-300 text-pink-600 focus:ring-pink-500"
+                        />
+                        <span class="ml-2 text-sm text-gray-600">Lembrar-me</span>
+                    </label>
+                    <a
+                        href="#"
+                        class="text-sm text-pink-600 hover:text-pink-800 transition-colors"
+                        >Esqueceu a senha?</a
+                    >
+                </div>
+
+                <button
+                    type="submit"
+                    class="w-full bg-pink-600 text-white py-2.5 sm:py-3 px-4 rounded-lg hover:bg-pink-700 focus:ring-2 focus:ring-pink-500 focus:ring-offset-2 transition-colors font-medium text-base"
+                >
+                    <i class="fas fa-sign-in-alt mr-2"></i>Entrar
+                </button>
+            </form>
+
+            <!-- Mensagem de Erro -->
+            <div
+                id="mensagemErro"
+                class="mt-4 p-3 bg-red-100 border border-red-400 text-red-700 rounded-lg hidden"
+            >
+                <i class="fas fa-exclamation-triangle mr-2"></i>
+                <span id="textoErro">Usuário ou senha incorretos!</span>
+            </div>
+            <!-- Footer -->
+            <div class="mt-4 sm:mt-6 text-center text-xs text-gray-500">
+                <p>© 2025 Confeitaria Lourdes</p>
+                <p class="hidden sm:block">Todos os direitos reservados</p>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Dados de usuários (em um sistema real, isso seria validado no servidor)
+        const usuarios = {
+            francielle: "Franebella31",
+            lourdes: "senhalourdes",
+            lorenzo: "Lorenzo1289",
+            isabella: "Victor44",
+        };
+
+        // Elementos DOM
+        const loginForm = document.getElementById("loginForm");
+        const usuarioInput = document.getElementById("usuario");
+        const senhaInput = document.getElementById("senha");
+        const toggleSenha = document.getElementById("toggleSenha");
+        const mensagemErro = document.getElementById("mensagemErro");
+        const textoErro = document.getElementById("textoErro");
+        const lembrarMe = document.getElementById("lembrarMe");
+
+        // Verificar se já está logado
+        document.addEventListener("DOMContentLoaded", function () {
+            const usuarioLogado = localStorage.getItem("usuarioLogado");
+            if (usuarioLogado) {
+                redirecionarParaSistema();
+            }
+
+            // Carregar dados salvos se "lembrar-me" estava marcado
+            const dadosSalvos = localStorage.getItem("dadosLogin");
+            if (dadosSalvos) {
+                const dados = JSON.parse(dadosSalvos);
+                usuarioInput.value = dados.usuario;
+                senhaInput.value = dados.senha;
+                lembrarMe.checked = true;
+            }
+        });
+
+        // Toggle mostrar/ocultar senha
+        toggleSenha.addEventListener("click", function () {
+            const tipo = senhaInput.type === "password" ? "text" : "password";
+            senhaInput.type = tipo;
+
+            const icone = this.querySelector("i");
+            if (tipo === "text") {
+                icone.classList.remove("fa-eye");
+                icone.classList.add("fa-eye-slash");
+            } else {
+                icone.classList.remove("fa-eye-slash");
+                icone.classList.add("fa-eye");
+            }
+        });
+
+        // Formulário de login
+        loginForm.addEventListener("submit", function (e) {
+            e.preventDefault();
+
+            const usuario = usuarioInput.value.trim();
+            const senha = senhaInput.value;
+
+            // Validar credenciais
+            if (usuarios[usuario] && usuarios[usuario] === senha) {
+                // Login bem-sucedido
+                localStorage.setItem("usuarioLogado", usuario);
+                localStorage.setItem("dataLogin", new Date().toISOString());
+
+                // Salvar dados se "lembrar-me" estiver marcado
+                if (lembrarMe.checked) {
+                    localStorage.setItem(
+                        "dadosLogin",
+                        JSON.stringify({
+                            usuario: usuario,
+                            senha: senha,
+                        })
+                    );
+                } else {
+                    localStorage.removeItem("dadosLogin");
+                }
+
+                // Feedback visual de sucesso
+                const botao = this.querySelector('button[type="submit"]');
+                botao.innerHTML = '<i class="fas fa-check mr-2"></i>Entrando...';
+                botao.classList.add("bg-green-600", "hover:bg-green-700");
+                botao.classList.remove("bg-pink-600", "hover:bg-pink-700");
+
+                // Ocultar mensagem de erro se estiver visível
+                mensagemErro.classList.add("hidden");
+
+                // Redirecionar após um breve delay
+                setTimeout(() => {
+                    redirecionarParaSistema();
+                }, 1000);
+            } else {
+                // Login falhou
+                mostrarErro("Usuário ou senha incorretos!");
+
+                // Shake animation no formulário
+                loginForm.classList.add("shake");
+                setTimeout(() => {
+                    loginForm.classList.remove("shake");
+                }, 500);
+
+                // Limpar senha
+                senhaInput.value = "";
+                senhaInput.focus();
+            }
+        });
+
+        // Função para mostrar erro
+        function mostrarErro(mensagem) {
+            textoErro.textContent = mensagem;
+            mensagemErro.classList.remove("hidden");
+
+            // Auto-ocultar após 5 segundos
+            setTimeout(() => {
+                mensagemErro.classList.add("hidden");
+            }, 5000);
+        }
+
+        // Função para redirecionar para o sistema
+        function redirecionarParaSistema() {
+            window.location.href = "sistema.html";
+        }
+
+        // Ocultar mensagem de erro ao digitar
+        usuarioInput.addEventListener("input", function () {
+            mensagemErro.classList.add("hidden");
+        });
+
+        senhaInput.addEventListener("input", function () {
+            mensagemErro.classList.add("hidden");
+        });
+
+        // Enter para focar no próximo campo
+        usuarioInput.addEventListener("keypress", function (e) {
+            if (e.key === "Enter") {
+                senhaInput.focus();
+            }
+        });
+    </script>
+</body>
+</html>

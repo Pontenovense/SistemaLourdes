@@ -1,0 +1,241 @@
+.tab-content {
+    display: none;
+}
+.tab-content.active {
+    display: block;
+}
+.kitchen-receipt {
+    font-family: 'Courier New', monospace;
+    max-width: 350px;
+    border: 2px dashed #333;
+    padding: 20px;
+    margin: 20px auto;
+    background: white;
+}
+
+/* Sistema de Notificações */
+.notification-container {
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+    z-index: 1000;
+    max-width: 400px;
+}
+
+.notification {
+    background: white;
+    border-radius: 8px;
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+    border-left: 4px solid #10b981;
+    padding: 16px 20px;
+    margin-bottom: 12px;
+    transform: translateX(100%);
+    opacity: 0;
+    transition: all 0.3s ease-in-out;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.notification.show {
+    transform: translateX(0);
+    opacity: 1;
+}
+
+.notification.success {
+    border-left-color: #10b981;
+}
+
+.notification.error {
+    border-left-color: #ef4444;
+}
+
+.notification.warning {
+    border-left-color: #f59e0b;
+}
+
+.notification.info {
+    border-left-color: #3b82f6;
+}
+
+.notification-icon {
+    font-size: 20px;
+    flex-shrink: 0;
+}
+
+.notification.success .notification-icon {
+    color: #10b981;
+}
+
+.notification.error .notification-icon {
+    color: #ef4444;
+}
+
+.notification.warning .notification-icon {
+    color: #f59e0b;
+}
+
+.notification.info .notification-icon {
+    color: #3b82f6;
+}
+
+.notification-content {
+    flex: 1;
+}
+
+.notification-title {
+    font-weight: 600;
+    font-size: 14px;
+    margin-bottom: 2px;
+}
+
+.notification-message {
+    font-size: 13px;
+    color: #6b7280;
+    line-height: 1.4;
+}
+
+.notification-close {
+    background: none;
+    border: none;
+    color: #9ca3af;
+    cursor: pointer;
+    font-size: 18px;
+    padding: 0;
+    width: 20px;
+    height: 20px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 50%;
+    transition: all 0.2s;
+}
+
+.notification-close:hover {
+    background: #f3f4f6;
+    color: #374151;
+}
+
+/* Responsividade Mobile */
+@media (max-width: 768px) {
+    .container {
+        padding: 0.5rem !important;
+    }
+    
+    .notification-container {
+        bottom: 10px;
+        right: 10px;
+        left: 10px;
+        max-width: none;
+    }
+    
+    .notification {
+        padding: 12px 16px;
+        font-size: 0.875rem;
+    }
+    
+    .kitchen-receipt {
+        max-width: 100%;
+        margin: 10px 0;
+        padding: 15px;
+        font-size: 0.875rem;
+    }
+    
+    /* Tabelas responsivas */
+    table {
+        font-size: 0.875rem;
+    }
+    
+    th, td {
+        padding: 0.5rem 0.75rem !important;
+    }
+    
+    /* Formulários mais compactos */
+    input, textarea, select {
+        font-size: 16px !important; /* Evita zoom no iOS */
+    }
+    
+    /* Cards com menos padding */
+    .bg-gray-50, .bg-pink-50, .bg-white {
+        padding: 1rem !important;
+    }
+}
+
+@media (max-width: 480px) {
+    .container {
+        padding: 0.25rem !important;
+    }
+    
+    .kitchen-receipt {
+        padding: 10px;
+        font-size: 0.8rem;
+    }
+    
+    table {
+        font-size: 0.8rem;
+    }
+    
+    th, td {
+        padding: 0.375rem 0.5rem !important;
+    }
+    
+    .notification {
+        padding: 8px 12px;
+        font-size: 0.8rem;
+    }
+    
+    /* Botões mais acessíveis em mobile */
+    button {
+        min-height: 44px;
+        touch-action: manipulation;
+    }
+    
+    /* Inputs maiores para melhor usabilidade */
+    input, textarea, select {
+        min-height: 44px;
+        font-size: 16px !important;
+    }
+}
+
+@media print {
+    * {
+        visibility: hidden;
+    }
+    .kitchen-receipt, .kitchen-receipt * {
+        visibility: visible;
+    }
+    .kitchen-receipt {
+        position: absolute;
+        left: 0;
+        top: 0;
+        width: 100% !important;
+        max-width: none !important;
+        margin: 0 !important;
+        padding: 20px !important;
+        font-family: 'Courier New', monospace !important;
+        border: 2px solid #333 !important;
+        background: white !important;
+        font-size: 12px !important;
+    }
+    body {
+        margin: 0;
+        padding: 0;
+    }
+    .notification-container {
+        display: none !important;
+    }
+}
+
+/* Melhorias de acessibilidade */
+@media (prefers-reduced-motion: reduce) {
+    .notification {
+        transition: none;
+    }
+}
+
+/* Ajustes para telas de alta densidade */
+@media (-webkit-min-device-pixel-ratio: 2), (min-resolution: 192dpi) {
+    .kitchen-receipt {
+        border-width: 1px;
+    }
+}
