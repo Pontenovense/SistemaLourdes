@@ -266,6 +266,9 @@ function atualizarListaPedidos() {
                 <button onclick="imprimirComandaPedido(${pedido.id})" class="text-green-600 hover:text-green-900 mr-2" title="Imprimir Comanda">
                     <i class="fas fa-print"></i>
                 </button>
+                <button onclick="copiarComandaPedidoImagem(${pedido.id})" class="text-purple-600 hover:text-purple-900 mr-2" title="Copiar Imagem">
+                    <i class="fas fa-copy"></i>
+                </button>
                 <button onclick="cancelarPedido(${pedido.id})" class="text-red-600 hover:text-red-900" title="Cancelar Pedido">
                     <i class="fas fa-times-circle"></i>
                 </button>
@@ -354,6 +357,77 @@ function imprimirComandaPedido(id) {
     setTimeout(() => {
         window.print();
     }, 500);
+}
+
+function copiarComandaImagem() {
+    const receiptElement = document.getElementById('previewNotinha');
+    
+    if (!receiptElement) {
+        showNotification('Erro!', 'Elemento da comanda não encontrado.', 'error');
+        return;
+    }
+
+    // Mostrar loading
+    const button = event.target;
+    const originalText = button.innerHTML;
+    button.innerHTML = '<i class="fas fa-spinner fa-spin mr-2"></i>Copiando...';
+    button.disabled = true;
+
+    html2canvas(receiptElement, {
+        backgroundColor: '#ffffff',
+        scale: 2,
+        useCORS: true,
+        allowTaint: true,
+        width: receiptElement.offsetWidth,
+        height: receiptElement.offsetHeight,
+        x: 0,
+        y: 0
+    }).then(canvas => {
+        canvas.toBlob(blob => {
+            if (blob) {
+                // Tentar usar a API moderna de clipboard
+                if (navigator.clipboard && window.ClipboardItem) {
+                    navigator.clipboard.write([
+                        new ClipboardItem({
+                            'image/png': blob
+                        })
+                    ]).then(() => {
+                        showNotification('Sucesso!', 'Imagem da comanda copiada para a área de transferência!', 'success');
+                    }).catch(err => {
+                        console.error('Erro ao copiar:', err);
+                        fallbackCopyImage(canvas);
+                    });
+                } else {
+                    // Fallback para navegadores mais antigos
+                    fallbackCopyImage(canvas);
+                }
+            }
+        }, 'image/png');
+    }).catch(err => {
+        console.error('Erro ao gerar imagem:', err);
+        showNotification('Erro!', 'Não foi possível gerar a imagem da comanda.', 'error');
+    }).finally(() => {
+        // Restaurar botão
+        button.innerHTML = originalText;
+        button.disabled = false;
+    });
+}
+
+function fallbackCopyImage(canvas) {
+    // Criar um link temporário para download
+    const link = document.createElement('a');
+    link.download = `comanda-${new Date().toISOString().slice(0, 10)}.png`;
+    link.href = canvas.toDataURL('image/png');
+    link.click();
+    
+    showNotification('Download!', 'A imagem foi baixada como fallback.', 'info');
+}
+
+function copiarComandaPedidoImagem(id) {
+    visualizarComanda(id);
+    setTimeout(() => {
+        copiarComandaImagem();
+    }, 1000);
 }
 
 function cancelarPedido(id) {
