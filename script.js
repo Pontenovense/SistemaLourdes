@@ -373,15 +373,16 @@ function copiarComandaImagem() {
     button.innerHTML = '<i class="fas fa-spinner fa-spin mr-2"></i>Copiando...';
     button.disabled = true;
 
+    // Capturar diretamente o elemento da comanda com margem para borda
     html2canvas(receiptElement, {
         backgroundColor: '#ffffff',
         scale: 2,
         useCORS: true,
         allowTaint: true,
-        width: receiptElement.offsetWidth,
-        height: receiptElement.offsetHeight,
-        x: 0,
-        y: 0
+        width: receiptElement.offsetWidth + 40,
+        height: receiptElement.offsetHeight + 40,
+        x: -20,
+        y: -20
     }).then(canvas => {
         canvas.toBlob(blob => {
             if (blob) {
