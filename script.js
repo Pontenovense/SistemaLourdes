@@ -396,7 +396,7 @@ function adicionarProdutoCalculadora() {
     
     // Limpar seleção
     document.getElementById('produtoSelecionado').value = '';
-    document.getElementById('quantidadeCalculo').value = 1;
+    document.getElementById('quantidadeCalculo').value = 0;
     document.getElementById('precoUnitario').textContent = formatarMoeda(0);
     document.getElementById('totalCalculo').textContent = formatarMoeda(0);
     
