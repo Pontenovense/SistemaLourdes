@@ -604,7 +604,7 @@ function adicionarProdutoAoPedido() {
     
     // Limpar seleção
     document.getElementById('produtoPedido').value = '';
-    document.getElementById('quantidadePedido').value = 1;
+    document.getElementById('quantidadePedido').value = 0;
     document.getElementById('precoUnitarioPedido').textContent = formatarMoeda(0);
     document.getElementById('totalItemPedido').textContent = formatarMoeda(0);
     
@@ -666,6 +666,9 @@ function atualizarPreviewProdutos() {
     }
     
     previewItens.innerHTML = produtosPedido.map(item => 
-        `<p class="mb-1">• ${item.quantidade}x ${item.nome} <strong>${formatarMoeda(item.total)}</strong></p>`
+        `<p class="mb-1 flex justify-between">
+            <span>• ${item.quantidade}x ${item.nome}</span>
+            <strong>${formatarMoeda(item.total)}</strong>
+        </p>`
     ).join('');
 }
