@@ -86,7 +86,9 @@ let produtos = [
     { id: 30, nome: "Bombom de Morango", preco: 3.00, descricao: "Doce - valor por unidade" },
     { id: 31, nome: "Brigadeiro Ferreiro", preco: 2.00, descricao: "Doce - valor por unidade" },
     { id: 32, nome: "Caixa Doce Mix 42un", preco: 60.00, descricao: "Caixa de doces - valor por caixa" },
-    { id: 33, nome: "Caixa Doce Mix 100un", preco: 150.00, descricao: "Caixa de doces - valor por caixa" }
+    { id: 33, nome: "Caixa Doce Mix 100un", preco: 150.00, descricao: "Caixa de doces - valor por caixa" },
+    { id: 34, nome: "Bolo", preco: 80.00, descricao: "Bolos" }
+
 ];
 
 let pedidos = [];
