@@ -54,40 +54,40 @@ function closeNotification(button) {
 
 // Dados iniciais
 let produtos = [
-    { id: 1, nome: "Coxinha", preco: 0.90, descricao: "Salgado frito - valor por unidade" },
-    { id: 2, nome: "Risoles de carne", preco: 0.90, descricao: "Salgado frito - valor por unidade" },
-    { id: 3, nome: "Kibe", preco: 0.90, descricao: "Salgado frito - valor por unidade" },
-    { id: 4, nome: "Bolinho de queijo", preco: 0.90, descricao: "Salgado frito - valor por unidade" },
-    { id: 5, nome: "Croquete de presunto e queijo", preco: 0.90, descricao: "Salgado frito - valor por unidade" },
-    { id: 6, nome: "Pastel de carne", preco: 1.00, descricao: "Salgado frito - valor por unidade" },
-    { id: 7, nome: "Pastel de queijo", preco: 1.00, descricao: "Salgado frito - valor por unidade" },
-    { id: 8, nome: "Bolinho de aipim c/ carne seca", preco: 1.20, descricao: "Salgado frito - valor por unidade" },
-    { id: 9, nome: "Mini churros de doce de leite", preco: 1.20, descricao: "Salgado frito - valor por unidade" },
-    { id: 10, nome: "Doguinho assado", preco: 1.20, descricao: "Salgado assado - valor por unidade" },
-    { id: 11, nome: "Esfiha de carne", preco: 1.20, descricao: "Salgado assado - valor por unidade" },
-    { id: 12, nome: "Esfiha de frango", preco: 1.20, descricao: "Salgado assado - valor por unidade" },
-    { id: 13, nome: "Folhado de frango", preco: 1.20, descricao: "Salgado assado - valor por unidade" },
-    { id: 14, nome: "Folhado de palmito", preco: 1.20, descricao: "Salgado assado - valor por unidade" },
-    { id: 15, nome: "Brigadeiro", preco: 1.40, descricao: "Doce - valor por unidade" },
-    { id: 16, nome: "Brigadeiro Branco", preco: 1.40, descricao: "Doce - valor por unidade" },
-    { id: 17, nome: "Beijinho", preco: 1.40, descricao: "Doce - valor por unidade" },
-    { id: 18, nome: "Dois Amores", preco: 1.40, descricao: "Doce - valor por unidade" },
-    { id: 19, nome: "Amendoim", preco: 1.40, descricao: "Doce - valor por unidade" },
-    { id: 20, nome: "Bicho de pé", preco: 1.40, descricao: "Doce - valor por unidade" },
-    { id: 21, nome: "Brigadeiro de Churros", preco: 1.50, descricao: "Doce - valor por unidade" },
-    { id: 22, nome: "Olho de Sogra", preco: 1.50, descricao: "Doce - valor por unidade" },
-    { id: 23, nome: "Rosinha Napolitana", preco: 1.50, descricao: "Doce - valor por unidade" },
-    { id: 24, nome: "Leite ninho com nutella", preco: 1.60, descricao: "Doce - valor por unidade" },
-    { id: 25, nome: "Surpresa de Uva", preco: 1.70, descricao: "Doce - valor por unidade" },
-    { id: 26, nome: "Brigadeiro ao leite c/Split Callebaut", preco: 2.00, descricao: "Doce - valor por unidade" },
-    { id: 27, nome: "Ouriço de coco queimado", preco: 2.00, descricao: "Doce - valor por unidade" },
-    { id: 28, nome: "Bombom Cereja", preco: 3.00, descricao: "Doce - valor por unidade" },
-    { id: 29, nome: "Bombom Uva", preco: 3.00, descricao: "Doce - valor por unidade" },
-    { id: 30, nome: "Bombom de Morango", preco: 3.00, descricao: "Doce - valor por unidade" },
-    { id: 31, nome: "Brigadeiro Ferreiro", preco: 2.00, descricao: "Doce - valor por unidade" },
-    { id: 32, nome: "Caixa Doce Mix 42un", preco: 60.00, descricao: "Caixa de doces - valor por caixa" },
-    { id: 33, nome: "Caixa Doce Mix 100un", preco: 150.00, descricao: "Caixa de doces - valor por caixa" },
-    { id: 34, nome: "Bolo", preco: 80.00, descricao: "Bolos" }
+    { id: 1, nome: "Coxinha", preco: 0.90, descricao: "Salgado frito - valor por unidade", categoria: "Salgados", tipoSalgado: "frito_promocional" },
+    { id: 2, nome: "Risoles de carne", preco: 0.90, descricao: "Salgado frito - valor por unidade", categoria: "Salgados", tipoSalgado: "frito_promocional" },
+    { id: 3, nome: "Kibe", preco: 0.90, descricao: "Salgado frito - valor por unidade", categoria: "Salgados", tipoSalgado: "frito_promocional" },
+    { id: 4, nome: "Bolinho de queijo", preco: 0.90, descricao: "Salgado frito - valor por unidade", categoria: "Salgados", tipoSalgado: "frito_promocional" },
+    { id: 5, nome: "Croquete de presunto e queijo", preco: 0.90, descricao: "Salgado frito - valor por unidade", categoria: "Salgados", tipoSalgado: "frito_promocional" },
+    { id: 6, nome: "Pastel de carne", preco: 1.00, descricao: "Salgado frito - valor por unidade", categoria: "Salgados", tipoSalgado: "frito_normal" },
+    { id: 7, nome: "Pastel de queijo", preco: 1.00, descricao: "Salgado frito - valor por unidade", categoria: "Salgados", tipoSalgado: "frito_normal" },
+    { id: 8, nome: "Bolinho de aipim c/ carne seca", preco: 1.20, descricao: "Salgado frito - valor por unidade", categoria: "Salgados", tipoSalgado: "frito_normal" },
+    { id: 9, nome: "Mini churros de doce de leite", preco: 1.20, descricao: "Salgado frito - valor por unidade", categoria: "Salgados", tipoSalgado: "frito_normal" },
+    { id: 10, nome: "Doguinho assado", preco: 1.20, descricao: "Salgado assado - valor por unidade", categoria: "Salgados", tipoSalgado: "assado" },
+    { id: 11, nome: "Esfiha de carne", preco: 1.20, descricao: "Salgado assado - valor por unidade", categoria: "Salgados", tipoSalgado: "assado" },
+    { id: 12, nome: "Esfiha de frango", preco: 1.20, descricao: "Salgado assado - valor por unidade", categoria: "Salgados", tipoSalgado: "assado" },
+    { id: 13, nome: "Folhado de frango", preco: 1.20, descricao: "Salgado assado - valor por unidade", categoria: "Salgados", tipoSalgado: "assado" },
+    { id: 14, nome: "Folhado de palmito", preco: 1.20, descricao: "Salgado assado - valor por unidade", categoria: "Salgados", tipoSalgado: "assado" },
+    { id: 15, nome: "Brigadeiro", preco: 1.40, descricao: "Doce - valor por unidade", categoria: "Doces", tipoSalgado: null },
+    { id: 16, nome: "Brigadeiro Branco", preco: 1.40, descricao: "Doce - valor por unidade", categoria: "Doces", tipoSalgado: null },
+    { id: 17, nome: "Beijinho", preco: 1.40, descricao: "Doce - valor por unidade", categoria: "Doces", tipoSalgado: null },
+    { id: 18, nome: "Dois Amores", preco: 1.40, descricao: "Doce - valor por unidade", categoria: "Doces", tipoSalgado: null },
+    { id: 19, nome: "Amendoim", preco: 1.40, descricao: "Doce - valor por unidade", categoria: "Doces", tipoSalgado: null },
+    { id: 20, nome: "Bicho de pé", preco: 1.40, descricao: "Doce - valor por unidade", categoria: "Doces", tipoSalgado: null },
+    { id: 21, nome: "Brigadeiro de Churros", preco: 1.50, descricao: "Doce - valor por unidade", categoria: "Doces", tipoSalgado: null },
+    { id: 22, nome: "Olho de Sogra", preco: 1.50, descricao: "Doce - valor por unidade", categoria: "Doces", tipoSalgado: null },
+    { id: 23, nome: "Rosinha Napolitana", preco: 1.50, descricao: "Doce - valor por unidade", categoria: "Doces", tipoSalgado: null },
+    { id: 24, nome: "Leite ninho com nutella", preco: 1.60, descricao: "Doce - valor por unidade", categoria: "Doces", tipoSalgado: null },
+    { id: 25, nome: "Surpresa de Uva", preco: 1.70, descricao: "Doce - valor por unidade", categoria: "Doces", tipoSalgado: null },
+    { id: 26, nome: "Brigadeiro ao leite c/Split Callebaut", preco: 2.00, descricao: "Doce - valor por unidade", categoria: "Doces", tipoSalgado: null },
+    { id: 27, nome: "Ouriço de coco queimado", preco: 2.00, descricao: "Doce - valor por unidade", categoria: "Doces", tipoSalgado: null },
+    { id: 28, nome: "Bombom Cereja", preco: 3.00, descricao: "Doce - valor por unidade", categoria: "Doces", tipoSalgado: null },
+    { id: 29, nome: "Bombom Uva", preco: 3.00, descricao: "Doce - valor por unidade", categoria: "Doces", tipoSalgado: null },
+    { id: 30, nome: "Bombom de Morango", preco: 3.00, descricao: "Doce - valor por unidade", categoria: "Doces", tipoSalgado: null },
+    { id: 31, nome: "Brigadeiro Ferreiro", preco: 2.00, descricao: "Doce - valor por unidade", categoria: "Doces", tipoSalgado: null },
+    { id: 32, nome: "Caixa Doce Mix 42un", preco: 60.00, descricao: "Caixa de doces - valor por caixa", categoria: "Doces", tipoSalgado: null },
+    { id: 33, nome: "Caixa Doce Mix 100un", preco: 150.00, descricao: "Caixa de doces - valor por caixa", categoria: "Doces", tipoSalgado: null },
+    { id: 34, nome: "Bolo", preco: 80.00, descricao: "Bolos", categoria: "Doces", tipoSalgado: null }
 
 ];
 
@@ -95,6 +95,51 @@ let pedidos = [];
 let proximoNumeroPedido = 1;
 let produtosCalculadora = [];
 let produtosPedido = [];
+let filtroCategoria = 'todos';
+
+// Função para calcular preço dinâmico dos salgados fritos promocionais
+function calcularPrecoSalgadoFrito(listaProdutos) {
+    // Contar total de salgados fritos promocionais
+    const totalSalgadosPromocionais = listaProdutos
+        .filter(item => {
+            const produto = produtos.find(p => p.id === item.id);
+            return produto && produto.tipoSalgado === 'frito_promocional';
+        })
+        .reduce((total, item) => total + item.quantidade, 0);
+    
+    // Retornar preço baseado na quantidade total
+    return totalSalgadosPromocionais >= 100 ? 0.90 : 1.00;
+}
+
+// Função para recalcular preços na calculadora
+function recalcularPrecosCalculadora() {
+    const precoSalgadoFrito = calcularPrecoSalgadoFrito(produtosCalculadora);
+    
+    produtosCalculadora.forEach(item => {
+        const produto = produtos.find(p => p.id === item.id);
+        if (produto && produto.tipoSalgado === 'frito_promocional') {
+            item.preco = precoSalgadoFrito;
+            item.total = item.quantidade * precoSalgadoFrito;
+        }
+    });
+    
+    atualizarListaCalculadora();
+}
+
+// Função para recalcular preços no pedido
+function recalcularPrecosPedido() {
+    const precoSalgadoFrito = calcularPrecoSalgadoFrito(produtosPedido);
+    
+    produtosPedido.forEach(item => {
+        const produto = produtos.find(p => p.id === item.id);
+        if (produto && produto.tipoSalgado === 'frito_promocional') {
+            item.preco = precoSalgadoFrito;
+            item.total = item.quantidade * precoSalgadoFrito;
+        }
+    });
+    
+    atualizarListaProdutosPedido();
+}
 
 // Dom Ready
 document.addEventListener('DOMContentLoaded', function() {
@@ -490,18 +535,29 @@ function adicionarProdutoCalculadora() {
     }
     
     const produto = produtos.find(p => p.id === produtoId);
-    const total = produto.preco * quantidade;
+    let precoFinal = produto.preco;
+    
+    // Para salgados fritos promocionais, usar preço dinâmico
+    if (produto.tipoSalgado === 'frito_promocional') {
+        // Criar lista temporária para calcular o preço
+        const listaTemp = [...produtosCalculadora, { id: produtoId, quantidade: quantidade }];
+        precoFinal = calcularPrecoSalgadoFrito(listaTemp);
+    }
+    
+    const total = precoFinal * quantidade;
     
     const itemCalculadora = {
         id: produtoId,
         nome: produto.nome,
-        preco: produto.preco,
+        preco: precoFinal,
         quantidade: quantidade,
         total: total
     };
     
     produtosCalculadora.push(itemCalculadora);
-    atualizarListaCalculadora();
+    
+    // Recalcular preços de todos os salgados fritos promocionais
+    recalcularPrecosCalculadora();
     
     // Limpar seleção
     document.getElementById('produtoSelecionado').value = '';
@@ -521,7 +577,10 @@ function limparCalculadora() {
 function removerProdutoCalculadora(index) {
     const produto = produtosCalculadora[index];
     produtosCalculadora.splice(index, 1);
-    atualizarListaCalculadora();
+    
+    // Recalcular preços após remoção
+    recalcularPrecosCalculadora();
+    
     showNotification('Produto Removido!', `${produto.nome} foi removido da calculadora.`, 'warning');
 }
 
@@ -535,10 +594,23 @@ function atualizarListaCalculadora() {
         return;
     }
     
-    lista.innerHTML = produtosCalculadora.map((item, index) => `
+    // Calcular total de salgados fritos promocionais para mostrar informação
+    const totalSalgadosPromocionais = produtosCalculadora
+        .filter(item => {
+            const produto = produtos.find(p => p.id === item.id);
+            return produto && produto.tipoSalgado === 'frito_promocional';
+        })
+        .reduce((total, item) => total + item.quantidade, 0);
+    
+    lista.innerHTML = produtosCalculadora.map((item, index) => {
+        const produto = produtos.find(p => p.id === item.id);
+        const isSalgadoPromocional = produto && produto.tipoSalgado === 'frito_promocional';
+        
+        return `
         <div class="flex justify-between items-center bg-gray-50 p-2 rounded">
             <div class="flex-1">
                 <span class="font-medium">${item.nome}</span>
+                ${isSalgadoPromocional ? `<span class="text-xs bg-blue-100 text-blue-800 px-1 rounded ml-1">Promocional</span>` : ''}
                 <br>
                 <span class="text-sm text-gray-600">${item.quantidade}x ${formatarMoeda(item.preco)} = ${formatarMoeda(item.total)}</span>
             </div>
@@ -546,7 +618,23 @@ function atualizarListaCalculadora() {
                 <i class="fas fa-times"></i>
             </button>
         </div>
-    `).join('');
+        `;
+    }).join('');
+    
+    // Adicionar informação sobre a regra de preço se houver salgados promocionais
+    if (totalSalgadosPromocionais > 0) {
+        const infoRegra = document.createElement('div');
+        infoRegra.className = 'bg-blue-50 border border-blue-200 p-2 rounded mt-2 text-xs';
+        infoRegra.innerHTML = `
+            <div class="font-medium text-blue-800">📋 Regra de Preço Salgados Fritos:</div>
+            <div class="text-blue-700">
+                Total salgados promocionais: ${totalSalgadosPromocionais} unidades<br>
+                Preço aplicado: ${formatarMoeda(totalSalgadosPromocionais >= 100 ? 0.90 : 1.00)} por unidade<br>
+                <span class="text-xs">${totalSalgadosPromocionais >= 100 ? '✅ Desconto ativo (≥100 un)' : '⚠️ Desconto inativo (<100 un)'}</span>
+            </div>
+        `;
+        lista.appendChild(infoRegra);
+    }
     
     const valorTotal = produtosCalculadora.reduce((sum, item) => sum + item.total, 0);
     totalGeral.textContent = formatarMoeda(valorTotal);
@@ -589,18 +677,29 @@ function adicionarProdutoAoPedido() {
     }
     
     const produto = produtos.find(p => p.id === produtoId);
-    const total = produto.preco * quantidade;
+    let precoFinal = produto.preco;
+    
+    // Para salgados fritos promocionais, usar preço dinâmico
+    if (produto.tipoSalgado === 'frito_promocional') {
+        // Criar lista temporária para calcular o preço
+        const listaTemp = [...produtosPedido, { id: produtoId, quantidade: quantidade }];
+        precoFinal = calcularPrecoSalgadoFrito(listaTemp);
+    }
+    
+    const total = precoFinal * quantidade;
     
     const itemPedido = {
         id: produtoId,
         nome: produto.nome,
-        preco: produto.preco,
+        preco: precoFinal,
         quantidade: quantidade,
         total: total
     };
     
     produtosPedido.push(itemPedido);
-    atualizarListaProdutosPedido();
+    
+    // Recalcular preços de todos os salgados fritos promocionais
+    recalcularPrecosPedido();
     
     // Limpar seleção
     document.getElementById('produtoPedido').value = '';
@@ -624,10 +723,25 @@ function atualizarListaProdutosPedido() {
         return;
     }
     
-    lista.innerHTML = produtosPedido.map((item, index) => `
+    // Calcular total de salgados fritos promocionais para mostrar informação
+    const totalSalgadosPromocionais = produtosPedido
+        .filter(item => {
+            const produto = produtos.find(p => p.id === item.id);
+            return produto && produto.tipoSalgado === 'frito_promocional';
+        })
+        .reduce((total, item) => total + item.quantidade, 0);
+    
+    lista.innerHTML = produtosPedido.map((item, index) => {
+        const produto = produtos.find(p => p.id === item.id);
+        const isSalgadoPromocional = produto && produto.tipoSalgado === 'frito_promocional';
+        
+        return `
         <div class="flex justify-between items-center bg-gray-50 p-3 rounded mb-2">
             <div class="flex-1">
-                <div class="font-medium text-gray-900">${item.nome}</div>
+                <div class="font-medium text-gray-900">
+                    ${item.nome}
+                    ${isSalgadoPromocional ? `<span class="text-xs bg-blue-100 text-blue-800 px-1 rounded ml-1">Promocional</span>` : ''}
+                </div>
                 <div class="text-sm text-gray-600">
                     ${item.quantidade}x ${formatarMoeda(item.preco)} = ${formatarMoeda(item.total)}
                 </div>
@@ -636,7 +750,23 @@ function atualizarListaProdutosPedido() {
                 <i class="fas fa-times"></i>
             </button>
         </div>
-    `).join('');
+        `;
+    }).join('');
+    
+    // Adicionar informação sobre a regra de preço se houver salgados promocionais
+    if (totalSalgadosPromocionais > 0) {
+        const infoRegra = document.createElement('div');
+        infoRegra.className = 'bg-blue-50 border border-blue-200 p-2 rounded mt-2 text-xs';
+        infoRegra.innerHTML = `
+            <div class="font-medium text-blue-800">📋 Regra de Preço Salgados Fritos:</div>
+            <div class="text-blue-700">
+                Total salgados promocionais: ${totalSalgadosPromocionais} unidades<br>
+                Preço aplicado: ${formatarMoeda(totalSalgadosPromocionais >= 100 ? 0.90 : 1.00)} por unidade<br>
+                <span class="text-xs">${totalSalgadosPromocionais >= 100 ? '✅ Desconto ativo (≥100 un)' : '⚠️ Desconto inativo (<100 un)'}</span>
+            </div>
+        `;
+        lista.appendChild(infoRegra);
+    }
     
     const valorTotal = produtosPedido.reduce((sum, item) => sum + item.total, 0);
     totalPedido.textContent = formatarMoeda(valorTotal);
@@ -648,8 +778,11 @@ function atualizarListaProdutosPedido() {
 function removerProdutoPedido(index) {
     const produto = produtosPedido[index];
     produtosPedido.splice(index, 1);
-    atualizarListaProdutosPedido();
+    
+    // Recalcular preços após remoção
+    recalcularPrecosPedido();
     atualizarPreviewProdutos();
+    
     showNotification('Produto Removido!', `${produto.nome} foi removido do pedido.`, 'warning');
 }
 
