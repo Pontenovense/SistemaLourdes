@@ -94,6 +94,7 @@ let produtos = [
 let pedidos = [];
 let proximoNumeroPedido = 1;
 let produtosCalculadora = [];
+let produtosPedido = [];
 
 // Dom Ready
 document.addEventListener('DOMContentLoaded', function() {
@@ -133,19 +134,36 @@ document.addEventListener('DOMContentLoaded', function() {
     document.getElementById('formPedido').addEventListener('submit', function(e) {
         e.preventDefault();
 
+        if (produtosPedido.length === 0) {
+            showNotification('Erro!', 'Adicione pelo menos um produto ao pedido.', 'error');
+            return;
+        }
+
+        const totalCalculado = produtosPedido.reduce((sum, item) => sum + item.total, 0);
+        const descricaoGerada = produtosPedido.map(item => 
+            `${item.quantidade}x ${item.nome} - ${formatarMoeda(item.preco)} = ${formatarMoeda(item.total)}`
+        ).join('\n');
+
         const novoPedido = {
             id: pedidos.length > 0 ? Math.max(...pedidos.map(p => p.id)) + 1 : 1,
             numero: proximoNumeroPedido++,
             cliente: document.getElementById('clientePedido').value,
             horario: document.getElementById('horarioPedido').value,
-            valor: parseFloat(document.getElementById('valorPedido').value),
-            descricao: document.getElementById('descricaoPedido').value,
+            valor: totalCalculado,
+            produtos: [...produtosPedido],
+            descricao: descricaoGerada,
             observacoes: document.getElementById('observacoesPedido').value
         };
+        
         pedidos.push(novoPedido);
         atualizarListaPedidos();
+        
+        // Limpar formulário e produtos
         this.reset();
+        produtosPedido = [];
+        atualizarListaProdutosPedido();
         atualizarPreview();
+        
         showNotification('Pedido Finalizado!', `Pedido de ${novoPedido.cliente} foi registrado com sucesso.`, 'success');
     });
 
@@ -169,19 +187,36 @@ document.addEventListener('DOMContentLoaded', function() {
     document.getElementById('adicionarProdutoCalculadora').addEventListener('click', adicionarProdutoCalculadora);
     document.getElementById('limparCalculadora').addEventListener('click', limparCalculadora);
 
+    // Eventos para produtos do pedido
+    document.getElementById('produtoPedido').addEventListener('change', function() {
+        const produtoId = parseInt(this.value);
+        if (produtoId) {
+            const produto = produtos.find(p => p.id === produtoId);
+            document.getElementById('precoUnitarioPedido').textContent = formatarMoeda(produto.preco);
+            calcularTotalItemPedido();
+        } else {
+            document.getElementById('precoUnitarioPedido').textContent = formatarMoeda(0);
+            document.getElementById('totalItemPedido').textContent = formatarMoeda(0);
+        }
+    });
+
+    document.getElementById('quantidadePedido').addEventListener('change', calcularTotalItemPedido);
+    document.getElementById('quantidadePedido').addEventListener('input', calcularTotalItemPedido);
+    document.getElementById('adicionarProdutoPedido').addEventListener('click', adicionarProdutoAoPedido);
+
     // Atualizar preview em tempo real
     document.getElementById('clientePedido').addEventListener('input', atualizarPreview);
     document.getElementById('horarioPedido').addEventListener('input', atualizarPreview);
-    document.getElementById('valorPedido').addEventListener('input', atualizarPreview);
-    document.getElementById('descricaoPedido').addEventListener('input', atualizarPreview);
     document.getElementById('observacoesPedido').addEventListener('input', atualizarPreview);
 
     // Inicialização
     atualizarListaProdutos();
     atualizarSelectProdutos();
+    atualizarSelectProdutosPedido();
     atualizarListaPedidos();
     atualizarPreview();
     atualizarListaCalculadora();
+    atualizarListaProdutosPedido();
 });
 
 function calcularTotal() {
@@ -200,16 +235,10 @@ function atualizarPreview() {
     document.getElementById('previewHorario').textContent = formatarDataHora(document.getElementById('horarioPedido').value) || '-';
     document.getElementById('previewTotal').textContent = formatarMoeda(parseFloat(document.getElementById('valorPedido').value) || 0);
     
-    const descricao = document.getElementById('descricaoPedido').value;
-    const previewItens = document.getElementById('previewItens');
-    if (descricao.trim()) {
-        previewItens.innerHTML = descricao.split('\n').map(linha => 
-            linha.trim() ? `<p class="mb-1">• ${linha.trim()}</p>` : ''
-        ).join('');
-    } else {
-        previewItens.innerHTML = '<p class="text-gray-500 italic">Aguardando descrição do pedido...</p>';
-    }
-
+    // Atualizar itens baseado nos produtos do pedido
+    atualizarPreviewProdutos();
+    
+    // Atualizar observações
     const observacoes = document.getElementById('observacoesPedido').value;
     const previewObservacoes = document.getElementById('previewObservacoes');
     const previewObservacoesTexto = document.getElementById('previewObservacoesTexto');
@@ -246,6 +275,9 @@ function atualizarSelectProdutos() {
         produtos.map(p => 
             `<option value="${p.id}">${p.nome} - ${formatarMoeda(p.preco)}</option>`
         ).join('');
+    
+    // Também atualizar o select de produtos do pedido
+    atualizarSelectProdutosPedido();
 }
 
 function atualizarListaPedidos() {
@@ -518,4 +550,122 @@ function atualizarListaCalculadora() {
     
     const valorTotal = produtosCalculadora.reduce((sum, item) => sum + item.total, 0);
     totalGeral.textContent = formatarMoeda(valorTotal);
+}
+
+// Funções para Produtos do Pedido
+function atualizarSelectProdutosPedido() {
+    const select = document.getElementById('produtoPedido');
+    select.innerHTML = '<option value="">Selecione um produto</option>' + 
+        produtos.map(p => 
+            `<option value="${p.id}">${p.nome} - ${formatarMoeda(p.preco)}</option>`
+        ).join('');
+}
+
+function calcularTotalItemPedido() {
+    const produtoId = parseInt(document.getElementById('produtoPedido').value);
+    const quantidade = parseFloat(document.getElementById('quantidadePedido').value);
+    
+    if (produtoId && quantidade > 0) {
+        const produto = produtos.find(p => p.id === produtoId);
+        const total = produto.preco * quantidade;
+        document.getElementById('totalItemPedido').textContent = formatarMoeda(total);
+    } else {
+        document.getElementById('totalItemPedido').textContent = formatarMoeda(0);
+    }
+}
+
+function adicionarProdutoAoPedido() {
+    const produtoId = parseInt(document.getElementById('produtoPedido').value);
+    const quantidade = parseFloat(document.getElementById('quantidadePedido').value);
+    
+    if (!produtoId) {
+        showNotification('Erro!', 'Selecione um produto primeiro.', 'error');
+        return;
+    }
+    
+    if (!quantidade || quantidade <= 0) {
+        showNotification('Erro!', 'Digite uma quantidade válida.', 'error');
+        return;
+    }
+    
+    const produto = produtos.find(p => p.id === produtoId);
+    const total = produto.preco * quantidade;
+    
+    const itemPedido = {
+        id: produtoId,
+        nome: produto.nome,
+        preco: produto.preco,
+        quantidade: quantidade,
+        total: total
+    };
+    
+    produtosPedido.push(itemPedido);
+    atualizarListaProdutosPedido();
+    
+    // Limpar seleção
+    document.getElementById('produtoPedido').value = '';
+    document.getElementById('quantidadePedido').value = 1;
+    document.getElementById('precoUnitarioPedido').textContent = formatarMoeda(0);
+    document.getElementById('totalItemPedido').textContent = formatarMoeda(0);
+    
+    // Atualizar preview
+    atualizarPreviewProdutos();
+    
+    showNotification('Produto Adicionado!', `${produto.nome} foi adicionado ao pedido.`, 'success');
+}
+
+function atualizarListaProdutosPedido() {
+    const lista = document.getElementById('produtosPedidoLista');
+    const totalPedido = document.getElementById('totalPedidoCalculado');
+    
+    if (produtosPedido.length === 0) {
+        lista.innerHTML = '<p class="text-sm text-gray-500 italic text-center py-4">Nenhum produto adicionado ao pedido</p>';
+        totalPedido.textContent = formatarMoeda(0);
+        return;
+    }
+    
+    lista.innerHTML = produtosPedido.map((item, index) => `
+        <div class="flex justify-between items-center bg-gray-50 p-3 rounded mb-2">
+            <div class="flex-1">
+                <div class="font-medium text-gray-900">${item.nome}</div>
+                <div class="text-sm text-gray-600">
+                    ${item.quantidade}x ${formatarMoeda(item.preco)} = ${formatarMoeda(item.total)}
+                </div>
+            </div>
+            <button onclick="removerProdutoPedido(${index})" class="text-red-600 hover:text-red-800 ml-2 p-1" title="Remover">
+                <i class="fas fa-times"></i>
+            </button>
+        </div>
+    `).join('');
+    
+    const valorTotal = produtosPedido.reduce((sum, item) => sum + item.total, 0);
+    totalPedido.textContent = formatarMoeda(valorTotal);
+    
+    // Atualizar campo valor total do pedido
+    document.getElementById('valorPedido').value = valorTotal.toFixed(2);
+}
+
+function removerProdutoPedido(index) {
+    const produto = produtosPedido[index];
+    produtosPedido.splice(index, 1);
+    atualizarListaProdutosPedido();
+    atualizarPreviewProdutos();
+    showNotification('Produto Removido!', `${produto.nome} foi removido do pedido.`, 'warning');
+}
+
+function atualizarPreviewProdutos() {
+    const previewItens = document.getElementById('previewItens');
+    const totalCalculado = produtosPedido.reduce((sum, item) => sum + item.total, 0);
+    
+    // Atualizar total na preview
+    document.getElementById('previewTotal').textContent = formatarMoeda(totalCalculado);
+    
+    if (produtosPedido.length === 0) {
+        previewItens.innerHTML = '<p class="text-gray-500 italic">Aguardando produtos do pedido...</p>';
+        return;
+    }
+    
+    previewItens.innerHTML = produtosPedido.map(item => 
+        `<p class="mb-1">• ${item.quantidade}x ${item.nome} <strong>${formatarMoeda(item.total)}</strong></p>`
+    ).join('');
 }
