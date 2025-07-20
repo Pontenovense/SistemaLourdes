@@ -212,18 +212,31 @@ document.addEventListener('DOMContentLoaded', function() {
         showNotification('Pedido Finalizado!', `Pedido de ${novoPedido.cliente} foi registrado com sucesso.`, 'success');
     });
 
-    // Atualizar preço na calculadora
-    document.getElementById('produtoSelecionado').addEventListener('change', function() {
-        const produtoId = parseInt(this.value);
-        if (produtoId) {
-            const produto = produtos.find(p => p.id === produtoId);
-            document.getElementById('precoUnitario').textContent = formatarMoeda(produto.preco);
-            calcularTotal();
+document.getElementById('produtoPedido').addEventListener('change', function() {
+    const produtoId = parseInt(this.value);
+    const descricaoBoloContainer = document.getElementById('descricaoBoloContainer');
+    const labelQuantidadePedido = document.getElementById('labelQuantidadePedido');
+
+    if (produtoId) {
+        const produto = produtos.find(p => p.id === produtoId);
+
+        if (produto && produto.nome.toLowerCase() === 'bolo') {
+            descricaoBoloContainer.classList.remove('hidden');
+            labelQuantidadePedido.textContent = 'KG';
         } else {
-            document.getElementById('precoUnitario').textContent = formatarMoeda(0);
-            document.getElementById('totalCalculo').textContent = formatarMoeda(0);
+            descricaoBoloContainer.classList.add('hidden');
+            labelQuantidadePedido.textContent = 'Quantidade';
         }
-    });
+
+        document.getElementById('precoUnitarioPedido').textContent = formatarMoeda(produto.preco);
+        calcularTotalItemPedido();
+    } else {
+        descricaoBoloContainer.classList.add('hidden');
+        labelQuantidadePedido.textContent = 'Quantidade';
+        document.getElementById('precoUnitarioPedido').textContent = formatarMoeda(0);
+        document.getElementById('totalItemPedido').textContent = formatarMoeda(0);
+    }
+});
 
     document.getElementById('quantidadeCalculo').addEventListener('change', calcularTotal);
     document.getElementById('quantidadeCalculo').addEventListener('input', calcularTotal);
@@ -665,64 +678,72 @@ function calcularTotalItemPedido() {
 function adicionarProdutoAoPedido() {
     const produtoId = parseInt(document.getElementById('produtoPedido').value);
     const quantidade = parseFloat(document.getElementById('quantidadePedido').value);
-    
+    const descricaoBolo = document.getElementById('descricaoBolo').value.trim();
+
     if (!produtoId) {
         showNotification('Erro!', 'Selecione um produto primeiro.', 'error');
         return;
     }
-    
+
     if (!quantidade || quantidade <= 0) {
         showNotification('Erro!', 'Digite uma quantidade válida.', 'error');
         return;
     }
-    
+
     const produto = produtos.find(p => p.id === produtoId);
     let precoFinal = produto.preco;
-    
+
     // Para salgados fritos promocionais, usar preço dinâmico
     if (produto.tipoSalgado === 'frito_promocional') {
         // Criar lista temporária para calcular o preço
         const listaTemp = [...produtosPedido, { id: produtoId, quantidade: quantidade }];
         precoFinal = calcularPrecoSalgadoFrito(listaTemp);
     }
-    
-    const total = precoFinal * quantidade;
-    
+
+    // Para bolo, não contabilizar valor
+    let total = precoFinal * quantidade;
+    if (produto.nome.toLowerCase() === 'bolo') {
+        precoFinal = 0;
+        total = 0;
+    }
+
     const itemPedido = {
         id: produtoId,
         nome: produto.nome,
         preco: precoFinal,
         quantidade: quantidade,
-        total: total
+        total: total,
+        descricaoBolo: produto.nome.toLowerCase() === 'bolo' ? descricaoBolo : ''
     };
-    
+
     produtosPedido.push(itemPedido);
-    
+
     // Recalcular preços de todos os salgados fritos promocionais
     recalcularPrecosPedido();
-    
-    // Limpar seleção
+
+    // Limpar seleção e descrição do bolo
     document.getElementById('produtoPedido').value = '';
     document.getElementById('quantidadePedido').value = 0;
+    document.getElementById('descricaoBolo').value = '';
     document.getElementById('precoUnitarioPedido').textContent = formatarMoeda(0);
     document.getElementById('totalItemPedido').textContent = formatarMoeda(0);
-    
+
     // Atualizar preview
     atualizarPreviewProdutos();
-    
+
     showNotification('Produto Adicionado!', `${produto.nome} foi adicionado ao pedido.`, 'success');
 }
 
 function atualizarListaProdutosPedido() {
     const lista = document.getElementById('produtosPedidoLista');
     const totalPedido = document.getElementById('totalPedidoCalculado');
-    
+
     if (produtosPedido.length === 0) {
         lista.innerHTML = '<p class="text-sm text-gray-500 italic text-center py-4">Nenhum produto adicionado ao pedido</p>';
         totalPedido.textContent = formatarMoeda(0);
         return;
     }
-    
+
     // Calcular total de salgados fritos promocionais para mostrar informação
     const totalSalgadosPromocionais = produtosPedido
         .filter(item => {
@@ -730,11 +751,30 @@ function atualizarListaProdutosPedido() {
             return produto && produto.tipoSalgado === 'frito_promocional';
         })
         .reduce((total, item) => total + item.quantidade, 0);
-    
+
     lista.innerHTML = produtosPedido.map((item, index) => {
         const produto = produtos.find(p => p.id === item.id);
         const isSalgadoPromocional = produto && produto.tipoSalgado === 'frito_promocional';
-        
+
+        // For bolo, show KG instead of quantidade, show description, hide price and total
+        if (produto && produto.nome.toLowerCase() === 'bolo') {
+            return `
+            <div class="flex justify-between items-center bg-gray-50 p-3 rounded mb-2">
+                <div class="flex-1">
+                    <div class="font-medium text-gray-900">
+                        ${item.nome} - ${item.descricaoBolo ? item.descricaoBolo : ''}
+                    </div>
+                    <div class="text-sm text-gray-600">
+                        ${item.quantidade} KG
+                    </div>
+                </div>
+                <button onclick="removerProdutoPedido(${index})" class="text-red-600 hover:text-red-800 ml-2 p-1" title="Remover">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            `;
+        }
+
         return `
         <div class="flex justify-between items-center bg-gray-50 p-3 rounded mb-2">
             <div class="flex-1">
@@ -752,25 +792,10 @@ function atualizarListaProdutosPedido() {
         </div>
         `;
     }).join('');
-    
-    // Adicionar informação sobre a regra de preço se houver salgados promocionais
-    if (totalSalgadosPromocionais > 0) {
-        const infoRegra = document.createElement('div');
-        infoRegra.className = 'bg-blue-50 border border-blue-200 p-2 rounded mt-2 text-xs';
-        infoRegra.innerHTML = `
-            <div class="font-medium text-blue-800">📋 Regra de Preço Salgados Fritos:</div>
-            <div class="text-blue-700">
-                Total salgados promocionais: ${totalSalgadosPromocionais} unidades<br>
-                Preço aplicado: ${formatarMoeda(totalSalgadosPromocionais >= 100 ? 0.90 : 1.00)} por unidade<br>
-                <span class="text-xs">${totalSalgadosPromocionais >= 100 ? '✅ Desconto ativo (≥100 un)' : '⚠️ Desconto inativo (<100 un)'}</span>
-            </div>
-        `;
-        lista.appendChild(infoRegra);
-    }
-    
+
     const valorTotal = produtosPedido.reduce((sum, item) => sum + item.total, 0);
     totalPedido.textContent = formatarMoeda(valorTotal);
-    
+
     // Atualizar campo valor total do pedido
     document.getElementById('valorPedido').value = valorTotal.toFixed(2);
 }
@@ -789,19 +814,28 @@ function removerProdutoPedido(index) {
 function atualizarPreviewProdutos() {
     const previewItens = document.getElementById('previewItens');
     const totalCalculado = produtosPedido.reduce((sum, item) => sum + item.total, 0);
-    
+
     // Atualizar total na preview
     document.getElementById('previewTotal').textContent = formatarMoeda(totalCalculado);
-    
+
     if (produtosPedido.length === 0) {
         previewItens.innerHTML = '<p class="text-gray-500 italic">Aguardando produtos do pedido...</p>';
         return;
     }
-    
-    previewItens.innerHTML = produtosPedido.map(item => 
-        `<p class="mb-1 flex justify-between">
+
+    previewItens.innerHTML = produtosPedido.map(item => {
+        const produto = produtos.find(p => p.id === item.id);
+
+        if (produto && produto.nome.toLowerCase() === 'bolo') {
+            return `<p class="mb-1 flex justify-between">
+                <span>• ${item.quantidade} KG ${item.nome} - ${item.descricaoBolo ? item.descricaoBolo : ''}</span>
+                <strong></strong>
+            </p>`;
+        }
+
+        return `<p class="mb-1 flex justify-between">
             <span>• ${item.quantidade}x ${item.nome}</span>
             <strong>${formatarMoeda(item.total)}</strong>
-        </p>`
-    ).join('');
+        </p>`;
+    }).join('');
 }
