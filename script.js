@@ -83,7 +83,7 @@ let produtos = [
     { id: 27, nome: "Ouriço de coco queimado", preco: 2.00, descricao: "Doce - valor por unidade", categoria: "Doces", tipoSalgado: null },
     { id: 28, nome: "Bombom Cereja", preco: 3.00, descricao: "Doce - valor por unidade", categoria: "Doces", tipoSalgado: null },
     { id: 29, nome: "Bombom Uva", preco: 3.00, descricao: "Doce - valor por unidade", categoria: "Doces", tipoSalgado: null },
-    { id: 30, nome: "Bombom de Morango", preco: 3.00, descricao: "Doce - valor por unidade", categoria: "Doces", tipoSalgado: null },
+    { id: 30, nome: "Bombom de Morango", preco: 4.00, descricao: "Doce - valor por unidade", categoria: "Doces", tipoSalgado: null },
     { id: 31, nome: "Brigadeiro Ferreiro", preco: 2.00, descricao: "Doce - valor por unidade", categoria: "Doces", tipoSalgado: null },
     { id: 32, nome: "Caixa Doce Mix 42un", preco: 60.00, descricao: "Caixa de doces - valor por caixa", categoria: "Doces", tipoSalgado: null },
     { id: 33, nome: "Caixa Doce Mix 100un", preco: 150.00, descricao: "Caixa de doces - valor por caixa", categoria: "Doces", tipoSalgado: null },
