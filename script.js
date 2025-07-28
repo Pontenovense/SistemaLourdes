@@ -231,8 +231,16 @@ document.addEventListener('DOMContentLoaded', function() {
     }
 
     // Event listeners para os botões de toggle
-    toggleCopyMode.addEventListener('click', ativarModoCopiarImagem);
-    togglePrintMode.addEventListener('click', ativarModoImpressao);
+    toggleCopyMode.addEventListener('click', function() {
+        ativarModoCopiarImagem();
+        // Atualizar nomes dos produtos na preview quando mudar de modo
+        atualizarPreviewProdutos();
+    });
+    togglePrintMode.addEventListener('click', function() {
+        ativarModoImpressao();
+        // Atualizar nomes dos produtos na preview quando mudar de modo
+        atualizarPreviewProdutos();
+    });
 
     // Inicializar no modo copiar imagem
     ativarModoCopiarImagem();
@@ -1047,33 +1055,41 @@ function atualizarPreviewProdutos() {
     // Verificar se está no modo impressão para usar nomes abreviados
     const isComandaPrintModeActive = document.getElementById('previewNotinha').classList.contains('print-mode');
 
-    previewItens.innerHTML = produtosPedido.map(item => {
-        const produto = produtos.find(p => p.id === item.id);
-        
-        // Usar nome abreviado se estiver no modo impressão
-        let nomeExibir = item.nome;
-        if (isComandaPrintModeActive && produto && produto.nomeAbreviado) {
-            nomeExibir = produto.nomeAbreviado;
-        }
+    function atualizarNomesProdutosPreview() {
+        const previewItens = document.getElementById('previewItens');
+        const isPrintMode = document.getElementById('previewNotinha').classList.contains('print-mode');
 
-        if (produto && produto.nome.toLowerCase() === 'bolo') {
-            return `<p class="mb-1 flex justify-between">
-                <span>• ${item.quantidade} KG ${nomeExibir} - ${item.descricaoBolo ? item.descricaoBolo : ''}</span>
-                <strong></strong>
-            </p>`;
-        }
+        previewItens.innerHTML = produtosPedido.map(item => {
+            const produto = produtos.find(p => p.id === item.id);
 
-        // Para produto DIVERSOS, usar o nome personalizado
-        if (produto && produto.nome === 'DIVERSOS') {
+            // Usar nome abreviado apenas no modo impressão
+            let nomeExibir = item.nome;
+            if (isPrintMode && produto && produto.nomeAbreviado) {
+                nomeExibir = produto.nomeAbreviado;
+            }
+
+            if (produto && produto.nome.toLowerCase() === 'bolo') {
+                return `<p class="mb-1 flex justify-between">
+                    <span>• ${item.quantidade} KG ${nomeExibir} - ${item.descricaoBolo ? item.descricaoBolo : ''}</span>
+                    <strong></strong>
+                </p>`;
+            }
+
+            // Para produto DIVERSOS, usar o nome personalizado
+            if (produto && produto.nome === 'DIVERSOS') {
+                return `<p class="mb-1 flex justify-between">
+                    <span>• ${item.quantidade}x ${item.nomePersonalizado || nomeExibir}</span>
+                    <strong>${formatarMoeda(item.total)}</strong>
+                </p>`;
+            }
+
             return `<p class="mb-1 flex justify-between">
-                <span>• ${item.quantidade}x ${item.nomePersonalizado || nomeExibir}</span>
+                <span>• ${item.quantidade}x ${nomeExibir}</span>
                 <strong>${formatarMoeda(item.total)}</strong>
             </p>`;
-        }
+        }).join('');
+    }
 
-        return `<p class="mb-1 flex justify-between">
-            <span>• ${item.quantidade}x ${nomeExibir}</span>
-            <strong>${formatarMoeda(item.total)}</strong>
-        </p>`;
-    }).join('');
+    // Call this function whenever mode changes or produtosPedido changes
+    atualizarNomesProdutosPreview();
 }
