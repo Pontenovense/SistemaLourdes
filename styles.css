@@ -27,9 +27,7 @@
 }
 
 /* Estilos específicos para o modo de impressão - layout da comanda */
-.kitchen-receipt.print-mode #previewCliente {
-    font-size: 1.25rem !important; /* text-xl */
-}
+/* Removido font-size específico para manter tamanho uniforme */
 
 .kitchen-receipt.print-mode .valor-total-section {
     margin-top: 1rem !important;

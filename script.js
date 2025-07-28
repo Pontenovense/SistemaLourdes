@@ -1072,8 +1072,9 @@ function atualizarPreviewProdutos() {
                 nomeExibir = produto.nomeAbreviado;
             }
 
-            // Converter para maiúsculo
+            // Converter para maiúsculo mantendo o tamanho original
             nomeExibir = nomeExibir.toUpperCase();
+
 
             if (produto && produto.nome.toLowerCase() === 'bolo') {
                 const descricaoBoloUpper = item.descricaoBolo ? item.descricaoBolo.toUpperCase() : '';
