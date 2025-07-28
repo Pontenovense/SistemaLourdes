@@ -26,6 +26,27 @@
     display: none;
 }
 
+/* Estilos específicos para o modo de impressão - layout da comanda */
+.kitchen-receipt.print-mode #previewCliente {
+    font-size: 1.25rem !important; /* text-xl */
+}
+
+.kitchen-receipt.print-mode .valor-total-section {
+    margin-top: 1rem !important;
+    padding-top: 0.5rem !important;
+    border-top: 2px dashed #9ca3af !important;
+}
+
+.kitchen-receipt.print-mode .valor-total-section .valor-label {
+    font-size: 1.125rem !important; /* text-lg */
+    font-weight: bold !important;
+}
+
+.kitchen-receipt.print-mode .valor-total-section .valor-amount {
+    font-size: 1.25rem !important; /* text-xl */
+    font-weight: bold !important;
+}
+
 /* Sistema de Notificações */
 .notification-container {
     position: fixed;

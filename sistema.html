@@ -160,10 +160,22 @@
                                             <label for="quantidadePedido" id="labelQuantidadePedido" class="block text-xs font-medium text-gray-600 mb-1">Quantidade</label>
                                             <input type="number" id="quantidadePedido" step="0.1" min="0.1" value="0" class="block w-full px-3 py-2 text-sm rounded-md border-gray-300 shadow-sm focus:border-pink-500 focus:ring-pink-500">
                                         </div>
-                                        <div id="descricaoBoloContainer" class="hidden">
-                                            <label for="descricaoBolo" class="block text-xs font-medium text-gray-600 mb-1">Descrição do Bolo (sabor)</label>
-                                            <input type="text" id="descricaoBolo" class="block w-full px-3 py-2 text-sm rounded-md border-gray-300 shadow-sm focus:border-pink-500 focus:ring-pink-500" placeholder="Ex: Chocolate, Baunilha, Morango...">
-                                        </div>
+                            <div id="descricaoBoloContainer" class="hidden">
+                                <label for="descricaoBolo" class="block text-xs font-medium text-gray-600 mb-1">Descrição do Bolo (sabor)</label>
+                                <input type="text" id="descricaoBolo" class="block w-full px-3 py-2 text-sm rounded-md border-gray-300 shadow-sm focus:border-pink-500 focus:ring-pink-500" placeholder="Ex: Chocolate, Baunilha, Morango...">
+                            </div>
+                            <div id="diversosContainer" class="hidden">
+                                <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                                    <div>
+                                        <label for="nomeDiversos" class="block text-xs font-medium text-gray-600 mb-1">Nome do Produto</label>
+                                        <input type="text" id="nomeDiversos" class="block w-full px-3 py-2 text-sm rounded-md border-gray-300 shadow-sm focus:border-pink-500 focus:ring-pink-500" placeholder="Ex: Torta de limão, Pudim...">
+                                    </div>
+                                    <div>
+                                        <label for="precoDiversos" class="block text-xs font-medium text-gray-600 mb-1">Preço (R$)</label>
+                                        <input type="number" id="precoDiversos" step="0.01" min="0" class="block w-full px-3 py-2 text-sm rounded-md border-gray-300 shadow-sm focus:border-pink-500 focus:ring-pink-500" placeholder="0,00">
+                                    </div>
+                                </div>
+                            </div>
                                     </div>
                                     <div class="flex justify-between items-center bg-gray-50 p-2 rounded">
                                         <div>
@@ -254,6 +266,14 @@
                             <div id="previewObservacoes" class="mb-4" style="display: none;">
                                 <h4 class="font-bold text-center mb-2 bg-yellow-200 p-2">⚠️ OBSERVAÇÕES ESPECIAIS:</h4>
                                 <div id="previewObservacoesTexto" class="text-sm leading-relaxed bg-yellow-50 p-2 border border-yellow-300">
+                                </div>
+                            </div>
+                            
+                            <!-- Seção do valor total para modo de impressão -->
+                            <div id="valorTotalPrint" class="valor-total-section" style="display: none;">
+                                <div class="flex justify-between">
+                                    <span class="valor-label">VALOR TOTAL:</span>
+                                    <span id="previewTotalPrint" class="valor-amount">R$ 0,00</span>
                                 </div>
                             </div>
                             

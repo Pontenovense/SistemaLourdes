@@ -54,41 +54,42 @@ function closeNotification(button) {
 
 // Dados iniciais
 let produtos = [
-    { id: 1, nome: "Coxinha", preco: 0.90, descricao: "Salgado frito - valor por unidade", categoria: "Salgados", tipoSalgado: "frito_promocional" },
-    { id: 2, nome: "Risoles de carne", preco: 0.90, descricao: "Salgado frito - valor por unidade", categoria: "Salgados", tipoSalgado: "frito_promocional" },
-    { id: 3, nome: "Kibe", preco: 0.90, descricao: "Salgado frito - valor por unidade", categoria: "Salgados", tipoSalgado: "frito_promocional" },
-    { id: 4, nome: "Bolinha de queijo", preco: 0.90, descricao: "Salgado frito - valor por unidade", categoria: "Salgados", tipoSalgado: "frito_promocional" },
-    { id: 5, nome: "Croquete de presunto e queijo", preco: 0.90, descricao: "Salgado frito - valor por unidade", categoria: "Salgados", tipoSalgado: "frito_promocional" },
-    { id: 6, nome: "Pastel de carne", preco: 1.00, descricao: "Salgado frito - valor por unidade", categoria: "Salgados", tipoSalgado: "frito_normal" },
-    { id: 7, nome: "Pastel de queijo", preco: 1.00, descricao: "Salgado frito - valor por unidade", categoria: "Salgados", tipoSalgado: "frito_normal" },
-    { id: 8, nome: "Bolinho de aipim c/ carne seca", preco: 1.20, descricao: "Salgado frito - valor por unidade", categoria: "Salgados", tipoSalgado: "frito_normal" },
-    { id: 9, nome: "Mini churros de doce de leite", preco: 1.20, descricao: "Salgado frito - valor por unidade", categoria: "Salgados", tipoSalgado: "frito_normal" },
-    { id: 10, nome: "Doguinho assado", preco: 1.20, descricao: "Salgado assado - valor por unidade", categoria: "Salgados", tipoSalgado: "assado" },
-    { id: 11, nome: "Esfiha de carne", preco: 1.20, descricao: "Salgado assado - valor por unidade", categoria: "Salgados", tipoSalgado: "assado" },
-    { id: 12, nome: "Esfiha de frango", preco: 1.20, descricao: "Salgado assado - valor por unidade", categoria: "Salgados", tipoSalgado: "assado" },
-    { id: 13, nome: "Folhado de frango", preco: 1.20, descricao: "Salgado assado - valor por unidade", categoria: "Salgados", tipoSalgado: "assado" },
-    { id: 14, nome: "Folhado de palmito", preco: 1.20, descricao: "Salgado assado - valor por unidade", categoria: "Salgados", tipoSalgado: "assado" },
-    { id: 15, nome: "Brigadeiro", preco: 1.40, descricao: "Doce - valor por unidade", categoria: "Doces", tipoSalgado: null },
-    { id: 16, nome: "Brigadeiro Branco", preco: 1.40, descricao: "Doce - valor por unidade", categoria: "Doces", tipoSalgado: null },
-    { id: 17, nome: "Beijinho", preco: 1.40, descricao: "Doce - valor por unidade", categoria: "Doces", tipoSalgado: null },
-    { id: 18, nome: "Dois Amores", preco: 1.40, descricao: "Doce - valor por unidade", categoria: "Doces", tipoSalgado: null },
-    { id: 19, nome: "Amendoim", preco: 1.40, descricao: "Doce - valor por unidade", categoria: "Doces", tipoSalgado: null },
-    { id: 20, nome: "Bicho de pé", preco: 1.40, descricao: "Doce - valor por unidade", categoria: "Doces", tipoSalgado: null },
-    { id: 21, nome: "Brigadeiro de Churros", preco: 1.50, descricao: "Doce - valor por unidade", categoria: "Doces", tipoSalgado: null },
-    { id: 22, nome: "Olho de Sogra", preco: 1.50, descricao: "Doce - valor por unidade", categoria: "Doces", tipoSalgado: null },
-    { id: 23, nome: "Rosinha Napolitana", preco: 1.50, descricao: "Doce - valor por unidade", categoria: "Doces", tipoSalgado: null },
-    { id: 24, nome: "Leite ninho com nutella", preco: 1.60, descricao: "Doce - valor por unidade", categoria: "Doces", tipoSalgado: null },
-    { id: 25, nome: "Surpresa de Uva", preco: 1.70, descricao: "Doce - valor por unidade", categoria: "Doces", tipoSalgado: null },
-    { id: 26, nome: "Brigadeiro ao leite c/Split Callebaut", preco: 2.00, descricao: "Doce - valor por unidade", categoria: "Doces", tipoSalgado: null },
-    { id: 27, nome: "Ouriço de coco queimado", preco: 2.00, descricao: "Doce - valor por unidade", categoria: "Doces", tipoSalgado: null },
-    { id: 28, nome: "Bombom Cereja", preco: 3.00, descricao: "Doce - valor por unidade", categoria: "Doces", tipoSalgado: null },
-    { id: 29, nome: "Bombom Uva", preco: 3.00, descricao: "Doce - valor por unidade", categoria: "Doces", tipoSalgado: null },
-    { id: 30, nome: "Bombom de Morango", preco: 4.00, descricao: "Doce - valor por unidade", categoria: "Doces", tipoSalgado: null },
-    { id: 31, nome: "Brigadeiro Ferreiro", preco: 2.00, descricao: "Doce - valor por unidade", categoria: "Doces", tipoSalgado: null },
-    { id: 32, nome: "Caixa Doce Mix 42un", preco: 60.00, descricao: "Caixa de doces - valor por caixa", categoria: "Doces", tipoSalgado: null },
-    { id: 33, nome: "Caixa Doce Mix 100un", preco: 150.00, descricao: "Caixa de doces - valor por caixa", categoria: "Doces", tipoSalgado: null },
-    { id: 34, nome: "Bolo", preco: 80.00, descricao: "Bolos", categoria: "Doces", tipoSalgado: null },
-    { id: 35, nome: "Morango do Amor", preco: 10.00, descricao: "Morango do Amor❤️", categoria: "Doces", tipoSalgado: null }
+    { id: 1, nome: "Coxinha", nomeAbreviado: "CX", preco: 0.90, descricao: "Salgado frito - valor por unidade", categoria: "Salgados", tipoSalgado: "frito_promocional" },
+    { id: 2, nome: "Risoles de carne", nomeAbreviado: "RC", preco: 0.90, descricao: "Salgado frito - valor por unidade", categoria: "Salgados", tipoSalgado: "frito_promocional" },
+    { id: 3, nome: "Kibe", nomeAbreviado: "Kibe", preco: 0.90, descricao: "Salgado frito - valor por unidade", categoria: "Salgados", tipoSalgado: "frito_promocional" },
+    { id: 4, nome: "Bolinha de queijo", nomeAbreviado: "B.queijo", preco: 0.90, descricao: "Salgado frito - valor por unidade", categoria: "Salgados", tipoSalgado: "frito_promocional" },
+    { id: 5, nome: "Croquete de presunto e queijo", nomeAbreviado: "BALÃo", preco: 0.90, descricao: "Salgado frito - valor por unidade", categoria: "Salgados", tipoSalgado: "frito_promocional" },
+    { id: 6, nome: "Pastel de carne", nomeAbreviado: "Pastel carne", preco: 1.00, descricao: "Salgado frito - valor por unidade", categoria: "Salgados", tipoSalgado: "frito_normal" },
+    { id: 7, nome: "Pastel de queijo", nomeAbreviado: "Pastel queijo", preco: 1.00, descricao: "Salgado frito - valor por unidade", categoria: "Salgados", tipoSalgado: "frito_normal" },
+    { id: 8, nome: "Bolinho de aipim c/ carne seca", nomeAbreviado: "B. aipim", preco: 1.20, descricao: "Salgado frito - valor por unidade", categoria: "Salgados", tipoSalgado: "frito_normal" },
+    { id: 9, nome: "Mini churros de doce de leite", nomeAbreviado: "Mini churros", preco: 1.20, descricao: "Salgado frito - valor por unidade", categoria: "Salgados", tipoSalgado: "frito_normal" },
+    { id: 10, nome: "Doguinho assado", nomeAbreviado: "Doguinho", preco: 1.20, descricao: "Salgado assado - valor por unidade", categoria: "Salgados", tipoSalgado: "assado" },
+    { id: 11, nome: "Esfiha de carne", nomeAbreviado: "Esfiha carne", preco: 1.20, descricao: "Salgado assado - valor por unidade", categoria: "Salgados", tipoSalgado: "assado" },
+    { id: 12, nome: "Esfiha de frango", nomeAbreviado: "Esfiha frango", preco: 1.20, descricao: "Salgado assado - valor por unidade", categoria: "Salgados", tipoSalgado: "assado" },
+    { id: 13, nome: "Folhado de frango", nomeAbreviado: "Folh. frango", preco: 1.20, descricao: "Salgado assado - valor por unidade", categoria: "Salgados", tipoSalgado: "assado" },
+    { id: 14, nome: "Folhado de palmito", nomeAbreviado: "Folh. palmito", preco: 1.20, descricao: "Salgado assado - valor por unidade", categoria: "Salgados", tipoSalgado: "assado" },
+    { id: 15, nome: "Brigadeiro", nomeAbreviado: "Brigadeiro", preco: 1.40, descricao: "Doce - valor por unidade", categoria: "Doces", tipoSalgado: null },
+    { id: 16, nome: "Brigadeiro Branco", nomeAbreviado: "Brig. Branco", preco: 1.40, descricao: "Doce - valor por unidade", categoria: "Doces", tipoSalgado: null },
+    { id: 17, nome: "Beijinho", nomeAbreviado: "Beijinho", preco: 1.40, descricao: "Doce - valor por unidade", categoria: "Doces", tipoSalgado: null },
+    { id: 18, nome: "Dois Amores", nomeAbreviado: "2 Amores", preco: 1.40, descricao: "Doce - valor por unidade", categoria: "Doces", tipoSalgado: null },
+    { id: 19, nome: "Amendoim", nomeAbreviado: "Amendoim", preco: 1.40, descricao: "Doce - valor por unidade", categoria: "Doces", tipoSalgado: null },
+    { id: 20, nome: "Bicho de pé", nomeAbreviado: "Bicho pé", preco: 1.40, descricao: "Doce - valor por unidade", categoria: "Doces", tipoSalgado: null },
+    { id: 21, nome: "Brigadeiro de Churros", nomeAbreviado: "Churros", preco: 1.50, descricao: "Doce - valor por unidade", categoria: "Doces", tipoSalgado: null },
+    { id: 22, nome: "Olho de Sogra", nomeAbreviado: "Olho Sogra", preco: 1.50, descricao: "Doce - valor por unidade", categoria: "Doces", tipoSalgado: null },
+    { id: 23, nome: "Rosinha Napolitana", nomeAbreviado: "Rosinha Napol.", preco: 1.50, descricao: "Doce - valor por unidade", categoria: "Doces", tipoSalgado: null },
+    { id: 24, nome: "Leite ninho com nutella", nomeAbreviado: "ninho nutella", preco: 1.60, descricao: "Doce - valor por unidade", categoria: "Doces", tipoSalgado: null },
+    { id: 25, nome: "Surpresa de Uva", nomeAbreviado: "Surp. Uva", preco: 1.70, descricao: "Doce - valor por unidade", categoria: "Doces", tipoSalgado: null },
+    { id: 26, nome: "Brigadeiro ao leite c/Split Callebaut", nomeAbreviado: "Brig. Split", preco: 2.00, descricao: "Doce - valor por unidade", categoria: "Doces", tipoSalgado: null },
+    { id: 27, nome: "Ouriço de coco queimado", nomeAbreviado: "Ouriço", preco: 2.00, descricao: "Doce - valor por unidade", categoria: "Doces", tipoSalgado: null },
+    { id: 28, nome: "Bombom Cereja", nomeAbreviado: "Bomb. Cereja", preco: 3.00, descricao: "Doce - valor por unidade", categoria: "Doces", tipoSalgado: null },
+    { id: 29, nome: "Bombom Uva", nomeAbreviado: "Bomb. Uva", preco: 3.00, descricao: "Doce - valor por unidade", categoria: "Doces", tipoSalgado: null },
+    { id: 30, nome: "Bombom de Morango", nomeAbreviado: "Bomb. Morango", preco: 4.00, descricao: "Doce - valor por unidade", categoria: "Doces", tipoSalgado: null },
+    { id: 31, nome: "Brigadeiro Ferreiro", nomeAbreviado: "Ferreiro", preco: 2.00, descricao: "Doce - valor por unidade", categoria: "Doces", tipoSalgado: null },
+    { id: 32, nome: "Caixa Doce Mix 42un", nomeAbreviado: "Cx Mix 42un", preco: 60.00, descricao: "Caixa de doces - valor por caixa", categoria: "Doces", tipoSalgado: null },
+    { id: 33, nome: "Caixa Doce Mix 100un", nomeAbreviado: "Cx Mix 100un", preco: 150.00, descricao: "Caixa de doces - valor por caixa", categoria: "Doces", tipoSalgado: null },
+    { id: 34, nome: "Bolo", nomeAbreviado: "Bolo", preco: 80.00, descricao: "Bolos", categoria: "Doces", tipoSalgado: null },
+    { id: 35, nome: "Morango do Amor", nomeAbreviado: "Morango Amor", preco: 10.00, descricao: "Morango do Amor❤️", categoria: "Doces", tipoSalgado: null },
+    { id: 36, nome: "DIVERSOS", nomeAbreviado: "DIVERSOS", preco: 0.00, descricao: "Produto personalizado - nome e preço definidos no pedido", categoria: "Diversos", tipoSalgado: null }
 ];
 
 let pedidos = [];
@@ -162,14 +163,79 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     });
 
-    // Toggle buttons para modo da comanda
-    document.getElementById('toggleCopyMode').addEventListener('click', function() {
-        setComandaMode(false);
-    });
+    // Toggle entre modos de visualização da comanda
+    const toggleCopyMode = document.getElementById('toggleCopyMode');
+    const togglePrintMode = document.getElementById('togglePrintMode');
+    const previewNotinha = document.getElementById('previewNotinha');
+    const comandaHeader = document.getElementById('comandaHeader');
+    const valorTotalPrint = document.getElementById('valorTotalPrint');
+    const previewTotal = document.getElementById('previewTotal');
+    const previewTotalPrint = document.getElementById('previewTotalPrint');
+    const previewCliente = document.getElementById('previewCliente');
 
-    document.getElementById('togglePrintMode').addEventListener('click', function() {
-        setComandaMode(true);
-    });
+    // Função para alternar para modo copiar imagem
+    function ativarModoCopiarImagem() {
+        // Atualizar botões
+        toggleCopyMode.classList.add('bg-white', 'text-pink-600', 'shadow-sm');
+        toggleCopyMode.classList.remove('text-gray-500');
+        togglePrintMode.classList.remove('bg-white', 'text-pink-600', 'shadow-sm');
+        togglePrintMode.classList.add('text-gray-500');
+
+        // Remover classe de modo impressão
+        previewNotinha.classList.remove('print-mode');
+        
+        // Mostrar header da confeitaria
+        comandaHeader.style.display = 'block';
+        
+        // Esconder seção de valor total do modo impressão
+        valorTotalPrint.style.display = 'none';
+        
+        // Mostrar valor total no local original
+        previewTotal.parentElement.style.display = 'flex';
+        
+        // Mostrar header "ITENS PARA PRODUZIR"
+        const itensHeader = document.querySelector('#previewItens').previousElementSibling;
+        if (itensHeader && itensHeader.tagName === 'H4') {
+            itensHeader.style.display = 'block';
+        }
+    }
+
+    // Função para alternar para modo impressão
+    function ativarModoImpressao() {
+        // Atualizar botões
+        togglePrintMode.classList.add('bg-white', 'text-pink-600', 'shadow-sm');
+        togglePrintMode.classList.remove('text-gray-500');
+        toggleCopyMode.classList.remove('bg-white', 'text-pink-600', 'shadow-sm');
+        toggleCopyMode.classList.add('text-gray-500');
+
+        // Adicionar classe de modo impressão
+        previewNotinha.classList.add('print-mode');
+        
+        // Esconder header da confeitaria
+        comandaHeader.style.display = 'none';
+        
+        // Esconder valor total do local original
+        previewTotal.parentElement.style.display = 'none';
+        
+        // Mostrar seção de valor total do modo impressão
+        valorTotalPrint.style.display = 'block';
+        
+        // Sincronizar valor total
+        previewTotalPrint.textContent = previewTotal.textContent;
+        
+        // Esconder header "ITENS PARA PRODUZIR"
+        const itensHeader = document.querySelector('#previewItens').previousElementSibling;
+        if (itensHeader && itensHeader.tagName === 'H4') {
+            itensHeader.style.display = 'none';
+        }
+    }
+
+    // Event listeners para os botões de toggle
+    toggleCopyMode.addEventListener('click', ativarModoCopiarImagem);
+    togglePrintMode.addEventListener('click', ativarModoImpressao);
+
+    // Inicializar no modo copiar imagem
+    ativarModoCopiarImagem();
 
     // Formulário de Produto
     document.getElementById('formProduto').addEventListener('submit', function(e) {
@@ -227,16 +293,26 @@ document.addEventListener('DOMContentLoaded', function() {
 document.getElementById('produtoPedido').addEventListener('change', function() {
     const produtoId = parseInt(this.value);
     const descricaoBoloContainer = document.getElementById('descricaoBoloContainer');
+    const diversosContainer = document.getElementById('diversosContainer');
     const labelQuantidadePedido = document.getElementById('labelQuantidadePedido');
 
     if (produtoId) {
         const produto = produtos.find(p => p.id === produtoId);
 
+        // Esconder todos os containers primeiro
+        descricaoBoloContainer.classList.add('hidden');
+        diversosContainer.classList.add('hidden');
+
         if (produto && produto.nome.toLowerCase() === 'bolo') {
             descricaoBoloContainer.classList.remove('hidden');
             labelQuantidadePedido.textContent = 'KG';
+        } else if (produto && produto.nome === 'DIVERSOS') {
+            diversosContainer.classList.remove('hidden');
+            labelQuantidadePedido.textContent = 'Quantidade';
+            // Limpar campos do produto diversos
+            document.getElementById('nomeDiversos').value = '';
+            document.getElementById('precoDiversos').value = '';
         } else {
-            descricaoBoloContainer.classList.add('hidden');
             labelQuantidadePedido.textContent = 'Quantidade';
         }
 
@@ -244,11 +320,47 @@ document.getElementById('produtoPedido').addEventListener('change', function() {
         calcularTotalItemPedido();
     } else {
         descricaoBoloContainer.classList.add('hidden');
+        diversosContainer.classList.add('hidden');
         labelQuantidadePedido.textContent = 'Quantidade';
         document.getElementById('precoUnitarioPedido').textContent = formatarMoeda(0);
         document.getElementById('totalItemPedido').textContent = formatarMoeda(0);
     }
 });
+
+// Event listeners para campos do produto DIVERSOS
+document.getElementById('precoDiversos').addEventListener('input', function() {
+    const produtoId = parseInt(document.getElementById('produtoPedido').value);
+    const produto = produtos.find(p => p.id === produtoId);
+    
+    if (produto && produto.nome === 'DIVERSOS') {
+        const precoPersonalizado = parseFloat(this.value) || 0;
+        document.getElementById('precoUnitarioPedido').textContent = formatarMoeda(precoPersonalizado);
+        calcularTotalItemPedidoDiversos();
+    }
+});
+
+document.getElementById('quantidadePedido').addEventListener('input', function() {
+    const produtoId = parseInt(document.getElementById('produtoPedido').value);
+    const produto = produtos.find(p => p.id === produtoId);
+    
+    if (produto && produto.nome === 'DIVERSOS') {
+        calcularTotalItemPedidoDiversos();
+    } else {
+        calcularTotalItemPedido();
+    }
+});
+
+function calcularTotalItemPedidoDiversos() {
+    const quantidade = parseFloat(document.getElementById('quantidadePedido').value);
+    const precoPersonalizado = parseFloat(document.getElementById('precoDiversos').value) || 0;
+    
+    if (quantidade > 0 && precoPersonalizado > 0) {
+        const total = quantidade * precoPersonalizado;
+        document.getElementById('totalItemPedido').textContent = formatarMoeda(total);
+    } else {
+        document.getElementById('totalItemPedido').textContent = formatarMoeda(0);
+    }
+}
 
     document.getElementById('quantidadeCalculo').addEventListener('change', calcularTotal);
     document.getElementById('quantidadeCalculo').addEventListener('input', calcularTotal);
@@ -330,7 +442,14 @@ function calcularTotal() {
 function atualizarPreview() {
     document.getElementById('previewCliente').textContent = document.getElementById('clientePedido').value || '-';
     document.getElementById('previewHorario').textContent = formatarDataHora(document.getElementById('horarioPedido').value) || '-';
-    document.getElementById('previewTotal').textContent = formatarMoeda(parseFloat(document.getElementById('valorPedido').value) || 0);
+    const valorTotal = formatarMoeda(parseFloat(document.getElementById('valorPedido').value) || 0);
+    document.getElementById('previewTotal').textContent = valorTotal;
+    
+    // Sincronizar valor total para modo de impressão SEMPRE
+    const previewTotalPrint = document.getElementById('previewTotalPrint');
+    if (previewTotalPrint) {
+        previewTotalPrint.textContent = valorTotal;
+    }
     
     // Atualizar itens baseado nos produtos do pedido
     atualizarPreviewProdutos();
@@ -762,6 +881,24 @@ function adicionarProdutoAoPedido() {
     const produto = produtos.find(p => p.id === produtoId);
     let precoFinal = produto.preco;
 
+    // Para produto DIVERSOS, usar preço personalizado
+    if (produto.nome === 'DIVERSOS') {
+        const nomePersonalizado = document.getElementById('nomeDiversos').value.trim();
+        const precoPersonalizado = parseFloat(document.getElementById('precoDiversos').value);
+
+        if (!nomePersonalizado) {
+            showNotification('Erro!', 'Digite o nome do produto diversos.', 'error');
+            return;
+        }
+
+        if (!precoPersonalizado || precoPersonalizado <= 0) {
+            showNotification('Erro!', 'Digite um preço válido para o produto diversos.', 'error');
+            return;
+        }
+
+        precoFinal = precoPersonalizado;
+    }
+
     // Para salgados fritos promocionais, usar preço dinâmico
     if (produto.tipoSalgado === 'frito_promocional') {
         // Criar lista temporária para calcular o preço
@@ -782,7 +919,8 @@ function adicionarProdutoAoPedido() {
         preco: precoFinal,
         quantidade: quantidade,
         total: total,
-        descricaoBolo: produto.nome.toLowerCase() === 'bolo' ? descricaoBolo : ''
+        descricaoBolo: produto.nome.toLowerCase() === 'bolo' ? descricaoBolo : '',
+        nomePersonalizado: produto.nome === 'DIVERSOS' ? document.getElementById('nomeDiversos').value.trim() : ''
     };
 
     produtosPedido.push(itemPedido);
@@ -790,17 +928,24 @@ function adicionarProdutoAoPedido() {
     // Recalcular preços de todos os salgados fritos promocionais
     recalcularPrecosPedido();
 
-    // Limpar seleção e descrição do bolo
+    // Limpar seleção e campos
     document.getElementById('produtoPedido').value = '';
     document.getElementById('quantidadePedido').value = 0;
     document.getElementById('descricaoBolo').value = '';
+    document.getElementById('nomeDiversos').value = '';
+    document.getElementById('precoDiversos').value = '';
     document.getElementById('precoUnitarioPedido').textContent = formatarMoeda(0);
     document.getElementById('totalItemPedido').textContent = formatarMoeda(0);
+
+    // Esconder containers
+    document.getElementById('descricaoBoloContainer').classList.add('hidden');
+    document.getElementById('diversosContainer').classList.add('hidden');
 
     // Atualizar preview
     atualizarPreviewProdutos();
 
-    showNotification('Produto Adicionado!', `${produto.nome} foi adicionado ao pedido.`, 'success');
+    const nomeExibir = produto.nome === 'DIVERSOS' ? itemPedido.nomePersonalizado : produto.nome;
+    showNotification('Produto Adicionado!', `${nomeExibir} foi adicionado ao pedido.`, 'success');
 }
 
 function atualizarListaProdutosPedido() {
@@ -885,25 +1030,49 @@ function atualizarPreviewProdutos() {
     const totalCalculado = produtosPedido.reduce((sum, item) => sum + item.total, 0);
 
     // Atualizar total na preview
-    document.getElementById('previewTotal').textContent = formatarMoeda(totalCalculado);
+    const valorTotalFormatado = formatarMoeda(totalCalculado);
+    document.getElementById('previewTotal').textContent = valorTotalFormatado;
+    
+    // Sincronizar valor total para modo de impressão SEMPRE
+    const previewTotalPrint = document.getElementById('previewTotalPrint');
+    if (previewTotalPrint) {
+        previewTotalPrint.textContent = valorTotalFormatado;
+    }
 
     if (produtosPedido.length === 0) {
         previewItens.innerHTML = '<p class="text-gray-500 italic">Aguardando produtos do pedido...</p>';
         return;
     }
 
+    // Verificar se está no modo impressão para usar nomes abreviados
+    const isComandaPrintModeActive = document.getElementById('previewNotinha').classList.contains('print-mode');
+
     previewItens.innerHTML = produtosPedido.map(item => {
         const produto = produtos.find(p => p.id === item.id);
+        
+        // Usar nome abreviado se estiver no modo impressão
+        let nomeExibir = item.nome;
+        if (isComandaPrintModeActive && produto && produto.nomeAbreviado) {
+            nomeExibir = produto.nomeAbreviado;
+        }
 
         if (produto && produto.nome.toLowerCase() === 'bolo') {
             return `<p class="mb-1 flex justify-between">
-                <span>• ${item.quantidade} KG ${item.nome} - ${item.descricaoBolo ? item.descricaoBolo : ''}</span>
+                <span>• ${item.quantidade} KG ${nomeExibir} - ${item.descricaoBolo ? item.descricaoBolo : ''}</span>
                 <strong></strong>
             </p>`;
         }
 
+        // Para produto DIVERSOS, usar o nome personalizado
+        if (produto && produto.nome === 'DIVERSOS') {
+            return `<p class="mb-1 flex justify-between">
+                <span>• ${item.quantidade}x ${item.nomePersonalizado || nomeExibir}</span>
+                <strong>${formatarMoeda(item.total)}</strong>
+            </p>`;
+        }
+
         return `<p class="mb-1 flex justify-between">
-            <span>• ${item.quantidade}x ${item.nome}</span>
+            <span>• ${item.quantidade}x ${nomeExibir}</span>
             <strong>${formatarMoeda(item.total)}</strong>
         </p>`;
     }).join('');
