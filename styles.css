@@ -13,6 +13,19 @@
     background: white;
 }
 
+/* Estilos para modo de impressão */
+.kitchen-receipt.print-mode {
+    font-weight: bold;
+}
+
+.kitchen-receipt.print-mode * {
+    font-weight: bold !important;
+}
+
+.kitchen-receipt.print-mode #comandaHeader {
+    display: none;
+}
+
 /* Sistema de Notificações */
 .notification-container {
     position: fixed;
@@ -216,6 +229,13 @@
         border: 2px solid #333 !important;
         background: white !important;
         font-size: 12px !important;
+        font-weight: bold !important;
+    }
+    .kitchen-receipt * {
+        font-weight: bold !important;
+    }
+    .kitchen-receipt #comandaHeader {
+        display: none !important;
     }
     body {
         margin: 0;

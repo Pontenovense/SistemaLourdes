@@ -141,6 +141,9 @@ function recalcularPrecosPedido() {
     atualizarListaProdutosPedido();
 }
 
+// Variável global para controlar o modo da comanda
+let isComandaPrintMode = false;
+
 // Dom Ready
 document.addEventListener('DOMContentLoaded', function() {
     // Tabs
@@ -157,6 +160,15 @@ document.addEventListener('DOMContentLoaded', function() {
             const contentId = this.id.replace('tab', 'content');
             document.getElementById(contentId).classList.add('active');
         });
+    });
+
+    // Toggle buttons para modo da comanda
+    document.getElementById('toggleCopyMode').addEventListener('click', function() {
+        setComandaMode(false);
+    });
+
+    document.getElementById('togglePrintMode').addEventListener('click', function() {
+        setComandaMode(true);
     });
 
     // Formulário de Produto
@@ -275,7 +287,34 @@ document.getElementById('produtoPedido').addEventListener('change', function() {
     atualizarPreview();
     atualizarListaCalculadora();
     atualizarListaProdutosPedido();
+    
+    // Inicializar modo da comanda (padrão: copiar imagem)
+    setComandaMode(false);
 });
+
+// Função para alternar entre modos da comanda
+function setComandaMode(printMode) {
+    isComandaPrintMode = printMode;
+    const previewNotinha = document.getElementById('previewNotinha');
+    const toggleCopyBtn = document.getElementById('toggleCopyMode');
+    const togglePrintBtn = document.getElementById('togglePrintMode');
+    
+    if (printMode) {
+        // Modo impressão: negrito e sem cabeçalho
+        previewNotinha.classList.add('print-mode');
+        togglePrintBtn.classList.add('bg-white', 'text-pink-600', 'shadow-sm');
+        togglePrintBtn.classList.remove('text-gray-500');
+        toggleCopyBtn.classList.remove('bg-white', 'text-pink-600', 'shadow-sm');
+        toggleCopyBtn.classList.add('text-gray-500');
+    } else {
+        // Modo copiar imagem: formato original
+        previewNotinha.classList.remove('print-mode');
+        toggleCopyBtn.classList.add('bg-white', 'text-pink-600', 'shadow-sm');
+        toggleCopyBtn.classList.remove('text-gray-500');
+        togglePrintBtn.classList.remove('bg-white', 'text-pink-600', 'shadow-sm');
+        togglePrintBtn.classList.add('text-gray-500');
+    }
+}
 
 function calcularTotal() {
     const produtoId = parseInt(document.getElementById('produtoSelecionado').value);
@@ -441,7 +480,21 @@ function visualizarComanda(id) {
 }
 
 function imprimirComanda() {
+    // Temporariamente ativar modo impressão se não estiver ativo
+    const wasInPrintMode = isComandaPrintMode;
+    if (!wasInPrintMode) {
+        setComandaMode(true);
+    }
+    
+    // Imprimir
     window.print();
+    
+    // Restaurar modo anterior após impressão
+    if (!wasInPrintMode) {
+        setTimeout(() => {
+            setComandaMode(false);
+        }, 1000);
+    }
 }
 
 function imprimirComandaPedido(id) {
@@ -459,51 +512,67 @@ function copiarComandaImagem() {
         return;
     }
 
+    // Temporariamente desativar modo impressão se estiver ativo
+    const wasInPrintMode = isComandaPrintMode;
+    if (wasInPrintMode) {
+        setComandaMode(false);
+    }
+
     // Mostrar loading
     const button = event.target;
     const originalText = button.innerHTML;
     button.innerHTML = '<i class="fas fa-spinner fa-spin mr-2"></i>Copiando...';
     button.disabled = true;
 
-    // Capturar diretamente o elemento da comanda com margem para borda
-    html2canvas(receiptElement, {
-        backgroundColor: '#ffffff',
-        scale: 2,
-        useCORS: true,
-        allowTaint: true,
-        width: receiptElement.offsetWidth + 40,
-        height: receiptElement.offsetHeight + 40,
-        x: -20,
-        y: -20
-    }).then(canvas => {
-        canvas.toBlob(blob => {
-            if (blob) {
-                // Tentar usar a API moderna de clipboard
-                if (navigator.clipboard && window.ClipboardItem) {
-                    navigator.clipboard.write([
-                        new ClipboardItem({
-                            'image/png': blob
-                        })
-                    ]).then(() => {
-                        showNotification('Sucesso!', 'Imagem da comanda copiada para a área de transferência!', 'success');
-                    }).catch(err => {
-                        console.error('Erro ao copiar:', err);
+    // Aguardar um pouco para a mudança de modo ser aplicada
+    setTimeout(() => {
+        // Capturar diretamente o elemento da comanda com margem para borda
+        html2canvas(receiptElement, {
+            backgroundColor: '#ffffff',
+            scale: 2,
+            useCORS: true,
+            allowTaint: true,
+            width: receiptElement.offsetWidth + 40,
+            height: receiptElement.offsetHeight + 40,
+            x: -20,
+            y: -20
+        }).then(canvas => {
+            canvas.toBlob(blob => {
+                if (blob) {
+                    // Tentar usar a API moderna de clipboard
+                    if (navigator.clipboard && window.ClipboardItem) {
+                        navigator.clipboard.write([
+                            new ClipboardItem({
+                                'image/png': blob
+                            })
+                        ]).then(() => {
+                            showNotification('Sucesso!', 'Imagem da comanda copiada para a área de transferência!', 'success');
+                        }).catch(err => {
+                            console.error('Erro ao copiar:', err);
+                            fallbackCopyImage(canvas);
+                        });
+                    } else {
+                        // Fallback para navegadores mais antigos
                         fallbackCopyImage(canvas);
-                    });
-                } else {
-                    // Fallback para navegadores mais antigos
-                    fallbackCopyImage(canvas);
+                    }
                 }
+            }, 'image/png');
+        }).catch(err => {
+            console.error('Erro ao gerar imagem:', err);
+            showNotification('Erro!', 'Não foi possível gerar a imagem da comanda.', 'error');
+        }).finally(() => {
+            // Restaurar botão
+            button.innerHTML = originalText;
+            button.disabled = false;
+            
+            // Restaurar modo anterior
+            if (wasInPrintMode) {
+                setTimeout(() => {
+                    setComandaMode(true);
+                }, 500);
             }
-        }, 'image/png');
-    }).catch(err => {
-        console.error('Erro ao gerar imagem:', err);
-        showNotification('Erro!', 'Não foi possível gerar a imagem da comanda.', 'error');
-    }).finally(() => {
-        // Restaurar botão
-        button.innerHTML = originalText;
-        button.disabled = false;
-    });
+        });
+    }, 200);
 }
 
 function fallbackCopyImage(canvas) {
