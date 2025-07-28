@@ -449,7 +449,10 @@ function calcularTotal() {
 }
 
 function atualizarPreview() {
-    document.getElementById('previewCliente').textContent = document.getElementById('clientePedido').value || '-';
+    // Nome do cliente em maiúsculo
+    const nomeCliente = document.getElementById('clientePedido').value || '-';
+    document.getElementById('previewCliente').textContent = nomeCliente.toUpperCase();
+    
     document.getElementById('previewHorario').textContent = formatarDataHora(document.getElementById('horarioPedido').value) || '-';
     const valorTotal = formatarMoeda(parseFloat(document.getElementById('valorPedido').value) || 0);
     document.getElementById('previewTotal').textContent = valorTotal;
@@ -463,12 +466,12 @@ function atualizarPreview() {
     // Atualizar itens baseado nos produtos do pedido
     atualizarPreviewProdutos();
     
-    // Atualizar observações
+    // Atualizar observações em maiúsculo
     const observacoes = document.getElementById('observacoesPedido').value;
     const previewObservacoes = document.getElementById('previewObservacoes');
     const previewObservacoesTexto = document.getElementById('previewObservacoesTexto');
     if (observacoes.trim()) {
-        previewObservacoesTexto.textContent = observacoes;
+        previewObservacoesTexto.textContent = observacoes.toUpperCase();
         previewObservacoes.style.display = 'block';
     } else {
         previewObservacoes.style.display = 'none';
@@ -1069,17 +1072,22 @@ function atualizarPreviewProdutos() {
                 nomeExibir = produto.nomeAbreviado;
             }
 
+            // Converter para maiúsculo
+            nomeExibir = nomeExibir.toUpperCase();
+
             if (produto && produto.nome.toLowerCase() === 'bolo') {
+                const descricaoBoloUpper = item.descricaoBolo ? item.descricaoBolo.toUpperCase() : '';
                 return `<p class="mb-1 flex justify-between">
-                    <span>• ${item.quantidade} KG ${nomeExibir} - ${item.descricaoBolo ? item.descricaoBolo : ''}</span>
+                    <span>• ${item.quantidade} KG ${nomeExibir} - ${descricaoBoloUpper}</span>
                     <strong></strong>
                 </p>`;
             }
 
             // Para produto DIVERSOS, usar o nome personalizado
             if (produto && produto.nome === 'DIVERSOS') {
+                const nomePersonalizadoUpper = item.nomePersonalizado ? item.nomePersonalizado.toUpperCase() : nomeExibir;
                 return `<p class="mb-1 flex justify-between">
-                    <span>• ${item.quantidade}x ${item.nomePersonalizado || nomeExibir}</span>
+                    <span>• ${item.quantidade}x ${nomePersonalizadoUpper}</span>
                     <strong>${formatarMoeda(item.total)}</strong>
                 </p>`;
             }
