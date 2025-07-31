@@ -287,8 +287,8 @@ document.addEventListener('DOMContentLoaded', function() {
         atualizarPreviewProdutos();
     });
 
-    // Inicializar no modo copiar imagem
-    ativarModoCopiarImagem();
+    // Inicializar no modo impressão
+    ativarModoImpressao();
 
     // Formulário de Produto
     document.getElementById('formProduto').addEventListener('submit', function(e) {
@@ -453,8 +453,8 @@ function calcularTotalItemPedidoDiversos() {
     atualizarListaCalculadora();
     atualizarListaProdutosPedido();
     
-    // Inicializar modo da comanda (padrão: copiar imagem)
-    setComandaMode(false);
+    // Inicializar modo da comanda (padrão: impressão)
+    setComandaMode(true);
 });
 
 // Função para alternar entre modos da comanda
