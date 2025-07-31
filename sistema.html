@@ -33,6 +33,7 @@
         <div class="bg-white rounded-lg shadow-md overflow-hidden mb-8">
             <div class="flex border-b border-gray-200 overflow-x-auto">
                 <button id="tabProdutos" class="tab-btn px-3 sm:px-4 py-2 sm:py-3 font-medium text-pink-600 border-b-2 border-pink-600 bg-pink-50 whitespace-nowrap text-sm sm:text-base">Produtos</button>
+                <button id="tabKitsFestas" class="tab-btn px-3 sm:px-4 py-2 sm:py-3 font-medium text-gray-500 hover:text-pink-600 whitespace-nowrap text-sm sm:text-base">Kits Festas</button>
                 <button id="tabPedidos" class="tab-btn px-3 sm:px-4 py-2 sm:py-3 font-medium text-gray-500 hover:text-pink-600 whitespace-nowrap text-sm sm:text-base">Pedidos</button>
             </div>
 
@@ -122,6 +123,210 @@
                                 <!-- Produtos serão adicionados aqui via JavaScript -->
                             </tbody>
                         </table>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Seção Kits Festas -->
+            <div id="contentKitsFestas" class="tab-content p-3 sm:p-6">
+                <div class="grid grid-cols-1 lg:grid-cols-2 gap-4 sm:gap-6">
+                    <!-- Seleção de Kit -->
+                    <div class="bg-gradient-to-br from-pink-50 to-purple-50 p-4 sm:p-6 rounded-lg border border-pink-200">
+                        <h2 class="text-lg sm:text-xl font-semibold mb-3 sm:mb-4 text-pink-700 flex items-center">
+                            <i class="fas fa-birthday-cake mr-2"></i>Kits Festas
+                        </h2>
+                        
+                        <!-- Seleção do Kit -->
+                        <div class="mb-4">
+                            <label class="block text-sm font-medium text-gray-700 mb-2">Escolha o Kit:</label>
+                            <div class="grid grid-cols-1 sm:grid-cols-2 gap-2">
+                                <div class="kit-option" data-kit="10">
+                                    <input type="radio" id="kit10" name="kitSelecionado" value="10" class="sr-only">
+                                    <label for="kit10" class="kit-card cursor-pointer block p-3 border-2 border-gray-200 rounded-lg hover:border-pink-300 transition-colors">
+                                        <div class="font-semibold text-pink-700">KIT 10 PESSOAS</div>
+                                        <div class="text-lg font-bold text-pink-600">R$ 265,00</div>
+                                        <div class="text-xs text-gray-600">1,5kg bolo + 100 salgados + 42 doces</div>
+                                    </label>
+                                </div>
+                                <div class="kit-option" data-kit="15">
+                                    <input type="radio" id="kit15" name="kitSelecionado" value="15" class="sr-only">
+                                    <label for="kit15" class="kit-card cursor-pointer block p-3 border-2 border-gray-200 rounded-lg hover:border-pink-300 transition-colors">
+                                        <div class="font-semibold text-pink-700">KIT 15 PESSOAS</div>
+                                        <div class="text-lg font-bold text-pink-600">R$ 400,00</div>
+                                        <div class="text-xs text-gray-600">2kg bolo + 150 salgados + 84 doces</div>
+                                    </label>
+                                </div>
+                                <div class="kit-option" data-kit="20">
+                                    <input type="radio" id="kit20" name="kitSelecionado" value="20" class="sr-only">
+                                    <label for="kit20" class="kit-card cursor-pointer block p-3 border-2 border-gray-200 rounded-lg hover:border-pink-300 transition-colors">
+                                        <div class="font-semibold text-pink-700">KIT 20 PESSOAS</div>
+                                        <div class="text-lg font-bold text-pink-600">R$ 550,00</div>
+                                        <div class="text-xs text-gray-600">2,5kg bolo + 200 salgados + 126 doces</div>
+                                    </label>
+                                </div>
+                                <div class="kit-option" data-kit="30">
+                                    <input type="radio" id="kit30" name="kitSelecionado" value="30" class="sr-only">
+                                    <label for="kit30" class="kit-card cursor-pointer block p-3 border-2 border-gray-200 rounded-lg hover:border-pink-300 transition-colors">
+                                        <div class="font-semibold text-pink-700">KIT 30 PESSOAS</div>
+                                        <div class="text-lg font-bold text-pink-600">R$ 735,00</div>
+                                        <div class="text-xs text-gray-600">3kg bolo + 300 salgados + 168 doces</div>
+                                    </label>
+                                </div>
+                                <div class="kit-option" data-kit="40">
+                                    <input type="radio" id="kit40" name="kitSelecionado" value="40" class="sr-only">
+                                    <label for="kit40" class="kit-card cursor-pointer block p-3 border-2 border-gray-200 rounded-lg hover:border-pink-300 transition-colors">
+                                        <div class="font-semibold text-pink-700">KIT 40 PESSOAS</div>
+                                        <div class="text-lg font-bold text-pink-600">R$ 960,00</div>
+                                        <div class="text-xs text-gray-600">4kg bolo + 400 salgados + 210 doces</div>
+                                    </label>
+                                </div>
+                                <div class="kit-option" data-kit="50">
+                                    <input type="radio" id="kit50" name="kitSelecionado" value="50" class="sr-only">
+                                    <label for="kit50" class="kit-card cursor-pointer block p-3 border-2 border-gray-200 rounded-lg hover:border-pink-300 transition-colors">
+                                        <div class="font-semibold text-pink-700">KIT 50 PESSOAS</div>
+                                        <div class="text-lg font-bold text-pink-600">R$ 1.332,00</div>
+                                        <div class="text-xs text-gray-600">5kg bolo + 500 salgados + 252 doces</div>
+                                    </label>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Personalização do Kit -->
+                        <div id="kitPersonalizacao" class="space-y-4" style="display: none;">
+                            <!-- Sabor do Bolo -->
+                            <div>
+                                <label class="block text-sm font-medium text-gray-700 mb-2">
+                                    <i class="fas fa-birthday-cake mr-1 text-pink-500"></i>Sabor do Bolo:
+                                </label>
+                                <select id="saborBolo" class="block w-full px-3 py-2 text-sm rounded-md border-gray-300 shadow-sm focus:border-pink-500 focus:ring-pink-500">
+                                    <option value="">Selecione o sabor</option>
+                                    <option value="Dois amores">Dois amores</option>
+                                    <option value="Dois amores c/morango">Dois amores c/morango</option>
+                                    <option value="Brigadeiro">Brigadeiro</option>
+                                    <option value="Brigadeiro com morango">Brigadeiro com morango</option>
+                                    <option value="Morango com nata e suspiro">Morango com nata e suspiro</option>
+                                    <option value="Morango com cocada">Morango com cocada</option>
+                                    <option value="Morango com 4 leite">Morango com 4 leite</option>
+                                    <option value="Abacaxi com coco">Abacaxi com coco</option>
+                                    <option value="Abacaxi com 4Leite">Abacaxi com 4Leite</option>
+                                    <option value="Abacaxi com leite ninho">Abacaxi com leite ninho</option>
+                                    <option value="Salada de frutas com nata">Salada de frutas com nata</option>
+                                    <option value="Prestígio">Prestígio</option>
+                                </select>
+                            </div>
+
+                            <!-- Tipo de Salgados -->
+                            <div>
+                                <label class="block text-sm font-medium text-gray-700 mb-2">
+                                    <i class="fas fa-utensils mr-1 text-pink-500"></i>Salgados:
+                                </label>
+                                <div class="space-y-2">
+                                    <label class="flex items-center">
+                                        <input type="radio" name="tipoSalgados" value="sortidos" class="text-pink-600 focus:ring-pink-500">
+                                        <span class="ml-2 text-sm">Sortidos (escolha da casa)</span>
+                                    </label>
+                                    <label class="flex items-center">
+                                        <input type="radio" name="tipoSalgados" value="escolha" class="text-pink-600 focus:ring-pink-500">
+                                        <span class="ml-2 text-sm">Escolha do cliente</span>
+                                    </label>
+                                </div>
+                            </div>
+
+                            <!-- Seleção de Salgados Específicos -->
+                            <div id="selecaoSalgados" class="hidden">
+                                <label class="block text-sm font-medium text-gray-700 mb-2">
+                                    Escolha até 5 tipos de salgados:
+                                </label>
+                                <div class="grid grid-cols-1 gap-2 max-h-40 overflow-y-auto border border-gray-200 rounded p-2">
+                                    <label class="flex items-center">
+                                        <input type="checkbox" name="salgadosEscolhidos" value="Coxinha" class="text-pink-600 focus:ring-pink-500">
+                                        <span class="ml-2 text-sm">Coxinha</span>
+                                    </label>
+                                    <label class="flex items-center">
+                                        <input type="checkbox" name="salgadosEscolhidos" value="Risoles de carne" class="text-pink-600 focus:ring-pink-500">
+                                        <span class="ml-2 text-sm">Risoles de carne</span>
+                                    </label>
+                                    <label class="flex items-center">
+                                        <input type="checkbox" name="salgadosEscolhidos" value="Kibe" class="text-pink-600 focus:ring-pink-500">
+                                        <span class="ml-2 text-sm">Kibe</span>
+                                    </label>
+                                    <label class="flex items-center">
+                                        <input type="checkbox" name="salgadosEscolhidos" value="Bolinho de queijo" class="text-pink-600 focus:ring-pink-500">
+                                        <span class="ml-2 text-sm">Bolinho de queijo</span>
+                                    </label>
+                                    <label class="flex items-center">
+                                        <input type="checkbox" name="salgadosEscolhidos" value="Croquete de presunto e queijo" class="text-pink-600 focus:ring-pink-500">
+                                        <span class="ml-2 text-sm">Croquete de presunto e queijo</span>
+                                    </label>
+                                </div>
+                                <div id="contadorSalgados" class="text-xs text-gray-500 mt-1">0/5 salgados selecionados</div>
+                            </div>
+
+                            <!-- Botão Adicionar Kit -->
+                            <button id="adicionarKit" class="w-full bg-gradient-to-r from-pink-600 to-purple-600 text-white py-3 px-4 rounded-lg hover:from-pink-700 hover:to-purple-700 focus:outline-none focus:ring-2 focus:ring-pink-500 font-semibold text-sm transition-all duration-200 transform hover:scale-105">
+                                <i class="fas fa-plus mr-2"></i>Adicionar Kit ao Pedido
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Preview do Kit -->
+                    <div class="bg-white p-4 sm:p-6 rounded-lg border border-gray-200">
+                        <h3 class="text-lg font-semibold mb-4 text-pink-700 flex items-center">
+                            <i class="fas fa-eye mr-2"></i>Preview do Kit
+                        </h3>
+                        
+                        <div id="kitPreview" class="text-center text-gray-500 italic py-8">
+                            Selecione um kit para ver os detalhes
+                        </div>
+
+                        <div id="kitDetalhes" class="hidden space-y-4">
+                            <div class="bg-pink-50 p-4 rounded-lg">
+                                <h4 id="kitTitulo" class="font-bold text-lg text-pink-700 mb-2"></h4>
+                                <div id="kitPreco" class="text-2xl font-bold text-pink-600 mb-3"></div>
+                                
+                                <div class="space-y-2 text-sm">
+                                    <div class="flex justify-between">
+                                        <span class="font-medium">Bolo:</span>
+                                        <span id="kitBolo"></span>
+                                    </div>
+                                    <div class="flex justify-between">
+                                        <span class="font-medium">Sabor:</span>
+                                        <span id="kitSabor" class="text-pink-600">-</span>
+                                    </div>
+                                    <div class="flex justify-between">
+                                        <span class="font-medium">Salgados:</span>
+                                        <span id="kitSalgados"></span>
+                                    </div>
+                                    <div class="flex justify-between">
+                                        <span class="font-medium">Tipo:</span>
+                                        <span id="kitTipoSalgados" class="text-pink-600">-</span>
+                                    </div>
+                                    <div id="kitSalgadosEscolhidos" class="hidden">
+                                        <span class="font-medium">Salgados escolhidos:</span>
+                                        <div id="listaSalgadosEscolhidos" class="text-xs text-gray-600 mt-1"></div>
+                                    </div>
+                                    <div class="flex justify-between">
+                                        <span class="font-medium">Doces:</span>
+                                        <span id="kitDoces"></span>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Composição dos Doces -->
+                            <div class="bg-yellow-50 p-3 rounded-lg border border-yellow-200">
+                                <h5 class="font-medium text-yellow-800 mb-2">
+                                    <i class="fas fa-candy-cane mr-1"></i>Composição dos Doces (por caixa):
+                                </h5>
+                                <div class="text-xs text-yellow-700 space-y-1">
+                                    <div>• 7 brigadeiros</div>
+                                    <div>• 7 beijinhos</div>
+                                    <div>• 7 surpresa de uva</div>
+                                    <div>• 7 dois amores</div>
+                                    <div>• 7 amendoim</div>
+                                    <div>• 7 leite ninho com nutella</div>
+                                </div>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>

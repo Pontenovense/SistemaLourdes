@@ -148,6 +148,79 @@
     color: #374151;
 }
 
+/* Estilos para Kits Festas */
+.kit-card {
+    transition: all 0.3s ease;
+}
+
+.kit-card:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+.kit-option input[type="radio"]:checked + .kit-card {
+    border-color: #ec4899 !important;
+    background: linear-gradient(135deg, #fdf2f8 0%, #fce7f3 100%);
+    box-shadow: 0 4px 12px rgba(236, 72, 153, 0.2);
+}
+
+.kit-option input[type="radio"]:checked + .kit-card .text-pink-700 {
+    color: #be185d !important;
+}
+
+.kit-option input[type="radio"]:checked + .kit-card .text-pink-600 {
+    color: #db2777 !important;
+}
+
+/* Animação para o preview do kit */
+#kitDetalhes {
+    animation: fadeInUp 0.3s ease-out;
+}
+
+@keyframes fadeInUp {
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* Estilos para seleção de salgados */
+#selecaoSalgados {
+    animation: slideDown 0.3s ease-out;
+}
+
+@keyframes slideDown {
+    from {
+        opacity: 0;
+        max-height: 0;
+    }
+    to {
+        opacity: 1;
+        max-height: 200px;
+    }
+}
+
+/* Contador de salgados */
+#contadorSalgados.text-red-500 {
+    color: #ef4444 !important;
+    font-weight: 600;
+}
+
+/* Botão adicionar kit com efeito especial */
+#adicionarKit:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+    transform: none !important;
+}
+
+#adicionarKit:disabled:hover {
+    transform: none !important;
+}
+
 /* Responsividade Mobile */
 @media (max-width: 768px) {
     .container {
@@ -191,6 +264,23 @@
     .bg-gray-50, .bg-pink-50, .bg-white {
         padding: 1rem !important;
     }
+
+    /* Responsividade para kits festas */
+    .kit-option {
+        margin-bottom: 0.5rem;
+    }
+    
+    .kit-card {
+        padding: 0.75rem !important;
+    }
+    
+    #kitDetalhes {
+        padding: 1rem;
+    }
+    
+    #selecaoSalgados {
+        max-height: 150px;
+    }
 }
 
 @media (max-width: 480px) {
@@ -226,6 +316,29 @@
     input, textarea, select {
         min-height: 44px;
         font-size: 16px !important;
+    }
+
+    /* Kits festas mobile */
+    .kit-card {
+        padding: 0.5rem !important;
+        font-size: 0.875rem;
+    }
+    
+    .kit-card .text-lg {
+        font-size: 1rem !important;
+    }
+    
+    .kit-card .text-xs {
+        font-size: 0.75rem !important;
+    }
+    
+    #kitPersonalizacao {
+        padding: 0.75rem;
+    }
+    
+    #selecaoSalgados {
+        max-height: 120px;
+        font-size: 0.875rem;
     }
 }
 

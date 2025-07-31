@@ -100,6 +100,49 @@ let produtosCalculadora = [];
 let produtosPedido = [];
 let filtroCategoria = 'todos';
 
+// Dados dos Kits Festas
+const kitsFestas = {
+    10: { pessoas: 10, preco: 265.00, bolo: '1,5kg', salgados: 100, doces: 42, caixasDoces: 1 },
+    15: { pessoas: 15, preco: 400.00, bolo: '2kg', salgados: 150, doces: 84, caixasDoces: 2 },
+    20: { pessoas: 20, preco: 550.00, bolo: '2,5kg', salgados: 200, doces: 126, caixasDoces: 3 },
+    30: { pessoas: 30, preco: 735.00, bolo: '3kg', salgados: 300, doces: 168, caixasDoces: 4 },
+    40: { pessoas: 40, preco: 960.00, bolo: '4kg', salgados: 400, doces: 210, caixasDoces: 5 },
+    50: { pessoas: 50, preco: 1332.00, bolo: '5kg', salgados: 500, doces: 252, caixasDoces: 6 }
+};
+
+// Sabores de bolo disponíveis
+const saboresBolo = [
+    'Dois amores',
+    'Dois amores c/morango',
+    'Brigadeiro',
+    'Brigadeiro com morango',
+    'Morango com nata e suspiro',
+    'Morango com cocada',
+    'Morango com 4 leite',
+    'Abacaxi com coco',
+    'Abacaxi com 4Leite',
+    'Abacaxi com leite ninho',
+    'Salada de frutas com nata',
+    'Prestígio'
+];
+
+// Salgados disponíveis para escolha
+const salgadosDisponiveis = [
+    'Coxinha',
+    'Risoles de carne',
+    'Kibe',
+    'Bolinho de queijo',
+    'Croquete de presunto e queijo'
+];
+
+// Estado atual do kit sendo configurado
+let kitAtual = {
+    tamanho: null,
+    sabor: '',
+    tipoSalgados: '',
+    salgadosEscolhidos: []
+};
+
 // Função para calcular preço dinâmico dos salgados fritos promocionais
 function calcularPrecoSalgadoFrito(listaProdutos) {
     // Contar total de salgados fritos promocionais
@@ -1104,3 +1147,358 @@ function atualizarPreviewProdutos() {
     // Call this function whenever mode changes or produtosPedido changes
     atualizarNomesProdutosPreview();
 }
+
+// ===== FUNÇÕES DOS KITS FESTAS =====
+
+// Inicializar eventos dos Kits Festas
+document.addEventListener('DOMContentLoaded', function() {
+    inicializarKitsFestas();
+});
+
+function inicializarKitsFestas() {
+    // Event listeners para seleção de kit
+    const kitsRadios = document.querySelectorAll('input[name="kitSelecionado"]');
+    kitsRadios.forEach(radio => {
+        radio.addEventListener('change', function() {
+            if (this.checked) {
+                selecionarKit(parseInt(this.value));
+            }
+        });
+    });
+
+    // Event listener para sabor do bolo
+    document.getElementById('saborBolo').addEventListener('change', function() {
+        kitAtual.sabor = this.value;
+        atualizarPreviewKit();
+        validarKit();
+    });
+
+    // Event listeners para tipo de salgados
+    const tipoSalgadosRadios = document.querySelectorAll('input[name="tipoSalgados"]');
+    tipoSalgadosRadios.forEach(radio => {
+        radio.addEventListener('change', function() {
+            kitAtual.tipoSalgados = this.value;
+            
+            const selecaoSalgados = document.getElementById('selecaoSalgados');
+            if (this.value === 'escolha') {
+                selecaoSalgados.classList.remove('hidden');
+            } else {
+                selecaoSalgados.classList.add('hidden');
+                // Limpar seleções anteriores
+                const checkboxes = document.querySelectorAll('input[name="salgadosEscolhidos"]');
+                checkboxes.forEach(cb => cb.checked = false);
+                kitAtual.salgadosEscolhidos = [];
+                atualizarContadorSalgados();
+            }
+            
+            atualizarPreviewKit();
+            validarKit();
+        });
+    });
+
+    // Event listeners para seleção de salgados específicos
+    const salgadosCheckboxes = document.querySelectorAll('input[name="salgadosEscolhidos"]');
+    salgadosCheckboxes.forEach(checkbox => {
+        checkbox.addEventListener('change', function() {
+            const salgadosSelecionados = Array.from(document.querySelectorAll('input[name="salgadosEscolhidos"]:checked'))
+                .map(cb => cb.value);
+            
+            // Limitar a 5 salgados
+            if (salgadosSelecionados.length > 5) {
+                this.checked = false;
+                showNotification('Limite Atingido!', 'Você pode escolher no máximo 5 tipos de salgados.', 'warning');
+                return;
+            }
+            
+            kitAtual.salgadosEscolhidos = salgadosSelecionados;
+            atualizarContadorSalgados();
+            atualizarPreviewKit();
+            validarKit();
+        });
+    });
+
+    // Event listener para botão adicionar kit
+    document.getElementById('adicionarKit').addEventListener('click', adicionarKitAoPedido);
+}
+
+function selecionarKit(tamanho) {
+    kitAtual.tamanho = tamanho;
+    
+    // Mostrar seção de personalização
+    document.getElementById('kitPersonalizacao').style.display = 'block';
+    
+    // Atualizar preview
+    atualizarPreviewKit();
+    
+    // Validar kit
+    validarKit();
+}
+
+function atualizarPreviewKit() {
+    const kitPreview = document.getElementById('kitPreview');
+    const kitDetalhes = document.getElementById('kitDetalhes');
+    
+    if (!kitAtual.tamanho) {
+        kitPreview.style.display = 'block';
+        kitDetalhes.classList.add('hidden');
+        return;
+    }
+    
+    const kit = kitsFestas[kitAtual.tamanho];
+    
+    // Esconder mensagem inicial e mostrar detalhes
+    kitPreview.style.display = 'none';
+    kitDetalhes.classList.remove('hidden');
+    
+    // Atualizar informações básicas
+    document.getElementById('kitTitulo').textContent = `KIT ${kit.pessoas} PESSOAS`;
+    document.getElementById('kitPreco').textContent = formatarMoeda(kit.preco);
+    document.getElementById('kitBolo').textContent = kit.bolo;
+    document.getElementById('kitSalgados').textContent = `${kit.salgados} unidades`;
+    document.getElementById('kitDoces').textContent = `${kit.doces} unidades (${kit.caixasDoces} caixa${kit.caixasDoces > 1 ? 's' : ''})`;
+    
+    // Atualizar sabor
+    document.getElementById('kitSabor').textContent = kitAtual.sabor || '-';
+    
+    // Atualizar tipo de salgados
+    let tipoTexto = '-';
+    if (kitAtual.tipoSalgados === 'sortidos') {
+        tipoTexto = 'Sortidos (escolha da casa)';
+    } else if (kitAtual.tipoSalgados === 'escolha') {
+        tipoTexto = 'Escolha do cliente';
+    }
+    document.getElementById('kitTipoSalgados').textContent = tipoTexto;
+    
+    // Mostrar/esconder salgados escolhidos
+    const kitSalgadosEscolhidos = document.getElementById('kitSalgadosEscolhidos');
+    const listaSalgadosEscolhidos = document.getElementById('listaSalgadosEscolhidos');
+    
+    if (kitAtual.tipoSalgados === 'escolha' && kitAtual.salgadosEscolhidos.length > 0) {
+        kitSalgadosEscolhidos.classList.remove('hidden');
+        listaSalgadosEscolhidos.innerHTML = kitAtual.salgadosEscolhidos.map(salgado => 
+            `<div>• ${salgado}</div>`
+        ).join('');
+    } else {
+        kitSalgadosEscolhidos.classList.add('hidden');
+    }
+}
+
+function atualizarContadorSalgados() {
+    const contador = document.getElementById('contadorSalgados');
+    const selecionados = kitAtual.salgadosEscolhidos.length;
+    
+    contador.textContent = `${selecionados}/5 salgados selecionados`;
+    
+    if (selecionados === 5) {
+        contador.classList.add('text-red-500');
+        contador.classList.remove('text-gray-500');
+    } else {
+        contador.classList.remove('text-red-500');
+        contador.classList.add('text-gray-500');
+    }
+}
+
+function validarKit() {
+    const botaoAdicionar = document.getElementById('adicionarKit');
+    
+    let valido = true;
+    let mensagemErro = '';
+    
+    if (!kitAtual.tamanho) {
+        valido = false;
+        mensagemErro = 'Selecione um kit';
+    } else if (!kitAtual.sabor) {
+        valido = false;
+        mensagemErro = 'Escolha o sabor do bolo';
+    } else if (!kitAtual.tipoSalgados) {
+        valido = false;
+        mensagemErro = 'Escolha o tipo de salgados';
+    } else if (kitAtual.tipoSalgados === 'escolha' && kitAtual.salgadosEscolhidos.length === 0) {
+        valido = false;
+        mensagemErro = 'Selecione pelo menos um tipo de salgado';
+    }
+    
+    if (valido) {
+        botaoAdicionar.disabled = false;
+        botaoAdicionar.textContent = 'Adicionar Kit ao Pedido';
+    } else {
+        botaoAdicionar.disabled = true;
+        botaoAdicionar.textContent = mensagemErro;
+    }
+}
+
+function adicionarKitAoPedido() {
+    if (!validarKitCompleto()) {
+        return;
+    }
+    
+    const kit = kitsFestas[kitAtual.tamanho];
+    
+    // Criar descrição detalhada do kit
+    let descricaoKit = `KIT ${kit.pessoas} PESSOAS:\n`;
+    descricaoKit += `• ${kit.bolo} bolo sabor ${kitAtual.sabor}\n`;
+    descricaoKit += `• ${kit.salgados} salgados `;
+    
+    if (kitAtual.tipoSalgados === 'sortidos') {
+        descricaoKit += '(sortidos)\n';
+    } else {
+        descricaoKit += `(${kitAtual.salgadosEscolhidos.join(', ')})\n`;
+    }
+    
+    descricaoKit += `• ${kit.doces} doces variados (${kit.caixasDoces} caixa${kit.caixasDoces > 1 ? 's' : ''})`;
+    
+    // Adicionar kit como produto especial ao pedido
+    const itemKit = {
+        id: `kit_${Date.now()}`, // ID único para o kit
+        nome: `Kit Festa ${kit.pessoas} Pessoas`,
+        preco: kit.preco,
+        quantidade: 1,
+        total: kit.preco,
+        isKit: true,
+        kitDetalhes: {
+            tamanho: kitAtual.tamanho,
+            sabor: kitAtual.sabor,
+            tipoSalgados: kitAtual.tipoSalgados,
+            salgadosEscolhidos: [...kitAtual.salgadosEscolhidos],
+            descricao: descricaoKit
+        }
+    };
+    
+    produtosPedido.push(itemKit);
+    
+    // Atualizar displays
+    atualizarListaProdutosPedido();
+    atualizarPreviewProdutos();
+    
+    // Limpar seleção do kit
+    limparSelecaoKit();
+    
+    // Ir para aba de pedidos
+    document.getElementById('tabPedidos').click();
+    
+    showNotification('Kit Adicionado!', `Kit Festa ${kit.pessoas} Pessoas foi adicionado ao pedido.`, 'success');
+}
+
+function validarKitCompleto() {
+    if (!kitAtual.tamanho) {
+        showNotification('Erro!', 'Selecione um kit primeiro.', 'error');
+        return false;
+    }
+    
+    if (!kitAtual.sabor) {
+        showNotification('Erro!', 'Escolha o sabor do bolo.', 'error');
+        return false;
+    }
+    
+    if (!kitAtual.tipoSalgados) {
+        showNotification('Erro!', 'Escolha o tipo de salgados.', 'error');
+        return false;
+    }
+    
+    if (kitAtual.tipoSalgados === 'escolha' && kitAtual.salgadosEscolhidos.length === 0) {
+        showNotification('Erro!', 'Selecione pelo menos um tipo de salgado.', 'error');
+        return false;
+    }
+    
+    return true;
+}
+
+function limparSelecaoKit() {
+    // Resetar estado do kit
+    kitAtual = {
+        tamanho: null,
+        sabor: '',
+        tipoSalgados: '',
+        salgadosEscolhidos: []
+    };
+    
+    // Limpar seleções na interface
+    const kitsRadios = document.querySelectorAll('input[name="kitSelecionado"]');
+    kitsRadios.forEach(radio => radio.checked = false);
+    
+    document.getElementById('saborBolo').value = '';
+    
+    const tipoSalgadosRadios = document.querySelectorAll('input[name="tipoSalgados"]');
+    tipoSalgadosRadios.forEach(radio => radio.checked = false);
+    
+    const salgadosCheckboxes = document.querySelectorAll('input[name="salgadosEscolhidos"]');
+    salgadosCheckboxes.forEach(checkbox => checkbox.checked = false);
+    
+    // Esconder seções
+    document.getElementById('kitPersonalizacao').style.display = 'none';
+    document.getElementById('selecaoSalgados').classList.add('hidden');
+    
+    // Resetar preview
+    document.getElementById('kitPreview').style.display = 'block';
+    document.getElementById('kitDetalhes').classList.add('hidden');
+    
+    // Resetar contador
+    atualizarContadorSalgados();
+}
+
+// Modificar a função atualizarPreviewProdutos para incluir kits
+function atualizarPreviewProdutosComKits() {
+    const previewItens = document.getElementById('previewItens');
+    const totalCalculado = produtosPedido.reduce((sum, item) => sum + item.total, 0);
+
+    // Atualizar total na preview
+    const valorTotalFormatado = formatarMoeda(totalCalculado);
+    document.getElementById('previewTotal').textContent = valorTotalFormatado;
+    
+    // Sincronizar valor total para modo de impressão SEMPRE
+    const previewTotalPrint = document.getElementById('previewTotalPrint');
+    if (previewTotalPrint) {
+        previewTotalPrint.textContent = valorTotalFormatado;
+    }
+
+    if (produtosPedido.length === 0) {
+        previewItens.innerHTML = '<p class="text-gray-500 italic">Aguardando produtos do pedido...</p>';
+        return;
+    }
+
+    const isPrintMode = document.getElementById('previewNotinha').classList.contains('print-mode');
+
+    previewItens.innerHTML = produtosPedido.map(item => {
+        // Se for um kit, usar descrição especial
+        if (item.isKit) {
+            const linhas = item.kitDetalhes.descricao.split('\n');
+            return linhas.map(linha => 
+                linha.trim() ? `<p class="mb-1">${linha.trim().toUpperCase()}</p>` : ''
+            ).join('');
+        }
+
+        // Lógica normal para produtos regulares
+        const produto = produtos.find(p => p.id === item.id);
+        let nomeExibir = item.nome;
+        
+        if (isPrintMode && produto && produto.nomeAbreviado) {
+            nomeExibir = produto.nomeAbreviado;
+        }
+        
+        nomeExibir = nomeExibir.toUpperCase();
+
+        if (produto && produto.nome.toLowerCase() === 'bolo') {
+            const descricaoBoloUpper = item.descricaoBolo ? item.descricaoBolo.toUpperCase() : '';
+            return `<p class="mb-1 flex justify-between">
+                <span>• ${item.quantidade} KG ${nomeExibir} - ${descricaoBoloUpper}</span>
+                <strong></strong>
+            </p>`;
+        }
+
+        if (produto && produto.nome === 'DIVERSOS') {
+            const nomePersonalizadoUpper = item.nomePersonalizado ? item.nomePersonalizado.toUpperCase() : nomeExibir;
+            return `<p class="mb-1 flex justify-between">
+                <span>• ${item.quantidade}x ${nomePersonalizadoUpper}</span>
+                <strong>${formatarMoeda(item.total)}</strong>
+            </p>`;
+        }
+
+        return `<p class="mb-1 flex justify-between">
+            <span>• ${item.quantidade}x ${nomeExibir}</span>
+            <strong>${formatarMoeda(item.total)}</strong>
+        </p>`;
+    }).join('');
+}
+
+// Substituir a função original pela versão com kits
+window.atualizarPreviewProdutos = atualizarPreviewProdutosComKits;
