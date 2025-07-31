@@ -90,8 +90,10 @@ let produtos = [
     { id: 34, nome: "Caixa Doce Mix 42un", nomeAbreviado: "Cx Mix 42un", preco: 60.00, descricao: "Caixa de doces - valor por caixa", categoria: "Doces", tipoSalgado: null },
     { id: 35, nome: "Caixa Doce Mix 100un", nomeAbreviado: "Cx Mix 100un", preco: 150.00, descricao: "Caixa de doces - valor por caixa", categoria: "Doces", tipoSalgado: null },
     { id: 36, nome: "Bolo", nomeAbreviado: "Bolo", preco: 80.00, descricao: "Bolos", categoria: "Doces", tipoSalgado: null },
-    { id: 37, nome: "Morango do Amor", nomeAbreviado: "Morango Amor", preco: 12.00, descricao: "Morango do Amor❤️", categoria: "Doces", tipoSalgado: null },
-    { id: 38, nome: "DIVERSOS", nomeAbreviado: "DIVERSOS", preco: 0.00, descricao: "Produto personalizado - nome e preço definidos no pedido", categoria: "Diversos", tipoSalgado: null }
+    { id: 37, nome: "Nega Maluca", nomeAbreviado: "Nega Maluca", preco: 40.00, descricao: "Bolos", categoria: "Doces", tipoSalgado: null },
+    { id: 38, nome: "Bolo Cenoura", nomeAbreviado: "Bolo Cenoura", preco: 40.00, descricao: "Bolos", categoria: "Doces", tipoSalgado: null },
+    { id: 39, nome: "Morango do Amor", nomeAbreviado: "Morango Amor", preco: 12.00, descricao: "Morango do Amor❤️", categoria: "Doces", tipoSalgado: null },
+    { id: 40, nome: "DIVERSOS", nomeAbreviado: "DIVERSOS", preco: 0.00, descricao: "Produto personalizado - nome e preço definidos no pedido", categoria: "Diversos", tipoSalgado: null }
 ];
 
 let pedidos = [];
