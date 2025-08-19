@@ -439,7 +439,13 @@ function calcularTotalItemPedidoDiversos() {
     });
 
     document.getElementById('quantidadePedido').addEventListener('change', calcularTotalItemPedido);
-    document.getElementById('quantidadePedido').addEventListener('input', calcularTotalItemPedido);
+document.getElementById('quantidadePedido').addEventListener('input', calcularTotalItemPedido);
+document.getElementById('quantidadePedido').addEventListener('keydown', function(event) {
+    if (event.key === 'Enter') {
+        event.preventDefault(); // Prevent form submission
+        adicionarProdutoAoPedido(); // Call the function to add the product
+    }
+});
     document.getElementById('adicionarProdutoPedido').addEventListener('click', adicionarProdutoAoPedido);
 
     // Atualizar preview em tempo real
