@@ -146,18 +146,17 @@ let kitAtual = {
     salgadosEscolhidos: []
 };
 
-// Função para calcular preço dinâmico dos salgados fritos promocionais
 function calcularPrecoSalgadoFrito(listaProdutos) {
-    // Contar total de salgados fritos promocionais
-    const totalSalgadosPromocionais = listaProdutos
+    // Contar total de salgados fritos
+    const totalSalgadosFritos = listaProdutos
         .filter(item => {
             const produto = produtos.find(p => p.id === item.id);
-            return produto && produto.tipoSalgado === 'frito_promocional';
+            return produto && (produto.tipoSalgado === 'frito_promocional' || produto.tipoSalgado === 'frito_normal');
         })
         .reduce((total, item) => total + item.quantidade, 0);
     
     // Retornar preço baseado na quantidade total
-    return totalSalgadosPromocionais >= 100 ? 0.90 : 1.00;
+    return totalSalgadosFritos >= 100 ? 0.90 : 1.00;
 }
 
 // Função para recalcular preços na calculadora
