@@ -94,7 +94,10 @@ let produtos = [
     { id: 38, nome: "Nega Maluca", nomeAbreviado: "Nega Maluca", preco: 40.00, descricao: "Bolos", categoria: "Doces", tipoSalgado: null },
     { id: 39, nome: "Bolo Cenoura", nomeAbreviado: "Bolo Cenoura", preco: 40.00, descricao: "Bolos", categoria: "Doces", tipoSalgado: null },
     { id: 40, nome: "Morango do Amor", nomeAbreviado: "Morango Amor", preco: 12.00, descricao: "Morango do Amor❤️", categoria: "Doces", tipoSalgado: null },
-    { id: 41, nome: "DIVERSOS", nomeAbreviado: "DIVERSOS", preco: 0.00, descricao: "Produto personalizado - nome e preço definidos no pedido", categoria: "Diversos", tipoSalgado: null }
+    { id: 41, nome: "Bolo de Pote", nomeAbreviado: "Bolo Pote", preco: 15.00, descricao: "Bolo de Pote", categoria: "Doces", tipoSalgado: null },
+    { id: 42, nome: "Copo da Felicidade", nomeAbreviado: "Copo Felicidade", preco: 15.00, descricao: "Copo da Felicidade", categoria: "Doces", tipoSalgado: null },
+    { id: 43, nome: "Brownie", nomeAbreviado: "Brownie", preco: 10.00, descricao: "Brownie", categoria: "Doces", tipoSalgado: null },
+    { id: 44, nome: "DIVERSOS", nomeAbreviado: "DIVERSOS", preco: 0.00, descricao: "Produto personalizado - nome e preço definidos no pedido", categoria: "Diversos", tipoSalgado: null }
 ];
 
 let pedidos = [];
