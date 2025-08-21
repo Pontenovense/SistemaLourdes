@@ -26,6 +26,16 @@
     display: none;
 }
 
+/* Estilo específico para o nome do cliente no modo de impressão */
+.kitchen-receipt.print-mode #previewCliente {
+    font-size: 1.5rem !important; /* 24px - muito maior que o padrão */
+    font-weight: 900 !important; /* Extra bold */
+    letter-spacing: 1px !important; /* Espaçamento entre letras para melhor legibilidade */
+    text-transform: uppercase !important;
+    line-height: 1.2 !important;
+    color: #000 !important;
+}
+
 /* Estilos específicos para o modo de impressão - layout da comanda */
 /* Removido font-size específico para manter tamanho uniforme */
 
@@ -246,6 +256,11 @@
         font-size: 0.875rem;
     }
     
+    /* Nome do cliente ainda maior em mobile no modo impressão */
+    .kitchen-receipt.print-mode #previewCliente {
+        font-size: 1.25rem !important; /* Ajustado para mobile */
+    }
+    
     /* Tabelas responsivas */
     table {
         font-size: 0.875rem;
@@ -291,6 +306,11 @@
     .kitchen-receipt {
         padding: 10px;
         font-size: 0.8rem;
+    }
+    
+    /* Nome do cliente para telas muito pequenas no modo impressão */
+    .kitchen-receipt.print-mode #previewCliente {
+        font-size: 1.1rem !important;
     }
     
     table {
@@ -369,6 +389,18 @@
     .kitchen-receipt #comandaHeader {
         display: none !important;
     }
+    
+    /* Nome do cliente MUITO MAIOR na impressão real */
+    .kitchen-receipt #previewCliente {
+        font-size: 18px !important; /* Equivalente a 1.5rem em impressão */
+        font-weight: 900 !important;
+        letter-spacing: 1px !important;
+        text-transform: uppercase !important;
+        line-height: 1.2 !important;
+        color: #000 !important;
+        margin: 4px 0 !important;
+    }
+    
     body {
         margin: 0;
         padding: 0;
