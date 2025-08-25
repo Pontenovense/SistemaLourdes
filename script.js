@@ -196,6 +196,29 @@ function recalcularPrecosPedido() {
 // Variável global para controlar o modo da comanda
 let isComandaPrintMode = false;
 
+// ===== FUNÇÕES DOS KITS FESTAS =====
+
+// Função para calcular distribuição de salgados
+function calcularDistribuicaoSalgados(totalSalgados, tiposSalgados) {
+    if (!tiposSalgados || tiposSalgados.length === 0) {
+        return [];
+    }
+    
+    const quantidadePorTipo = Math.floor(totalSalgados / tiposSalgados.length);
+    const resto = totalSalgados % tiposSalgados.length;
+    
+    const distribuicao = tiposSalgados.map((tipo, index) => {
+        // Distribuir o resto entre os primeiros tipos
+        const quantidade = quantidadePorTipo + (index < resto ? 1 : 0);
+        return {
+            tipo: tipo,
+            quantidade: quantidade
+        };
+    });
+    
+    return distribuicao;
+}
+
 // Dom Ready
 document.addEventListener('DOMContentLoaded', function() {
     // Tabs
@@ -442,13 +465,13 @@ function calcularTotalItemPedidoDiversos() {
     });
 
     document.getElementById('quantidadePedido').addEventListener('change', calcularTotalItemPedido);
-document.getElementById('quantidadePedido').addEventListener('input', calcularTotalItemPedido);
-document.getElementById('quantidadePedido').addEventListener('keydown', function(event) {
-    if (event.key === 'Enter') {
-        event.preventDefault(); // Prevent form submission
-        adicionarProdutoAoPedido(); // Call the function to add the product
-    }
-});
+    document.getElementById('quantidadePedido').addEventListener('input', calcularTotalItemPedido);
+    document.getElementById('quantidadePedido').addEventListener('keydown', function(event) {
+        if (event.key === 'Enter') {
+            event.preventDefault(); // Prevent form submission
+            adicionarProdutoAoPedido(); // Call the function to add the product
+        }
+    });
     document.getElementById('adicionarProdutoPedido').addEventListener('click', adicionarProdutoAoPedido);
 
     // Atualizar preview em tempo real
@@ -467,6 +490,9 @@ document.getElementById('quantidadePedido').addEventListener('keydown', function
     
     // Inicializar modo da comanda (padrão: impressão)
     setComandaMode(true);
+    
+    // Inicializar Kits Festas
+    inicializarKitsFestas();
 });
 
 // Função para alternar entre modos da comanda
@@ -1112,61 +1138,67 @@ function atualizarPreviewProdutos() {
         return;
     }
 
-    // Verificar se está no modo impressão para usar nomes abreviados
-    const isComandaPrintModeActive = document.getElementById('previewNotinha').classList.contains('print-mode');
+    const isPrintMode = document.getElementById('previewNotinha').classList.contains('print-mode');
 
-    function atualizarNomesProdutosPreview() {
-        const previewItens = document.getElementById('previewItens');
-        const isPrintMode = document.getElementById('previewNotinha').classList.contains('print-mode');
-
-        previewItens.innerHTML = produtosPedido.map(item => {
-            const produto = produtos.find(p => p.id === item.id);
-
-            // Usar nome abreviado apenas no modo impressão
-            let nomeExibir = item.nome;
-            if (isPrintMode && produto && produto.nomeAbreviado) {
-                nomeExibir = produto.nomeAbreviado;
+    previewItens.innerHTML = produtosPedido.map(item => {
+        // Se for um kit, usar descrição especial com quantidades específicas
+        if (item.isKit) {
+            const kit = kitsFestas[item.kitDetalhes.tamanho];
+            let descricaoKit = `KIT ${kit.pessoas} PESSOAS:\n`;
+            descricaoKit += `• ${kit.bolo} BOLO SABOR ${item.kitDetalhes.sabor.toUpperCase()}\n`;
+            
+            // Implementar a funcionalidade solicitada: especificar quantidades de cada salgado
+            if (item.kitDetalhes.tipoSalgados === 'sortidos') {
+                descricaoKit += `• ${kit.salgados} SALGADOS (SORTIDOS)\n`;
+            } else if (item.kitDetalhes.tipoSalgados === 'escolha') {
+                const distribuicao = calcularDistribuicaoSalgados(kit.salgados, item.kitDetalhes.salgadosEscolhidos);
+                // Cada salgado em uma linha separada, sem mostrar o total
+                const salgadosDetalhados = distribuicao.map(s => `• ${s.quantidade}x ${s.tipo.toUpperCase()}`).join('\n');
+                descricaoKit += `${salgadosDetalhados}\n`;
             }
+            
+            descricaoKit += `• ${kit.doces} DOCES VARIADOS (${kit.caixasDoces} CAIXA${kit.caixasDoces > 1 ? 'S' : ''})`;
+            
+            const linhas = descricaoKit.split('\n');
+            return linhas.map(linha => 
+                linha.trim() ? `<p class="mb-1">${linha.trim()}</p>` : ''
+            ).join('');
+        }
 
-            // Converter para maiúsculo mantendo o tamanho original
-            nomeExibir = nomeExibir.toUpperCase();
+        // Lógica normal para produtos regulares
+        const produto = produtos.find(p => p.id === item.id);
+        let nomeExibir = item.nome;
+        
+        if (isPrintMode && produto && produto.nomeAbreviado) {
+            nomeExibir = produto.nomeAbreviado;
+        }
+        
+        nomeExibir = nomeExibir.toUpperCase();
 
-
-            if (produto && produto.nome.toLowerCase() === 'bolo') {
-                const descricaoBoloUpper = item.descricaoBolo ? item.descricaoBolo.toUpperCase() : '';
-                return `<p class="mb-1 flex justify-between">
-                    <span>• ${item.quantidade} KG ${nomeExibir} - ${descricaoBoloUpper}</span>
-                    <strong></strong>
-                </p>`;
-            }
-
-            // Para produto DIVERSOS, usar o nome personalizado
-            if (produto && produto.nome === 'DIVERSOS') {
-                const nomePersonalizadoUpper = item.nomePersonalizado ? item.nomePersonalizado.toUpperCase() : nomeExibir;
-                return `<p class="mb-1 flex justify-between">
-                    <span>• ${item.quantidade}x ${nomePersonalizadoUpper}</span>
-                    <strong>${formatarMoeda(item.total)}</strong>
-                </p>`;
-            }
-
+        if (produto && produto.nome.toLowerCase() === 'bolo') {
+            const descricaoBoloUpper = item.descricaoBolo ? item.descricaoBolo.toUpperCase() : '';
             return `<p class="mb-1 flex justify-between">
-                <span>• ${item.quantidade}x ${nomeExibir}</span>
+                <span>• ${item.quantidade} KG ${nomeExibir} - ${descricaoBoloUpper}</span>
+                <strong></strong>
+            </p>`;
+        }
+
+        if (produto && produto.nome === 'DIVERSOS') {
+            const nomePersonalizadoUpper = item.nomePersonalizado ? item.nomePersonalizado.toUpperCase() : nomeExibir;
+            return `<p class="mb-1 flex justify-between">
+                <span>• ${item.quantidade}x ${nomePersonalizadoUpper}</span>
                 <strong>${formatarMoeda(item.total)}</strong>
             </p>`;
-        }).join('');
-    }
+        }
 
-    // Call this function whenever mode changes or produtosPedido changes
-    atualizarNomesProdutosPreview();
+        return `<p class="mb-1 flex justify-between">
+            <span>• ${item.quantidade}x ${nomeExibir}</span>
+            <strong>${formatarMoeda(item.total)}</strong>
+        </p>`;
+    }).join('');
 }
 
-// ===== FUNÇÕES DOS KITS FESTAS =====
-
 // Inicializar eventos dos Kits Festas
-document.addEventListener('DOMContentLoaded', function() {
-    inicializarKitsFestas();
-});
-
 function inicializarKitsFestas() {
     // Event listeners para seleção de kit
     const kitsRadios = document.querySelectorAll('input[name="kitSelecionado"]');
@@ -1281,14 +1313,17 @@ function atualizarPreviewKit() {
     }
     document.getElementById('kitTipoSalgados').textContent = tipoTexto;
     
-    // Mostrar/esconder salgados escolhidos
+    // Mostrar/esconder salgados escolhidos com quantidades específicas
     const kitSalgadosEscolhidos = document.getElementById('kitSalgadosEscolhidos');
     const listaSalgadosEscolhidos = document.getElementById('listaSalgadosEscolhidos');
     
     if (kitAtual.tipoSalgados === 'escolha' && kitAtual.salgadosEscolhidos.length > 0) {
         kitSalgadosEscolhidos.classList.remove('hidden');
-        listaSalgadosEscolhidos.innerHTML = kitAtual.salgadosEscolhidos.map(salgado => 
-            `<div>• ${salgado}</div>`
+        
+        // Calcular e mostrar distribuição de quantidades
+        const distribuicao = calcularDistribuicaoSalgados(kit.salgados, kitAtual.salgadosEscolhidos);
+        listaSalgadosEscolhidos.innerHTML = distribuicao.map(salgado => 
+            `<div>• ${salgado.quantidade}x ${salgado.tipo}</div>`
         ).join('');
     } else {
         kitSalgadosEscolhidos.classList.add('hidden');
@@ -1346,15 +1381,17 @@ function adicionarKitAoPedido() {
     
     const kit = kitsFestas[kitAtual.tamanho];
     
-    // Criar descrição detalhada do kit
+    // Criar descrição detalhada do kit com quantidades específicas
     let descricaoKit = `KIT ${kit.pessoas} PESSOAS:\n`;
     descricaoKit += `• ${kit.bolo} bolo sabor ${kitAtual.sabor}\n`;
-    descricaoKit += `• ${kit.salgados} salgados `;
     
     if (kitAtual.tipoSalgados === 'sortidos') {
-        descricaoKit += '(sortidos)\n';
+        descricaoKit += `• ${kit.salgados} salgados (sortidos)\n`;
     } else {
-        descricaoKit += `(${kitAtual.salgadosEscolhidos.join(', ')})\n`;
+        // Usar a nova funcionalidade de distribuição de salgados
+        const distribuicao = calcularDistribuicaoSalgados(kit.salgados, kitAtual.salgadosEscolhidos);
+        const salgadosDetalhados = distribuicao.map(s => `${s.quantidade}x ${s.tipo}`).join(', ');
+        descricaoKit += `• ${kit.salgados} salgados (${salgadosDetalhados})\n`;
     }
     
     descricaoKit += `• ${kit.doces} doces variados (${kit.caixasDoces} caixa${kit.caixasDoces > 1 ? 's' : ''})`;
@@ -1447,70 +1484,3 @@ function limparSelecaoKit() {
     // Resetar contador
     atualizarContadorSalgados();
 }
-
-// Modificar a função atualizarPreviewProdutos para incluir kits
-function atualizarPreviewProdutosComKits() {
-    const previewItens = document.getElementById('previewItens');
-    const totalCalculado = produtosPedido.reduce((sum, item) => sum + item.total, 0);
-
-    // Atualizar total na preview
-    const valorTotalFormatado = formatarMoeda(totalCalculado);
-    document.getElementById('previewTotal').textContent = valorTotalFormatado;
-    
-    // Sincronizar valor total para modo de impressão SEMPRE
-    const previewTotalPrint = document.getElementById('previewTotalPrint');
-    if (previewTotalPrint) {
-        previewTotalPrint.textContent = valorTotalFormatado;
-    }
-
-    if (produtosPedido.length === 0) {
-        previewItens.innerHTML = '<p class="text-gray-500 italic">Aguardando produtos do pedido...</p>';
-        return;
-    }
-
-    const isPrintMode = document.getElementById('previewNotinha').classList.contains('print-mode');
-
-    previewItens.innerHTML = produtosPedido.map(item => {
-        // Se for um kit, usar descrição especial
-        if (item.isKit) {
-            const linhas = item.kitDetalhes.descricao.split('\n');
-            return linhas.map(linha => 
-                linha.trim() ? `<p class="mb-1">${linha.trim().toUpperCase()}</p>` : ''
-            ).join('');
-        }
-
-        // Lógica normal para produtos regulares
-        const produto = produtos.find(p => p.id === item.id);
-        let nomeExibir = item.nome;
-        
-        if (isPrintMode && produto && produto.nomeAbreviado) {
-            nomeExibir = produto.nomeAbreviado;
-        }
-        
-        nomeExibir = nomeExibir.toUpperCase();
-
-        if (produto && produto.nome.toLowerCase() === 'bolo') {
-            const descricaoBoloUpper = item.descricaoBolo ? item.descricaoBolo.toUpperCase() : '';
-            return `<p class="mb-1 flex justify-between">
-                <span>• ${item.quantidade} KG ${nomeExibir} - ${descricaoBoloUpper}</span>
-                <strong></strong>
-            </p>`;
-        }
-
-        if (produto && produto.nome === 'DIVERSOS') {
-            const nomePersonalizadoUpper = item.nomePersonalizado ? item.nomePersonalizado.toUpperCase() : nomeExibir;
-            return `<p class="mb-1 flex justify-between">
-                <span>• ${item.quantidade}x ${nomePersonalizadoUpper}</span>
-                <strong>${formatarMoeda(item.total)}</strong>
-            </p>`;
-        }
-
-        return `<p class="mb-1 flex justify-between">
-            <span>• ${item.quantidade}x ${nomeExibir}</span>
-            <strong>${formatarMoeda(item.total)}</strong>
-        </p>`;
-    }).join('');
-}
-
-// Substituir a função original pela versão com kits
-window.atualizarPreviewProdutos = atualizarPreviewProdutosComKits;
