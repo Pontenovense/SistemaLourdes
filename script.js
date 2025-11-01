@@ -472,6 +472,13 @@ function calcularTotalItemPedidoDiversos() {
             adicionarProdutoAoPedido(); // Call the function to add the product
         }
     });
+
+    // Prevent form submission on Enter key for all inputs except the submit button
+    document.getElementById('formPedido').addEventListener('keydown', function(e) {
+        if (e.key === 'Enter' && e.target.tagName === 'INPUT') {
+            e.preventDefault();
+        }
+    });
     document.getElementById('adicionarProdutoPedido').addEventListener('click', adicionarProdutoAoPedido);
     document.getElementById('limparPedido').addEventListener('click', limparTudoPedido);
 
@@ -1492,7 +1499,7 @@ function showConfirmationModal(title, message, onConfirm, onCancel = null) {
     const modal = document.createElement('div');
     modal.className = 'confirmation-modal';
     modal.id = 'confirmationModal';
-    
+
     modal.innerHTML = `
         <div class="confirmation-modal-content">
             <div class="confirmation-modal-icon">
@@ -1510,19 +1517,22 @@ function showConfirmationModal(title, message, onConfirm, onCancel = null) {
             </div>
         </div>
     `;
-    
+
     // Adicionar ao body
     document.body.appendChild(modal);
-    
+
+    // Flag para prevenir múltiplas execuções
+    let actionTaken = false;
+
     // Mostrar modal com animação
     setTimeout(() => {
         modal.classList.add('show');
     }, 10);
-    
+
     // Event listeners para os botões
     const cancelBtn = modal.querySelector('#confirmCancel');
     const confirmBtn = modal.querySelector('#confirmOk');
-    
+
     function closeModal() {
         modal.classList.remove('show');
         setTimeout(() => {
@@ -1531,48 +1541,68 @@ function showConfirmationModal(title, message, onConfirm, onCancel = null) {
             }
         }, 300);
     }
-    
+
     cancelBtn.addEventListener('click', () => {
+        if (actionTaken) return;
+        actionTaken = true;
         closeModal();
         if (onCancel) onCancel();
+        document.removeEventListener('keydown', handleKeydown);
     });
-    
+
     confirmBtn.addEventListener('click', () => {
+        if (actionTaken) return;
+        actionTaken = true;
         closeModal();
         if (onConfirm) onConfirm();
+        document.removeEventListener('keydown', handleKeydown);
     });
-    
+
     // Fechar modal ao clicar fora
     modal.addEventListener('click', (e) => {
         if (e.target === modal) {
+            if (actionTaken) return;
+            actionTaken = true;
             closeModal();
             if (onCancel) onCancel();
+            document.removeEventListener('keydown', handleKeydown);
         }
     });
-    
+
     // Fechar modal com ESC e confirmar com ENTER
     const handleKeydown = (e) => {
         if (e.key === 'Escape') {
+            if (actionTaken) return;
+            actionTaken = true;
             closeModal();
             if (onCancel) onCancel();
             document.removeEventListener('keydown', handleKeydown);
         } else if (e.key === 'Enter') {
             e.preventDefault();
+            if (actionTaken) return;
+            actionTaken = true;
             closeModal();
             if (onConfirm) onConfirm();
             document.removeEventListener('keydown', handleKeydown);
         }
     };
     document.addEventListener('keydown', handleKeydown);
-    
+
     // Focar no botão de confirmar para melhor acessibilidade
     setTimeout(() => {
         confirmBtn.focus();
     }, 100);
 }
 
+// Flag para prevenir múltiplas execuções da limpeza
+let isLimpandoPedido = false;
+
 // Função para limpar todas as informações do pedido
 function limparTudoPedido() {
+    // Prevenir múltiplas execuções
+    if (isLimpandoPedido) return;
+    isLimpandoPedido = true;
+
     showConfirmationModal(
         'Limpar Pedido',
         'Tem certeza que deseja limpar todas as informações do pedido? Esta ação não pode ser desfeita.',
@@ -1583,37 +1613,44 @@ function limparTudoPedido() {
             document.getElementById('horarioPedido').value = '';
             document.getElementById('valorPedido').value = '';
             document.getElementById('observacoesPedido').value = '';
-            
+
             // Limpar campos de produto
             document.getElementById('produtoPedido').value = '';
             document.getElementById('quantidadePedido').value = 0;
             document.getElementById('descricaoBolo').value = '';
             document.getElementById('nomeDiversos').value = '';
             document.getElementById('precoDiversos').value = '';
-            
+
             // Esconder containers especiais
             document.getElementById('descricaoBoloContainer').classList.add('hidden');
             document.getElementById('diversosContainer').classList.add('hidden');
-            
+
             // Resetar labels
             document.getElementById('labelQuantidadePedido').textContent = 'Quantidade';
-            
+
             // Limpar valores de preço
             document.getElementById('precoUnitarioPedido').textContent = formatarMoeda(0);
             document.getElementById('totalItemPedido').textContent = formatarMoeda(0);
-            
+
             // Limpar lista de produtos do pedido
             produtosPedido = [];
             atualizarListaProdutosPedido();
-            
+
             // Atualizar preview
             atualizarPreview();
-            
+
             showNotification('Pedido Limpo!', 'Todas as informações do pedido foram removidas com sucesso.', 'success');
+
+            // Resetar flag após um pequeno delay para permitir nova execução se necessário
+            setTimeout(() => {
+                isLimpandoPedido = false;
+            }, 1000);
         },
         function() {
             // Função executada quando cancelar (opcional)
             showNotification('Cancelado', 'A limpeza do pedido foi cancelada.', 'info');
+            // Resetar flag
+            isLimpandoPedido = false;
         }
     );
 }
