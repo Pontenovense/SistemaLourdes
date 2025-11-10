@@ -61,8 +61,8 @@ let produtos = [
     { id: 5, nome: "Kibe", nomeAbreviado: "Kibe", preco: 0.90, descricao: "Salgado frito - valor por unidade", categoria: "Salgados", tipoSalgado: "frito_promocional" },
     { id: 6, nome: "Bolinha de queijo", nomeAbreviado: "B.queijo", preco: 0.90, descricao: "Salgado frito - valor por unidade", categoria: "Salgados", tipoSalgado: "frito_promocional" },
     { id: 7, nome: "Croquete de presunto e queijo", nomeAbreviado: "Balão", preco: 0.90, descricao: "Salgado frito - valor por unidade", categoria: "Salgados", tipoSalgado: "frito_promocional" },
-    { id: 8, nome: "Pastel de carne", nomeAbreviado: "Pastel carne", preco: 1.00, descricao: "Salgado frito - valor por unidade", categoria: "Salgados", tipoSalgado: "frito_normal" },
-    { id: 9, nome: "Pastel de queijo", nomeAbreviado: "Pastel queijo", preco: 1.00, descricao: "Salgado frito - valor por unidade", categoria: "Salgados", tipoSalgado: "frito_normal" },
+    { id: 8, nome: "Pastel de carne", nomeAbreviado: "Pastel carne", preco: 1.10, descricao: "Salgado frito - valor por unidade", categoria: "Salgados", tipoSalgado: "frito_normal" },
+    { id: 9, nome: "Pastel de queijo", nomeAbreviado: "Pastel queijo", preco: 1.10, descricao: "Salgado frito - valor por unidade", categoria: "Salgados", tipoSalgado: "frito_normal" },
     { id: 10, nome: "Bolinho de aipim c/ carne seca", nomeAbreviado: "B. aipim", preco: 1.20, descricao: "Salgado frito - valor por unidade", categoria: "Salgados", tipoSalgado: "frito_normal" },
     { id: 11, nome: "Mini churros de doce de leite", nomeAbreviado: "Mini churros", preco: 1.20, descricao: "Salgado frito - valor por unidade", categoria: "Salgados", tipoSalgado: "frito_normal" },
     { id: 12, nome: "Doguinho assado", nomeAbreviado: "Doguinho", preco: 1.20, descricao: "Salgado assado - valor por unidade", categoria: "Salgados", tipoSalgado: "assado" },
@@ -70,15 +70,15 @@ let produtos = [
     { id: 14, nome: "Esfiha de frango", nomeAbreviado: "Esfiha frango", preco: 1.20, descricao: "Salgado assado - valor por unidade", categoria: "Salgados", tipoSalgado: "assado" },
     { id: 15, nome: "Folhado de frango", nomeAbreviado: "Folh. frango", preco: 1.20, descricao: "Salgado assado - valor por unidade", categoria: "Salgados", tipoSalgado: "assado" },
     { id: 16, nome: "Folhado de palmito", nomeAbreviado: "Folh. palmito", preco: 1.20, descricao: "Salgado assado - valor por unidade", categoria: "Salgados", tipoSalgado: "assado" },
-    { id: 17, nome: "Brigadeiro", nomeAbreviado: "Brigadeiro", preco: 1.40, descricao: "Doce - valor por unidade", categoria: "Doces", tipoSalgado: null },
-    { id: 18, nome: "Cajuzinho", nomeAbreviado: "Caju", preco: 1.40, descricao: "Doce - valor por unidade", categoria: "Doces", tipoSalgado: null },
-    { id: 19, nome: "Brigadeiro Branco", nomeAbreviado: "Brig. Branco", preco: 1.40, descricao: "Doce - valor por unidade", categoria: "Doces", tipoSalgado: null },
-    { id: 20, nome: "Beijinho", nomeAbreviado: "Beijinho", preco: 1.40, descricao: "Doce - valor por unidade", categoria: "Doces", tipoSalgado: null },
-    { id: 21, nome: "Dois Amores", nomeAbreviado: "2 Amores", preco: 1.40, descricao: "Doce - valor por unidade", categoria: "Doces", tipoSalgado: null },
-    { id: 22, nome: "Amendoim", nomeAbreviado: "Amendoim", preco: 1.40, descricao: "Doce - valor por unidade", categoria: "Doces", tipoSalgado: null },
-    { id: 23, nome: "Bicho de pé", nomeAbreviado: "Bicho pé", preco: 1.40, descricao: "Doce - valor por unidade", categoria: "Doces", tipoSalgado: null },
-    { id: 24, nome: "Brigadeiro de Churros", nomeAbreviado: "Churros", preco: 1.50, descricao: "Doce - valor por unidade", categoria: "Doces", tipoSalgado: null },
-    { id: 25, nome: "Olho de Sogra", nomeAbreviado: "Olho Sogra", preco: 1.50, descricao: "Doce - valor por unidade", categoria: "Doces", tipoSalgado: null },
+    { id: 17, nome: "Brigadeiro", nomeAbreviado: "Brigadeiro", preco: 1.60, descricao: "Doce - valor por unidade", categoria: "Doces", tipoSalgado: null },
+    { id: 18, nome: "Cajuzinho", nomeAbreviado: "Caju", preco: 1.60, descricao: "Doce - valor por unidade", categoria: "Doces", tipoSalgado: null },
+    { id: 19, nome: "Brigadeiro Branco", nomeAbreviado: "Brig. Branco", preco: 1.60, descricao: "Doce - valor por unidade", categoria: "Doces", tipoSalgado: null },
+    { id: 20, nome: "Beijinho", nomeAbreviado: "Beijinho", preco: 1.60, descricao: "Doce - valor por unidade", categoria: "Doces", tipoSalgado: null },
+    { id: 21, nome: "Dois Amores", nomeAbreviado: "2 Amores", preco: 1.60, descricao: "Doce - valor por unidade", categoria: "Doces", tipoSalgado: null },
+    { id: 22, nome: "Amendoim", nomeAbreviado: "Amendoim", preco: 1.60, descricao: "Doce - valor por unidade", categoria: "Doces", tipoSalgado: null },
+    { id: 23, nome: "Bicho de pé", nomeAbreviado: "Bicho pé", preco: 1.60, descricao: "Doce - valor por unidade", categoria: "Doces", tipoSalgado: null },
+    { id: 24, nome: "Brigadeiro de Churros", nomeAbreviado: "Churros", preco: 1.70, descricao: "Doce - valor por unidade", categoria: "Doces", tipoSalgado: null },
+    { id: 25, nome: "Olho de Sogra", nomeAbreviado: "Olho Sogra", preco: 1.70, descricao: "Doce - valor por unidade", categoria: "Doces", tipoSalgado: null },
     { id: 26, nome: "Rosinha Napolitana", nomeAbreviado: "Rosinha Napol.", preco: 1.50, descricao: "Doce - valor por unidade", categoria: "Doces", tipoSalgado: null },
     { id: 27, nome: "Leite ninho com nutella", nomeAbreviado: "ninho nutella", preco: 1.60, descricao: "Doce - valor por unidade", categoria: "Doces", tipoSalgado: null },
     { id: 28, nome: "Surpresa de Uva", nomeAbreviado: "Surp. Uva", preco: 1.70, descricao: "Doce - valor por unidade", categoria: "Doces", tipoSalgado: null },
@@ -109,12 +109,12 @@ let filtroCategoria = 'todos';
 
 // Dados dos Kits Festas
 const kitsFestas = {
-    10: { pessoas: 10, preco: 265.00, bolo: '1,5kg', salgados: 100, doces: 42, caixasDoces: 1 },
-    15: { pessoas: 15, preco: 400.00, bolo: '2kg', salgados: 150, doces: 84, caixasDoces: 2 },
-    20: { pessoas: 20, preco: 550.00, bolo: '2,5kg', salgados: 200, doces: 126, caixasDoces: 3 },
-    30: { pessoas: 30, preco: 735.00, bolo: '3kg', salgados: 300, doces: 168, caixasDoces: 4 },
-    40: { pessoas: 40, preco: 960.00, bolo: '4kg', salgados: 400, doces: 210, caixasDoces: 5 },
-    50: { pessoas: 50, preco: 1332.00, bolo: '5kg', salgados: 500, doces: 252, caixasDoces: 6 }
+    10: { pessoas: 10, preco: 290.00, bolo: '1,5kg', salgados: 100, doces: 42, caixasDoces: 1 },
+    15: { pessoas: 15, preco: 450.00, bolo: '2kg', salgados: 150, doces: 84, caixasDoces: 2 },
+    20: { pessoas: 20, preco: 610.00, bolo: '2,5kg', salgados: 200, doces: 126, caixasDoces: 3 },
+    30: { pessoas: 30, preco: 815.00, bolo: '3kg', salgados: 300, doces: 168, caixasDoces: 4 },
+    40: { pessoas: 40, preco: 1065.00, bolo: '4kg', salgados: 400, doces: 210, caixasDoces: 5 },
+    50: { pessoas: 50, preco: 1315.00, bolo: '5kg', salgados: 500, doces: 252, caixasDoces: 6 }
 };
 
 // Sabores de bolo disponíveis
