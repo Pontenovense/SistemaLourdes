@@ -80,26 +80,27 @@ let produtos = [
     { id: 24, nome: "Bicho de pé", nomeAbreviado: "Bicho pé", preco: 1.60, descricao: "Doce - valor por unidade", categoria: "Doces", tipoSalgado: null },
     { id: 25, nome: "Brigadeiro de Churros", nomeAbreviado: "Churros", preco: 1.70, descricao: "Doce - valor por unidade", categoria: "Doces", tipoSalgado: null },
     { id: 26, nome: "Olho de Sogra", nomeAbreviado: "Olho Sogra", preco: 1.70, descricao: "Doce - valor por unidade", categoria: "Doces", tipoSalgado: null },
-    { id: 27, nome: "Rosinha Napolitana", nomeAbreviado: "Rosinha Napol.", preco: 1.50, descricao: "Doce - valor por unidade", categoria: "Doces", tipoSalgado: null },
-    { id: 28, nome: "Leite ninho com nutella", nomeAbreviado: "ninho nutella", preco: 1.80, descricao: "Doce - valor por unidade", categoria: "Doces", tipoSalgado: null },
-    { id: 29, nome: "Surpresa de Uva", nomeAbreviado: "Surp. Uva", preco: 1.80, descricao: "Doce - valor por unidade", categoria: "Doces", tipoSalgado: null },
-    { id: 30, nome: "Brigadeiro ao leite c/Split Callebaut", nomeAbreviado: "Brig. Split", preco: 2.00, descricao: "Doce - valor por unidade", categoria: "Doces", tipoSalgado: null },
-    { id: 31, nome: "Ouriço de coco queimado", nomeAbreviado: "Ouriço", preco: 2.00, descricao: "Doce - valor por unidade", categoria: "Doces", tipoSalgado: null },
-    { id: 32, nome: "Bombom Cereja", nomeAbreviado: "Bomb. Cereja", preco: 3.00, descricao: "Doce - valor por unidade", categoria: "Doces", tipoSalgado: null },
-    { id: 33, nome: "Bombom Uva", nomeAbreviado: "Bomb. Uva", preco: 3.00, descricao: "Doce - valor por unidade", categoria: "Doces", tipoSalgado: null },
-    { id: 34, nome: "Bombom de Morango", nomeAbreviado: "Bomb. Morango", preco: 4.00, descricao: "Doce - valor por unidade", categoria: "Doces", tipoSalgado: null },
-    { id: 35, nome: "Brigadeiro Ferreiro", nomeAbreviado: "Ferreiro", preco: 2.10, descricao: "Doce - valor por unidade", categoria: "Doces", tipoSalgado: null },
-    { id: 36, nome: "Caixa Doce Mix 42un", nomeAbreviado: "Cx Doce Mix 42un", preco: 70.00, descricao: "Caixa de doces - valor por caixa", categoria: "Doces", tipoSalgado: null },
-    { id: 37, nome: "Caixa Doce Mix 100un", nomeAbreviado: "Cx Doce Mix 100un", preco: 170.00, descricao: "Caixa de doces - valor por caixa", categoria: "Doces", tipoSalgado: null },
-    { id: 38, nome: "Bolo", nomeAbreviado: "Bolo", preco: 90.00, descricao: "Bolos", categoria: "Doces", tipoSalgado: null },
-    { id: 39, nome: "Nega Maluca", nomeAbreviado: "Nega Maluca", preco: 40.00, descricao: "Bolos", categoria: "Doces", tipoSalgado: null },
-    { id: 40, nome: "Bolo Cenoura", nomeAbreviado: "Bolo Cenoura", preco: 40.00, descricao: "Bolos", categoria: "Doces", tipoSalgado: null },
-    { id: 41, nome: "Morango do Amor", nomeAbreviado: "Morango Amor", preco: 10.00, descricao: "Morango do Amor❤️", categoria: "Doces", tipoSalgado: null },
-    { id: 42, nome: "Bandeja Morango do Amor", nomeAbreviado: "Bandeja Morango Amor", preco: 25.00, descricao: "5un Morango do Amor❤️", categoria: "Doces", tipoSalgado: null },
-    { id: 43, nome: "Bolo de Pote", nomeAbreviado: "Bolo Pote", preco: 15.00, descricao: "Bolo de Pote", categoria: "Doces", tipoSalgado: null },
-    { id: 44, nome: "Copo da Felicidade", nomeAbreviado: "Copo Felicidade", preco: 15.00, descricao: "Copo da Felicidade", categoria: "Doces", tipoSalgado: null },
-    { id: 45, nome: "Brownie", nomeAbreviado: "Brownie", preco: 10.00, descricao: "Brownie", categoria: "Doces", tipoSalgado: null },
-    { id: 46, nome: "DIVERSOS", nomeAbreviado: "DIVERSOS", preco: 0.00, descricao: "Produto personalizado - nome e preço definidos no pedido", categoria: "Diversos", tipoSalgado: null }
+    { id: 27, nome: "Leite ninho com nutella", nomeAbreviado: "ninho nutella", preco: 1.80, descricao: "Doce - valor por unidade", categoria: "Doces", tipoSalgado: null },
+    { id: 28, nome: "Surpresa de Uva", nomeAbreviado: "Surp. Uva", preco: 1.80, descricao: "Doce - valor por unidade", categoria: "Doces", tipoSalgado: null },
+    { id: 29, nome: "Mini donuts", nomeAbreviado: "Mini donuts", preco: 2.50, descricao: "Doce - valor por unidade", categoria: "Doces", tipoSalgado: null },
+    { id: 30, nome: "Mini brownie", nomeAbreviado: "Mini brownie", preco: 3.00, descricao: "Doce - valor por unidade", categoria: "Doces", tipoSalgado: null },
+    { id: 31, nome: "Oreo surprise", nomeAbreviado: "Oreo surprise", preco: 3.00, descricao: "Doce - valor por unidade", categoria: "Doces", tipoSalgado: null },
+    { id: 32, nome: "Ouriço de coco queimado", nomeAbreviado: "Ouriço", preco: 2.00, descricao: "Doce - valor por unidade", categoria: "Doces", tipoSalgado: null },
+    { id: 33, nome: "Bombom Cereja", nomeAbreviado: "Bomb. Cereja", preco: 3.00, descricao: "Doce - valor por unidade", categoria: "Doces", tipoSalgado: null },
+    { id: 34, nome: "Bombom Uva", nomeAbreviado: "Bomb. Uva", preco: 3.00, descricao: "Doce - valor por unidade", categoria: "Doces", tipoSalgado: null },
+    { id: 35, nome: "Bombom de Morango", nomeAbreviado: "Bomb. Morango", preco: 4.00, descricao: "Doce - valor por unidade", categoria: "Doces", tipoSalgado: null },
+    { id: 36, nome: "Brigadeiro Ferreiro", nomeAbreviado: "Ferreiro", preco: 2.10, descricao: "Doce - valor por unidade", categoria: "Doces", tipoSalgado: null },
+    { id: 37, nome: "Caixa Doce Mix 42un", nomeAbreviado: "Cx Doce Mix 42un", preco: 70.00, descricao: "Caixa de doces - valor por caixa", categoria: "Doces", tipoSalgado: null },
+    { id: 38, nome: "Caixa Doce Mix 100un", nomeAbreviado: "Cx Doce Mix 100un", preco: 170.00, descricao: "Caixa de doces - valor por caixa", categoria: "Doces", tipoSalgado: null },
+    { id: 39, nome: "Bolo", nomeAbreviado: "Bolo", preco: 90.00, descricao: "Bolos", categoria: "Doces", tipoSalgado: null },
+    { id: 40, nome: "Nega Maluca", nomeAbreviado: "Nega Maluca", preco: 40.00, descricao: "Bolos", categoria: "Doces", tipoSalgado: null },
+    { id: 41, nome: "Bolo Cenoura", nomeAbreviado: "Bolo Cenoura", preco: 40.00, descricao: "Bolos", categoria: "Doces", tipoSalgado: null },
+    { id: 42, nome: "Morango do Amor", nomeAbreviado: "Morango Amor", preco: 10.00, descricao: "Morango do Amor❤️", categoria: "Doces", tipoSalgado: null },
+    { id: 43, nome: "Bandeja Morango do Amor", nomeAbreviado: "Bandeja Morango Amor", preco: 25.00, descricao: "5un Morango do Amor❤️", categoria: "Doces", tipoSalgado: null },
+    { id: 44, nome: "Bolo de Pote", nomeAbreviado: "Bolo Pote", preco: 15.00, descricao: "Bolo de Pote", categoria: "Doces", tipoSalgado: null },
+    { id: 45, nome: "Copo da Felicidade", nomeAbreviado: "Copo Felicidade", preco: 15.00, descricao: "Copo da Felicidade", categoria: "Doces", tipoSalgado: null },
+    { id: 46, nome: "Brownie", nomeAbreviado: "Brownie", preco: 10.00, descricao: "Brownie", categoria: "Doces", tipoSalgado: null },
+    { id: 47, nome: "DIVERSOS", nomeAbreviado: "DIVERSOS", preco: 0.00, descricao: "Produto personalizado - nome e preço definidos no pedido", categoria: "Diversos", tipoSalgado: null }
 ];
 
 let pedidos = [];
@@ -840,7 +841,12 @@ function adicionarProdutoCalculadora() {
     
     const produto = produtos.find(p => p.id === produtoId);
     let precoFinal = produto.preco;
-    
+
+    // Para Cento Salgado Mix, usar preço especial se quantidade < 1
+    if (produto.id === 1 && quantidade > 0 && quantidade < 1) {
+        precoFinal = 100.00;
+    }
+
     // Para salgados fritos promocionais, usar preço dinâmico
     if (produto.tipoSalgado === 'frito_promocional') {
         // Criar lista temporária para calcular o preço
@@ -956,12 +962,22 @@ function atualizarSelectProdutosPedido() {
 function calcularTotalItemPedido() {
     const produtoId = parseInt(document.getElementById('produtoPedido').value);
     const quantidade = parseFloat(document.getElementById('quantidadePedido').value);
-    
-    if (produtoId && quantidade > 0) {
+
+    if (produtoId) {
         const produto = produtos.find(p => p.id === produtoId);
-        const total = produto.preco * quantidade;
-        document.getElementById('totalItemPedido').textContent = formatarMoeda(total);
+        let precoFinal = produto.preco;
+        if (produto.id === 1 && quantidade > 0 && quantidade < 1) {
+            precoFinal = 100.00;
+        }
+        document.getElementById('precoUnitarioPedido').textContent = formatarMoeda(precoFinal);
+        if (quantidade > 0) {
+            const total = precoFinal * quantidade;
+            document.getElementById('totalItemPedido').textContent = formatarMoeda(total);
+        } else {
+            document.getElementById('totalItemPedido').textContent = formatarMoeda(0);
+        }
     } else {
+        document.getElementById('precoUnitarioPedido').textContent = formatarMoeda(0);
         document.getElementById('totalItemPedido').textContent = formatarMoeda(0);
     }
 }
@@ -1000,6 +1016,11 @@ function adicionarProdutoAoPedido() {
         }
 
         precoFinal = precoPersonalizado;
+    }
+
+    // Para Cento Salgado Mix, usar preço especial se quantidade < 1
+    if (produto.id === 1 && quantidade > 0 && quantidade < 1) {
+        precoFinal = 100.00;
     }
 
     // Para salgados fritos promocionais, usar preço dinâmico
