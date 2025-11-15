@@ -205,20 +205,46 @@ function calcularDistribuicaoSalgados(totalSalgados, tiposSalgados) {
     if (!tiposSalgados || tiposSalgados.length === 0) {
         return [];
     }
-    
-    const quantidadePorTipo = Math.floor(totalSalgados / tiposSalgados.length);
-    const resto = totalSalgados % tiposSalgados.length;
-    
-    const distribuicao = tiposSalgados.map((tipo, index) => {
-        // Distribuir o resto entre os primeiros tipos
-        const quantidade = quantidadePorTipo + (index < resto ? 1 : 0);
-        return {
+
+    const numTypes = tiposSalgados.length;
+
+    // Verificar se a divisão fecha certinho
+    if (totalSalgados % numTypes === 0) {
+        // Divisão igual
+        const quantidadePorTipo = totalSalgados / numTypes;
+        return tiposSalgados.map(tipo => ({
             tipo: tipo,
-            quantidade: quantidade
-        };
-    });
-    
-    return distribuicao;
+            quantidade: quantidadePorTipo
+        }));
+    } else {
+        // Divisão não fecha certinho, aplicar lógica especial
+        const firstPercentage = 0.4;
+        const remainingPercentage = 1 - firstPercentage;
+        const eachRemainingPercentage = numTypes > 1 ? remainingPercentage / (numTypes - 1) : 0;
+
+        const distribuicao = tiposSalgados.map((tipo, index) => {
+            let percentage;
+            if (index === 0) {
+                percentage = firstPercentage;
+            } else {
+                percentage = eachRemainingPercentage;
+            }
+            const quantidade = Math.floor(totalSalgados * percentage);
+            return {
+                tipo: tipo,
+                quantidade: quantidade
+            };
+        });
+
+        // Distribuir o resto para o primeiro salgado
+        const totalDistributed = distribuicao.reduce((sum, item) => sum + item.quantidade, 0);
+        const remainder = totalSalgados - totalDistributed;
+        if (remainder > 0 && distribuicao.length > 0) {
+            distribuicao[0].quantidade += remainder;
+        }
+
+        return distribuicao;
+    }
 }
 
 // Dom Ready
