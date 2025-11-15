@@ -57,7 +57,7 @@ let produtos = [
     { id: 1, nome: "Cento Salgado Mix", nomeAbreviado: "cento salg mix", preco: 90.00, descricao: "Salgado frito - valor por unidade", categoria: "Salgados", tipoSalgado: "null" },
     { id: 2, nome: "Coxinha", nomeAbreviado: "Coxinha", preco: 0.90, descricao: "Salgado frito - valor por unidade", categoria: "Salgados", tipoSalgado: "frito_promocional" },
     { id: 3, nome: "Risoles de carne", nomeAbreviado: "Risoles carne", preco: 0.90, descricao: "Salgado frito - valor por unidade", categoria: "Salgados", tipoSalgado: "frito_promocional" },
-    { id: 4, nome: "Risoles de palmito", nomeAbreviado: "Risoles palmito", preco: 1.20, descricao: "Salgado frito - valor por unidade", categoria: "Salgados", tipoSalgado: null },
+    { id: 4, nome: "Risoles de palmito", nomeAbreviado: "Risoles palmito", preco: 1.20, descricao: "Salgado frito - valor por unidade", categoria: "Salgados", tipoSalgado: "frito_promocional_count" },
     { id: 5, nome: "Kibe", nomeAbreviado: "Kibe", preco: 0.90, descricao: "Salgado frito - valor por unidade", categoria: "Salgados", tipoSalgado: "frito_promocional" },
     { id: 6, nome: "Bolinha de queijo", nomeAbreviado: "B.queijo", preco: 0.90, descricao: "Salgado frito - valor por unidade", categoria: "Salgados", tipoSalgado: "frito_promocional" },
     { id: 7, nome: "Croquete de presunto e queijo", nomeAbreviado: "Balão", preco: 0.90, descricao: "Salgado frito - valor por unidade", categoria: "Salgados", tipoSalgado: "frito_promocional" },
@@ -153,14 +153,14 @@ let kitAtual = {
 };
 
 function calcularPrecoSalgadoFrito(listaProdutos) {
-    // Contar total de salgados fritos
+    // Contar total de salgados fritos (incluindo risoles de palmito para contagem)
     const totalSalgadosFritos = listaProdutos
         .filter(item => {
             const produto = produtos.find(p => p.id === item.id);
-            return produto && (produto.tipoSalgado === 'frito_promocional' || produto.tipoSalgado === 'frito_normal');
+            return produto && (produto.tipoSalgado === 'frito_promocional' || produto.tipoSalgado === 'frito_normal' || produto.tipoSalgado === 'frito_promocional_count');
         })
         .reduce((total, item) => total + item.quantidade, 0);
-    
+
     // Retornar preço baseado na quantidade total
     return totalSalgadosFritos >= 100 ? 0.90 : 1.00;
 }
