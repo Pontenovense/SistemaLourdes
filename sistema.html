@@ -235,31 +235,47 @@
                             <!-- Seleção de Salgados Específicos -->
                             <div id="selecaoSalgados" class="hidden">
                                 <label class="block text-sm font-medium text-gray-700 mb-2">
-                                    Escolha até 5 tipos de salgados:
+                                    Escolha até 5 tipos de salgados e suas quantidades:
                                 </label>
                                 <div class="grid grid-cols-1 gap-2 max-h-40 overflow-y-auto border border-gray-200 rounded p-2">
-                                    <label class="flex items-center">
-                                        <input type="checkbox" name="salgadosEscolhidos" value="Coxinha" class="text-pink-600 focus:ring-pink-500">
-                                        <span class="ml-2 text-sm">Coxinha</span>
+                                    <label class="flex items-center justify-between">
+                                        <div class="flex items-center">
+                                            <input type="checkbox" name="salgadosEscolhidos" value="Coxinha" class="text-pink-600 focus:ring-pink-500">
+                                            <span class="ml-2 text-sm">Coxinha</span>
+                                        </div>
+                                        <input type="number" name="quantidadeCoxinha" min="0" value="0" class="w-16 px-2 py-1 text-sm border border-gray-300 rounded disabled:bg-gray-100" disabled>
                                     </label>
-                                    <label class="flex items-center">
-                                        <input type="checkbox" name="salgadosEscolhidos" value="Risoles de carne" class="text-pink-600 focus:ring-pink-500">
-                                        <span class="ml-2 text-sm">Risoles de carne</span>
+                                    <label class="flex items-center justify-between">
+                                        <div class="flex items-center">
+                                            <input type="checkbox" name="salgadosEscolhidos" value="Risoles de carne" class="text-pink-600 focus:ring-pink-500">
+                                            <span class="ml-2 text-sm">Risoles de carne</span>
+                                        </div>
+                                        <input type="number" name="quantidadeRisolesCarne" min="0" value="0" class="w-16 px-2 py-1 text-sm border border-gray-300 rounded disabled:bg-gray-100" disabled>
                                     </label>
-                                    <label class="flex items-center">
-                                        <input type="checkbox" name="salgadosEscolhidos" value="Kibe" class="text-pink-600 focus:ring-pink-500">
-                                        <span class="ml-2 text-sm">Kibe</span>
+                                    <label class="flex items-center justify-between">
+                                        <div class="flex items-center">
+                                            <input type="checkbox" name="salgadosEscolhidos" value="Kibe" class="text-pink-600 focus:ring-pink-500">
+                                            <span class="ml-2 text-sm">Kibe</span>
+                                        </div>
+                                        <input type="number" name="quantidadeKibe" min="0" value="0" class="w-16 px-2 py-1 text-sm border border-gray-300 rounded disabled:bg-gray-100" disabled>
                                     </label>
-                                    <label class="flex items-center">
-                                        <input type="checkbox" name="salgadosEscolhidos" value="Bolinho de queijo" class="text-pink-600 focus:ring-pink-500">
-                                        <span class="ml-2 text-sm">Bolinho de queijo</span>
+                                    <label class="flex items-center justify-between">
+                                        <div class="flex items-center">
+                                            <input type="checkbox" name="salgadosEscolhidos" value="Bolinho de queijo" class="text-pink-600 focus:ring-pink-500">
+                                            <span class="ml-2 text-sm">Bolinho de queijo</span>
+                                        </div>
+                                        <input type="number" name="quantidadeBolinhoQueijo" min="0" value="0" class="w-16 px-2 py-1 text-sm border border-gray-300 rounded disabled:bg-gray-100" disabled>
                                     </label>
-                                    <label class="flex items-center">
-                                        <input type="checkbox" name="salgadosEscolhidos" value="Croquete de presunto e queijo" class="text-pink-600 focus:ring-pink-500">
-                                        <span class="ml-2 text-sm">Croquete de presunto e queijo</span>
+                                    <label class="flex items-center justify-between">
+                                        <div class="flex items-center">
+                                            <input type="checkbox" name="salgadosEscolhidos" value="Croquete de presunto e queijo" class="text-pink-600 focus:ring-pink-500">
+                                            <span class="ml-2 text-sm">Croquete de presunto e queijo</span>
+                                        </div>
+                                        <input type="number" name="quantidadeCroquete" min="0" value="0" class="w-16 px-2 py-1 text-sm border border-gray-300 rounded disabled:bg-gray-100" disabled>
                                     </label>
                                 </div>
                                 <div id="contadorSalgados" class="text-xs text-gray-500 mt-1">0/5 salgados selecionados</div>
+                                <div id="totalSalgadosCustom" class="text-xs text-gray-500 mt-1">Total: 0 / 100 unidades</div>
                             </div>
 
                             <!-- Botão Adicionar Kit -->

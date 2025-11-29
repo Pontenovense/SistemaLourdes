@@ -149,7 +149,8 @@ let kitAtual = {
     tamanho: null,
     sabor: '',
     tipoSalgados: '',
-    salgadosEscolhidos: []
+    salgadosEscolhidos: [],
+    quantidadesCustom: {}
 };
 
 function calcularPrecoSalgadoFrito(listaProdutos) {
@@ -1207,10 +1208,26 @@ function atualizarPreviewProdutos() {
             if (item.kitDetalhes.tipoSalgados === 'sortidos') {
                 descricaoKit += `• ${kit.salgados} SALGADOS (SORTIDOS)\n`;
             } else if (item.kitDetalhes.tipoSalgados === 'escolha') {
-                const distribuicao = calcularDistribuicaoSalgados(kit.salgados, item.kitDetalhes.salgadosEscolhidos);
-                // Cada salgado em uma linha separada, sem mostrar o total
-                const salgadosDetalhados = distribuicao.map(s => `• ${s.quantidade}x ${s.tipo.toUpperCase()}`).join('\n');
-                descricaoKit += `${salgadosDetalhados}\n`;
+                // Check if custom quantities are set and valid
+                const hasCustomQuantities = Object.values(item.kitDetalhes.quantidadesCustom).some(qty => (parseInt(qty) || 0) > 0);
+                const totalCustom = Object.values(item.kitDetalhes.quantidadesCustom).reduce((sum, qty) => sum + (parseInt(qty) || 0), 0);
+
+                if (hasCustomQuantities && totalCustom === kit.salgados) {
+                    // Use custom quantities
+                    const salgadosCustom = item.kitDetalhes.salgadosEscolhidos
+                        .map(salgado => {
+                            const qty = item.kitDetalhes.quantidadesCustom[salgado] || 0;
+                            return qty > 0 ? `• ${qty}x ${salgado.toUpperCase()}` : null;
+                        })
+                        .filter(item => item !== null)
+                        .join('\n');
+                    descricaoKit += `${salgadosCustom}\n`;
+                } else {
+                    // Use automatic distribution
+                    const distribuicao = calcularDistribuicaoSalgados(kit.salgados, item.kitDetalhes.salgadosEscolhidos);
+                    const salgadosDetalhados = distribuicao.map(s => `• ${s.quantidade}x ${s.tipo.toUpperCase()}`).join('\n');
+                    descricaoKit += `${salgadosDetalhados}\n`;
+                }
             }
             
             descricaoKit += `• ${kit.doces} DOCES VARIADOS (${kit.caixasDoces} CAIXA${kit.caixasDoces > 1 ? 'S' : ''})`;
@@ -1302,18 +1319,56 @@ function inicializarKitsFestas() {
         checkbox.addEventListener('change', function() {
             const salgadosSelecionados = Array.from(document.querySelectorAll('input[name="salgadosEscolhidos"]:checked'))
                 .map(cb => cb.value);
-            
+
             // Limitar a 5 salgados
             if (salgadosSelecionados.length > 5) {
                 this.checked = false;
                 showNotification('Limite Atingido!', 'Você pode escolher no máximo 5 tipos de salgados.', 'warning');
                 return;
             }
-            
+
             kitAtual.salgadosEscolhidos = salgadosSelecionados;
+
+            // Enable/disable quantity inputs
+            const quantityInput = this.closest('label').querySelector('input[type="number"]');
+            if (quantityInput) {
+                if (this.checked) {
+                    quantityInput.disabled = false;
+                    quantityInput.value = kitAtual.quantidadesCustom[this.value] || 0;
+                } else {
+                    quantityInput.disabled = true;
+                    quantityInput.value = 0;
+                    delete kitAtual.quantidadesCustom[this.value];
+                }
+            }
+
             atualizarContadorSalgados();
+            atualizarTotalSalgadosCustom();
             atualizarPreviewKit();
             validarKit();
+        });
+    });
+
+    // Event listeners para inputs de quantidade customizada
+    const quantityInputs = document.querySelectorAll('input[name^="quantidade"]');
+    quantityInputs.forEach(input => {
+        input.addEventListener('input', function() {
+            // Map input names to checkbox values
+            const nameToValueMap = {
+                'quantidadeCoxinha': 'Coxinha',
+                'quantidadeRisolesCarne': 'Risoles de carne',
+                'quantidadeKibe': 'Kibe',
+                'quantidadeBolinhoQueijo': 'Bolinho de queijo',
+                'quantidadeCroquete': 'Croquete de presunto e queijo'
+            };
+
+            const checkboxValue = nameToValueMap[this.name];
+            if (checkboxValue) {
+                kitAtual.quantidadesCustom[checkboxValue] = parseInt(this.value) || 0;
+                atualizarTotalSalgadosCustom();
+                atualizarPreviewKit();
+                validarKit();
+            }
         });
     });
 
@@ -1372,15 +1427,29 @@ function atualizarPreviewKit() {
     // Mostrar/esconder salgados escolhidos com quantidades específicas
     const kitSalgadosEscolhidos = document.getElementById('kitSalgadosEscolhidos');
     const listaSalgadosEscolhidos = document.getElementById('listaSalgadosEscolhidos');
-    
+
     if (kitAtual.tipoSalgados === 'escolha' && kitAtual.salgadosEscolhidos.length > 0) {
         kitSalgadosEscolhidos.classList.remove('hidden');
-        
-        // Calcular e mostrar distribuição de quantidades
-        const distribuicao = calcularDistribuicaoSalgados(kit.salgados, kitAtual.salgadosEscolhidos);
-        listaSalgadosEscolhidos.innerHTML = distribuicao.map(salgado => 
-            `<div>• ${salgado.quantidade}x ${salgado.tipo}</div>`
-        ).join('');
+
+        // Check if any custom quantities are set
+        const hasCustomQuantities = Object.values(kitAtual.quantidadesCustom).some(qty => (parseInt(qty) || 0) > 0);
+
+        if (hasCustomQuantities) {
+            // Show custom quantities (even if total is not correct yet)
+            listaSalgadosEscolhidos.innerHTML = kitAtual.salgadosEscolhidos
+                .map(salgado => {
+                    const qty = kitAtual.quantidadesCustom[salgado] || 0;
+                    return qty > 0 ? `<div>• ${qty}x ${salgado}</div>` : null;
+                })
+                .filter(item => item !== null)
+                .join('');
+        } else {
+            // Show automatic distribution
+            const distribuicao = calcularDistribuicaoSalgados(kit.salgados, kitAtual.salgadosEscolhidos);
+            listaSalgadosEscolhidos.innerHTML = distribuicao.map(salgado =>
+                `<div>• ${salgado.quantidade}x ${salgado.tipo}</div>`
+            ).join('');
+        }
     } else {
         kitSalgadosEscolhidos.classList.add('hidden');
     }
@@ -1389,9 +1458,9 @@ function atualizarPreviewKit() {
 function atualizarContadorSalgados() {
     const contador = document.getElementById('contadorSalgados');
     const selecionados = kitAtual.salgadosEscolhidos.length;
-    
+
     contador.textContent = `${selecionados}/5 salgados selecionados`;
-    
+
     if (selecionados === 5) {
         contador.classList.add('text-red-500');
         contador.classList.remove('text-gray-500');
@@ -1401,12 +1470,29 @@ function atualizarContadorSalgados() {
     }
 }
 
+function atualizarTotalSalgadosCustom() {
+    const totalCustom = Object.values(kitAtual.quantidadesCustom).reduce((sum, qty) => sum + (parseInt(qty) || 0), 0);
+    const kit = kitsFestas[kitAtual.tamanho];
+    const totalSalgadosDisplay = document.getElementById('totalSalgadosCustom');
+
+    if (totalSalgadosDisplay) {
+        totalSalgadosDisplay.textContent = `Total: ${totalCustom}/${kit ? kit.salgados : 0}`;
+        if (totalCustom === (kit ? kit.salgados : 0)) {
+            totalSalgadosDisplay.classList.add('text-green-600');
+            totalSalgadosDisplay.classList.remove('text-red-600');
+        } else {
+            totalSalgadosDisplay.classList.add('text-red-600');
+            totalSalgadosDisplay.classList.remove('text-green-600');
+        }
+    }
+}
+
 function validarKit() {
     const botaoAdicionar = document.getElementById('adicionarKit');
-    
+
     let valido = true;
     let mensagemErro = '';
-    
+
     if (!kitAtual.tamanho) {
         valido = false;
         mensagemErro = 'Selecione um kit';
@@ -1419,8 +1505,16 @@ function validarKit() {
     } else if (kitAtual.tipoSalgados === 'escolha' && kitAtual.salgadosEscolhidos.length === 0) {
         valido = false;
         mensagemErro = 'Selecione pelo menos um tipo de salgado';
+    } else if (kitAtual.tipoSalgados === 'escolha' && kitAtual.salgadosEscolhidos.length > 0) {
+        // Check if custom quantities total matches kit total
+        const kit = kitsFestas[kitAtual.tamanho];
+        const totalCustom = Object.values(kitAtual.quantidadesCustom).reduce((sum, qty) => sum + (parseInt(qty) || 0), 0);
+        if (totalCustom !== kit.salgados) {
+            valido = false;
+            mensagemErro = `Total deve ser ${kit.salgados} unidades (atual: ${totalCustom})`;
+        }
     }
-    
+
     if (valido) {
         botaoAdicionar.disabled = false;
         botaoAdicionar.textContent = 'Adicionar Kit ao Pedido';
@@ -1434,24 +1528,40 @@ function adicionarKitAoPedido() {
     if (!validarKitCompleto()) {
         return;
     }
-    
+
     const kit = kitsFestas[kitAtual.tamanho];
-    
+
     // Criar descrição detalhada do kit com quantidades específicas
     let descricaoKit = `KIT ${kit.pessoas} PESSOAS:\n`;
     descricaoKit += `• ${kit.bolo} bolo sabor ${kitAtual.sabor}\n`;
-    
+
     if (kitAtual.tipoSalgados === 'sortidos') {
         descricaoKit += `• ${kit.salgados} salgados (sortidos)\n`;
     } else {
-        // Usar a nova funcionalidade de distribuição de salgados
-        const distribuicao = calcularDistribuicaoSalgados(kit.salgados, kitAtual.salgadosEscolhidos);
-        const salgadosDetalhados = distribuicao.map(s => `${s.quantidade}x ${s.tipo}`).join(', ');
-        descricaoKit += `• ${kit.salgados} salgados (${salgadosDetalhados})\n`;
+        // Check if custom quantities are provided and valid
+        const hasCustomQuantities = Object.values(kitAtual.quantidadesCustom).some(qty => (parseInt(qty) || 0) > 0);
+        const totalCustom = Object.values(kitAtual.quantidadesCustom).reduce((sum, qty) => sum + (parseInt(qty) || 0), 0);
+
+        if (hasCustomQuantities && totalCustom === kit.salgados) {
+            // Use custom quantities
+            const salgadosCustom = kitAtual.salgadosEscolhidos
+                .map(salgado => {
+                    const qty = kitAtual.quantidadesCustom[salgado] || 0;
+                    return qty > 0 ? `${qty}x ${salgado}` : null;
+                })
+                .filter(item => item !== null)
+                .join(', ');
+            descricaoKit += `• ${kit.salgados} salgados (${salgadosCustom})\n`;
+        } else {
+            // Use automatic distribution
+            const distribuicao = calcularDistribuicaoSalgados(kit.salgados, kitAtual.salgadosEscolhidos);
+            const salgadosDetalhados = distribuicao.map(s => `${s.quantidade}x ${s.tipo}`).join(', ');
+            descricaoKit += `• ${kit.salgados} salgados (${salgadosDetalhados})\n`;
+        }
     }
-    
+
     descricaoKit += `• ${kit.doces} doces variados (${kit.caixasDoces} caixa${kit.caixasDoces > 1 ? 's' : ''})`;
-    
+
     // Adicionar kit como produto especial ao pedido
     const itemKit = {
         id: `kit_${Date.now()}`, // ID único para o kit
@@ -1465,22 +1575,23 @@ function adicionarKitAoPedido() {
             sabor: kitAtual.sabor,
             tipoSalgados: kitAtual.tipoSalgados,
             salgadosEscolhidos: [...kitAtual.salgadosEscolhidos],
+            quantidadesCustom: { ...kitAtual.quantidadesCustom },
             descricao: descricaoKit
         }
     };
-    
+
     produtosPedido.push(itemKit);
-    
+
     // Atualizar displays
     atualizarListaProdutosPedido();
     atualizarPreviewProdutos();
-    
+
     // Limpar seleção do kit
     limparSelecaoKit();
-    
+
     // Ir para aba de pedidos
     document.getElementById('tabPedidos').click();
-    
+
     showNotification('Kit Adicionado!', `Kit Festa ${kit.pessoas} Pessoas foi adicionado ao pedido.`, 'success');
 }
 
@@ -1514,31 +1625,40 @@ function limparSelecaoKit() {
         tamanho: null,
         sabor: '',
         tipoSalgados: '',
-        salgadosEscolhidos: []
+        salgadosEscolhidos: [],
+        quantidadesCustom: {}
     };
-    
+
     // Limpar seleções na interface
     const kitsRadios = document.querySelectorAll('input[name="kitSelecionado"]');
     kitsRadios.forEach(radio => radio.checked = false);
-    
+
     document.getElementById('saborBolo').value = '';
-    
+
     const tipoSalgadosRadios = document.querySelectorAll('input[name="tipoSalgados"]');
     tipoSalgadosRadios.forEach(radio => radio.checked = false);
-    
+
     const salgadosCheckboxes = document.querySelectorAll('input[name="salgadosEscolhidos"]');
-    salgadosCheckboxes.forEach(checkbox => checkbox.checked = false);
-    
+    salgadosCheckboxes.forEach(checkbox => {
+        checkbox.checked = false;
+        const quantityInput = checkbox.closest('label').querySelector('input[type="number"]');
+        if (quantityInput) {
+            quantityInput.disabled = true;
+            quantityInput.value = 0;
+        }
+    });
+
     // Esconder seções
     document.getElementById('kitPersonalizacao').style.display = 'none';
     document.getElementById('selecaoSalgados').classList.add('hidden');
-    
+
     // Resetar preview
     document.getElementById('kitPreview').style.display = 'block';
     document.getElementById('kitDetalhes').classList.add('hidden');
-    
+
     // Resetar contador
     atualizarContadorSalgados();
+    atualizarTotalSalgadosCustom();
 }
 
 // Função para criar e mostrar modal de confirmação personalizado
