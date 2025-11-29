@@ -1431,11 +1431,11 @@ function atualizarPreviewKit() {
     if (kitAtual.tipoSalgados === 'escolha' && kitAtual.salgadosEscolhidos.length > 0) {
         kitSalgadosEscolhidos.classList.remove('hidden');
 
-        // Check if any custom quantities are set
+        // Check if custom quantities are set
         const hasCustomQuantities = Object.values(kitAtual.quantidadesCustom).some(qty => (parseInt(qty) || 0) > 0);
 
         if (hasCustomQuantities) {
-            // Show custom quantities (even if total is not correct yet)
+            // Show custom quantities (even if total doesn't match yet)
             listaSalgadosEscolhidos.innerHTML = kitAtual.salgadosEscolhidos
                 .map(salgado => {
                     const qty = kitAtual.quantidadesCustom[salgado] || 0;
@@ -1506,13 +1506,18 @@ function validarKit() {
         valido = false;
         mensagemErro = 'Selecione pelo menos um tipo de salgado';
     } else if (kitAtual.tipoSalgados === 'escolha' && kitAtual.salgadosEscolhidos.length > 0) {
-        // Check if custom quantities total matches kit total
-        const kit = kitsFestas[kitAtual.tamanho];
-        const totalCustom = Object.values(kitAtual.quantidadesCustom).reduce((sum, qty) => sum + (parseInt(qty) || 0), 0);
-        if (totalCustom !== kit.salgados) {
-            valido = false;
-            mensagemErro = `Total deve ser ${kit.salgados} unidades (atual: ${totalCustom})`;
+        // Only validate custom quantities if they are actually set
+        const hasCustomQuantities = Object.values(kitAtual.quantidadesCustom).some(qty => (parseInt(qty) || 0) > 0);
+        if (hasCustomQuantities) {
+            // Check if custom quantities total matches kit total
+            const kit = kitsFestas[kitAtual.tamanho];
+            const totalCustom = Object.values(kitAtual.quantidadesCustom).reduce((sum, qty) => sum + (parseInt(qty) || 0), 0);
+            if (totalCustom !== kit.salgados) {
+                valido = false;
+                mensagemErro = `Total deve ser ${kit.salgados} unidades (atual: ${totalCustom})`;
+            }
         }
+        // If no custom quantities are set, use automatic distribution - no validation needed
     }
 
     if (valido) {
