@@ -140,8 +140,9 @@ const salgadosDisponiveis = [
     'Coxinha',
     'Risoles de carne',
     'Kibe',
-    'Bolinho de queijo',
-    'Croquete de presunto e queijo'
+    'Bolinha de queijo',
+    'Croquete de presunto e queijo',
+    'Enroladinho de Vina'
 ];
 
 // Estado atual do kit sendo configurado
