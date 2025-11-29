@@ -198,21 +198,27 @@
                                 <label class="block text-sm font-medium text-gray-700 mb-2">
                                     <i class="fas fa-birthday-cake mr-1 text-pink-500"></i>Sabor do Bolo:
                                 </label>
-                                <select id="saborBolo" class="block w-full px-3 py-2 text-sm rounded-md border-gray-300 shadow-sm focus:border-pink-500 focus:ring-pink-500">
-                                    <option value="">Selecione o sabor</option>
-                                    <option value="Dois amores">Dois amores</option>
-                                    <option value="Dois amores c/morango">Dois amores c/morango</option>
-                                    <option value="Brigadeiro">Brigadeiro</option>
-                                    <option value="Brigadeiro com morango">Brigadeiro com morango</option>
-                                    <option value="Morango com nata e suspiro">Morango com nata e suspiro</option>
-                                    <option value="Morango com cocada">Morango com cocada</option>
-                                    <option value="Morango com 4 leite">Morango com 4 leite</option>
-                                    <option value="Abacaxi com coco">Abacaxi com coco</option>
-                                    <option value="Abacaxi com 4Leite">Abacaxi com 4Leite</option>
-                                    <option value="Abacaxi com leite ninho">Abacaxi com leite ninho</option>
-                                    <option value="Salada de frutas com nata">Salada de frutas com nata</option>
-                                    <option value="Prestígio">Prestígio</option>
-                                </select>
+                                <div class="space-y-2">
+                                    <select id="saborBolo" class="block w-full px-3 py-2 text-sm rounded-md border-gray-300 shadow-sm focus:border-pink-500 focus:ring-pink-500">
+                                        <option value="">Selecione o sabor</option>
+                                        <option value="Dois amores">Dois amores</option>
+                                        <option value="Dois amores c/morango">Dois amores c/morango</option>
+                                        <option value="Brigadeiro">Brigadeiro</option>
+                                        <option value="Brigadeiro com morango">Brigadeiro com morango</option>
+                                        <option value="Morango com nata e suspiro">Morango com nata e suspiro</option>
+                                        <option value="Morango com cocada">Morango com cocada</option>
+                                        <option value="Morango com 4 leite">Morango com 4 leite</option>
+                                        <option value="Abacaxi com coco">Abacaxi com coco</option>
+                                        <option value="Abacaxi com 4Leite">Abacaxi com 4Leite</option>
+                                        <option value="Abacaxi com leite ninho">Abacaxi com leite ninho</option>
+                                        <option value="Salada de frutas com nata">Salada de frutas com nata</option>
+                                        <option value="Prestígio">Prestígio</option>
+                                        <option value="personalizado">Outro sabor</option>
+                                    </select>
+                                    <div id="saborPersonalizadoContainer" class="hidden">
+                                        <input type="text" id="saborBoloPersonalizado" placeholder="Digite o sabor personalizado do bolo" class="block w-full px-3 py-2 text-sm rounded-md border-gray-300 shadow-sm focus:border-pink-500 focus:ring-pink-500">
+                                    </div>
+                                </div>
                             </div>
 
                             <!-- Tipo de Salgados -->

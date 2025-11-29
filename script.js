@@ -1285,9 +1285,29 @@ function inicializarKitsFestas() {
 
     // Event listener para sabor do bolo
     document.getElementById('saborBolo').addEventListener('change', function() {
-        kitAtual.sabor = this.value;
+        const saborPersonalizadoContainer = document.getElementById('saborPersonalizadoContainer');
+
+        if (this.value === 'personalizado') {
+            // Mostrar campo personalizado
+            saborPersonalizadoContainer.classList.remove('hidden');
+            kitAtual.sabor = document.getElementById('saborBoloPersonalizado').value || '';
+        } else {
+            // Esconder campo personalizado e usar valor selecionado
+            saborPersonalizadoContainer.classList.add('hidden');
+            kitAtual.sabor = this.value;
+        }
+
         atualizarPreviewKit();
         validarKit();
+    });
+
+    // Event listener para campo de texto personalizado
+    document.getElementById('saborBoloPersonalizado').addEventListener('input', function() {
+        if (document.getElementById('saborBolo').value === 'personalizado') {
+            kitAtual.sabor = this.value;
+            atualizarPreviewKit();
+            validarKit();
+        }
     });
 
     // Event listeners para tipo de salgados
@@ -1639,6 +1659,8 @@ function limparSelecaoKit() {
     kitsRadios.forEach(radio => radio.checked = false);
 
     document.getElementById('saborBolo').value = '';
+    document.getElementById('saborBoloPersonalizado').value = '';
+    document.getElementById('saborPersonalizadoContainer').classList.add('hidden');
 
     const tipoSalgadosRadios = document.querySelectorAll('input[name="tipoSalgados"]');
     tipoSalgadosRadios.forEach(radio => radio.checked = false);
