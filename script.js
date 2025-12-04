@@ -870,9 +870,9 @@ function adicionarProdutoCalculadora() {
     const produto = produtos.find(p => p.id === produtoId);
     let precoFinal = produto.preco;
 
-    // Para Cento Salgado Mix, usar preço especial se quantidade < 1
-    if (produto.id === 1 && quantidade > 0 && quantidade < 1) {
-        precoFinal = 100.00;
+    // Para Salgado Mix, usar preço baseado na quantidade
+    if (produto.id === 1) {
+        precoFinal = quantidade < 100 ? 1.00 : 0.90;
     }
 
     // Para salgados fritos promocionais, usar preço dinâmico
@@ -994,8 +994,9 @@ function calcularTotalItemPedido() {
     if (produtoId) {
         const produto = produtos.find(p => p.id === produtoId);
         let precoFinal = produto.preco;
-        if (produto.id === 1 && quantidade > 0 && quantidade < 1) {
-            precoFinal = 100.00;
+        // Para Salgado Mix, usar preço baseado na quantidade
+        if (produto.id === 1) {
+            precoFinal = quantidade < 100 ? 1.00 : 0.90;
         }
         document.getElementById('precoUnitarioPedido').textContent = formatarMoeda(precoFinal);
         if (quantidade > 0) {
@@ -1046,9 +1047,9 @@ function adicionarProdutoAoPedido() {
         precoFinal = precoPersonalizado;
     }
 
-    // Para Cento Salgado Mix, usar preço especial se quantidade < 1
-    if (produto.id === 1 && quantidade > 0 && quantidade < 1) {
-        precoFinal = 100.00;
+    // Para Salgado Mix, usar preço baseado na quantidade
+    if (produto.id === 1) {
+        precoFinal = quantidade < 100 ? 1.00 : 0.90;
     }
 
     // Para salgados fritos promocionais, usar preço dinâmico
