@@ -1342,10 +1342,10 @@ function inicializarKitsFestas() {
             const salgadosSelecionados = Array.from(document.querySelectorAll('input[name="salgadosEscolhidos"]:checked'))
                 .map(cb => cb.value);
 
-            // Limitar a 5 salgados
-            if (salgadosSelecionados.length > 5) {
+            // Limitar a 6 salgados
+            if (salgadosSelecionados.length > 6) {
                 this.checked = false;
-                showNotification('Limite Atingido!', 'Você pode escolher no máximo 5 tipos de salgados.', 'warning');
+                showNotification('Limite Atingido!', 'Você pode escolher no máximo 6 tipos de salgados.', 'warning');
                 return;
             }
 
@@ -1482,9 +1482,9 @@ function atualizarContadorSalgados() {
     const contador = document.getElementById('contadorSalgados');
     const selecionados = kitAtual.salgadosEscolhidos.length;
 
-    contador.textContent = `${selecionados}/5 salgados selecionados`;
+    contador.textContent = `${selecionados}/6 salgados selecionados`;
 
-    if (selecionados === 5) {
+    if (selecionados === 6) {
         contador.classList.add('text-red-500');
         contador.classList.remove('text-gray-500');
     } else {
