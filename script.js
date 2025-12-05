@@ -1380,8 +1380,9 @@ function inicializarKitsFestas() {
                 'quantidadeCoxinha': 'Coxinha',
                 'quantidadeRisolesCarne': 'Risoles de carne',
                 'quantidadeKibe': 'Kibe',
-                'quantidadeBolinhoQueijo': 'Bolinho de queijo',
-                'quantidadeCroquete': 'Croquete de presunto e queijo'
+                'quantidadeBolinhoQueijo': 'Bolinha de queijo',
+                'quantidadeCroquete': 'Croquete de presunto e queijo',
+                'quantidadeEnroladinhoVina': 'Enroladinho de Vina'
             };
 
             const checkboxValue = nameToValueMap[this.name];
