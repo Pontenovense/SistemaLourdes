@@ -209,44 +209,14 @@ function calcularDistribuicaoSalgados(totalSalgados, tiposSalgados) {
     }
 
     const numTypes = tiposSalgados.length;
+    const baseQuantity = Math.floor(totalSalgados / numTypes);
+    const remainder = totalSalgados % numTypes;
 
-    // Verificar se a divisão fecha certinho
-    if (totalSalgados % numTypes === 0) {
-        // Divisão igual
-        const quantidadePorTipo = totalSalgados / numTypes;
-        return tiposSalgados.map(tipo => ({
-            tipo: tipo,
-            quantidade: quantidadePorTipo
-        }));
-    } else {
-        // Divisão não fecha certinho, aplicar lógica especial
-        const firstPercentage = 0.4;
-        const remainingPercentage = 1 - firstPercentage;
-        const eachRemainingPercentage = numTypes > 1 ? remainingPercentage / (numTypes - 1) : 0;
-
-        const distribuicao = tiposSalgados.map((tipo, index) => {
-            let percentage;
-            if (index === 0) {
-                percentage = firstPercentage;
-            } else {
-                percentage = eachRemainingPercentage;
-            }
-            const quantidade = Math.floor(totalSalgados * percentage);
-            return {
-                tipo: tipo,
-                quantidade: quantidade
-            };
-        });
-
-        // Distribuir o resto para o primeiro salgado
-        const totalDistributed = distribuicao.reduce((sum, item) => sum + item.quantidade, 0);
-        const remainder = totalSalgados - totalDistributed;
-        if (remainder > 0 && distribuicao.length > 0) {
-            distribuicao[0].quantidade += remainder;
-        }
-
-        return distribuicao;
-    }
+    // Distribuir quantidades de forma balanceada
+    return tiposSalgados.map((tipo, index) => ({
+        tipo: tipo,
+        quantidade: baseQuantity + (index < remainder ? 1 : 0)
+    }));
 }
 
 // Dom Ready
