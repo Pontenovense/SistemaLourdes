@@ -345,7 +345,9 @@ document.addEventListener('DOMContentLoaded', function() {
         }
 
         const totalCalculado = produtosPedido.reduce((sum, item) => sum + item.total, 0);
-        const descricaoGerada = produtosPedido.map(item => 
+        const deposito = parseFloat(document.getElementById('depositoPedido').value) || 0;
+        const valorRestante = totalCalculado - deposito;
+        const descricaoGerada = produtosPedido.map(item =>
             `${item.quantidade}x ${item.nome} - ${formatarMoeda(item.preco)} = ${formatarMoeda(item.total)}`
         ).join('\n');
 
@@ -354,21 +356,22 @@ document.addEventListener('DOMContentLoaded', function() {
             numero: proximoNumeroPedido++,
             cliente: document.getElementById('clientePedido').value,
             horario: document.getElementById('horarioPedido').value,
-            valor: totalCalculado,
+            valor: valorRestante,
+            deposito: deposito,
             produtos: [...produtosPedido],
             descricao: descricaoGerada,
             observacoes: document.getElementById('observacoesPedido').value
         };
-        
+
         pedidos.push(novoPedido);
         atualizarListaPedidos();
-        
+
         // Limpar formulário e produtos
         this.reset();
         produtosPedido = [];
         atualizarListaProdutosPedido();
         atualizarPreview();
-        
+
         showNotification('Pedido Finalizado!', `Pedido de ${novoPedido.cliente} foi registrado com sucesso.`, 'success');
     });
 
@@ -486,6 +489,7 @@ function calcularTotalItemPedidoDiversos() {
     document.getElementById('clientePedido').addEventListener('input', atualizarPreview);
     document.getElementById('horarioPedido').addEventListener('input', atualizarPreview);
     document.getElementById('observacoesPedido').addEventListener('input', atualizarPreview);
+    document.getElementById('depositoPedido').addEventListener('input', atualizarPreview);
 
     // Inicialização
     atualizarListaProdutos();
@@ -542,20 +546,36 @@ function atualizarPreview() {
     // Nome do cliente em maiúsculo
     const nomeCliente = document.getElementById('clientePedido').value || '-';
     document.getElementById('previewCliente').textContent = nomeCliente.toUpperCase();
-    
+
     document.getElementById('previewHorario').textContent = formatarDataHora(document.getElementById('horarioPedido').value) || '-';
-    const valorTotal = formatarMoeda(parseFloat(document.getElementById('valorPedido').value) || 0);
+
+    // Calcular total dos produtos e depósito
+    const totalProdutos = produtosPedido.reduce((sum, item) => sum + item.total, 0);
+    const deposito = parseFloat(document.getElementById('depositoPedido').value) || 0;
+    const valorRestante = totalProdutos - deposito;
+
+    const valorTotal = formatarMoeda(valorRestante);
     document.getElementById('previewTotal').textContent = valorTotal;
-    
+
     // Sincronizar valor total para modo de impressão SEMPRE
     const previewTotalPrint = document.getElementById('previewTotalPrint');
     if (previewTotalPrint) {
         previewTotalPrint.textContent = valorTotal;
     }
-    
+
+    // Atualizar seção de depósito
+    const previewDeposito = document.getElementById('previewDeposito');
+    const previewDepositoTexto = document.getElementById('previewDepositoTexto');
+    if (deposito > 0) {
+        previewDepositoTexto.textContent = `PAGO: ${formatarMoeda(deposito)}`;
+        previewDeposito.style.display = 'block';
+    } else {
+        previewDeposito.style.display = 'none';
+    }
+
     // Atualizar itens baseado nos produtos do pedido
     atualizarPreviewProdutos();
-    
+
     // Atualizar observações em maiúsculo
     const observacoes = document.getElementById('observacoesPedido').value;
     const previewObservacoes = document.getElementById('previewObservacoes');
@@ -679,9 +699,9 @@ function visualizarComanda(id) {
         document.getElementById('previewHorario').textContent = formatarDataHora(pedido.horario);
         document.getElementById('previewTotal').textContent = formatarMoeda(pedido.valor);
         document.getElementById('previewNumero').textContent = String(pedido.numero).padStart(3, '0');
-        
+
         const previewItens = document.getElementById('previewItens');
-        previewItens.innerHTML = pedido.descricao.split('\n').map(linha => 
+        previewItens.innerHTML = pedido.descricao.split('\n').map(linha =>
             linha.trim() ? `<p class="mb-1">• ${linha.trim()}</p>` : ''
         ).join('');
 
@@ -693,7 +713,17 @@ function visualizarComanda(id) {
         } else {
             previewObservacoes.style.display = 'none';
         }
-        
+
+        // Atualizar seção de depósito
+        const previewDeposito = document.getElementById('previewDeposito');
+        const previewDepositoTexto = document.getElementById('previewDepositoTexto');
+        if (pedido.deposito && pedido.deposito > 0) {
+            previewDepositoTexto.textContent = `DEPÓSITO: ${formatarMoeda(pedido.deposito)}`;
+            previewDeposito.style.display = 'block';
+        } else {
+            previewDeposito.style.display = 'none';
+        }
+
         // Abre a aba de pedidos e rola para a pré-visualização
         document.getElementById('tabPedidos').click();
         document.querySelector('.kitchen-receipt').scrollIntoView({ behavior: 'smooth' });
@@ -1130,11 +1160,14 @@ function atualizarListaProdutosPedido() {
         `;
     }).join('');
 
-    const valorTotal = produtosPedido.reduce((sum, item) => sum + item.total, 0);
-    totalPedido.textContent = formatarMoeda(valorTotal);
+    const valorTotalProdutos = produtosPedido.reduce((sum, item) => sum + item.total, 0);
+    const deposito = parseFloat(document.getElementById('depositoPedido').value) || 0;
+    const valorRestante = valorTotalProdutos - deposito;
 
-    // Atualizar campo valor total do pedido
-    document.getElementById('valorPedido').value = valorTotal.toFixed(2);
+    totalPedido.textContent = formatarMoeda(valorRestante);
+
+    // Atualizar campo valor total do pedido (valor restante a pagar)
+    document.getElementById('valorPedido').value = valorRestante.toFixed(2);
 }
 
 function removerProdutoPedido(index) {
@@ -1150,12 +1183,14 @@ function removerProdutoPedido(index) {
 
 function atualizarPreviewProdutos() {
     const previewItens = document.getElementById('previewItens');
-    const totalCalculado = produtosPedido.reduce((sum, item) => sum + item.total, 0);
+    const totalProdutos = produtosPedido.reduce((sum, item) => sum + item.total, 0);
+    const deposito = parseFloat(document.getElementById('depositoPedido').value) || 0;
+    const valorRestante = totalProdutos - deposito;
 
-    // Atualizar total na preview
-    const valorTotalFormatado = formatarMoeda(totalCalculado);
+    // Atualizar total na preview (valor restante a pagar)
+    const valorTotalFormatado = formatarMoeda(valorRestante);
     document.getElementById('previewTotal').textContent = valorTotalFormatado;
-    
+
     // Sincronizar valor total para modo de impressão SEMPRE
     const previewTotalPrint = document.getElementById('previewTotalPrint');
     if (previewTotalPrint) {
@@ -1780,6 +1815,7 @@ function limparTudoPedido() {
             document.getElementById('clientePedido').value = '';
             document.getElementById('horarioPedido').value = '';
             document.getElementById('valorPedido').value = '';
+            document.getElementById('depositoPedido').value = '';
             document.getElementById('observacoesPedido').value = '';
 
             // Limpar campos de produto
