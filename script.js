@@ -1858,6 +1858,8 @@ function limparTudoPedido() {
             document.getElementById('valorPedido').value = '';
             document.getElementById('depositoPedido').value = '';
             document.getElementById('observacoesPedido').value = '';
+            document.getElementById('pedidoPago').checked = false;
+
 
             // Limpar campos de produto
             document.getElementById('produtoPedido').value = '';
