@@ -358,10 +358,12 @@ document.addEventListener('DOMContentLoaded', function() {
             horario: document.getElementById('horarioPedido').value,
             valor: valorRestante,
             deposito: deposito,
+            pago: document.getElementById('pedidoPago').checked,
             produtos: [...produtosPedido],
             descricao: descricaoGerada,
             observacoes: document.getElementById('observacoesPedido').value
         };
+
 
         pedidos.push(novoPedido);
         atualizarListaPedidos();
@@ -372,7 +374,11 @@ document.addEventListener('DOMContentLoaded', function() {
         atualizarListaProdutosPedido();
         atualizarPreview();
 
+        // Resetar checkbox de pedido pago
+        document.getElementById('pedidoPago').checked = false;
+
         showNotification('Pedido Finalizado!', `Pedido de ${novoPedido.cliente} foi registrado com sucesso.`, 'success');
+
     });
 
 document.getElementById('produtoPedido').addEventListener('change', function() {
@@ -490,6 +496,8 @@ function calcularTotalItemPedidoDiversos() {
     document.getElementById('horarioPedido').addEventListener('input', atualizarPreview);
     document.getElementById('observacoesPedido').addEventListener('input', atualizarPreview);
     document.getElementById('depositoPedido').addEventListener('input', atualizarPreview);
+    document.getElementById('pedidoPago').addEventListener('change', atualizarPreview);
+
 
     // Inicialização
     atualizarListaProdutos();
@@ -553,21 +561,27 @@ function atualizarPreview() {
     const totalProdutos = produtosPedido.reduce((sum, item) => sum + item.total, 0);
     const deposito = parseFloat(document.getElementById('depositoPedido').value) || 0;
     const valorRestante = totalProdutos - deposito;
+    const pedidoPago = document.getElementById('pedidoPago').checked;
 
+    // Mostrar sempre o valor, mas com indicador de PAGO quando marcado
     const valorTotal = formatarMoeda(valorRestante);
-    document.getElementById('previewTotal').textContent = valorTotal;
+    const valorDisplay = pedidoPago ? `${valorTotal} (PAGO)` : valorTotal;
+    document.getElementById('previewTotal').textContent = valorDisplay;
+    document.getElementById('previewTotal').className = pedidoPago ? 'font-bold text-lg text-green-600' : 'font-bold text-lg';
 
     // Sincronizar valor total para modo de impressão SEMPRE
     const previewTotalPrint = document.getElementById('previewTotalPrint');
     if (previewTotalPrint) {
-        previewTotalPrint.textContent = valorTotal;
+        previewTotalPrint.textContent = pedidoPago ? 'PAGO' : valorTotal;
+        previewTotalPrint.className = pedidoPago ? 'valor-amount status-pago-texto' : 'valor-amount';
     }
 
-    // Atualizar seção de depósito
+
+    // Atualizar seção de depósito (esconder se pedido estiver pago)
     const previewDeposito = document.getElementById('previewDeposito');
     const previewDepositoTexto = document.getElementById('previewDepositoTexto');
-    if (deposito > 0) {
-        previewDepositoTexto.textContent = `PAGO: ${formatarMoeda(deposito)}`;
+    if (deposito > 0 && !pedidoPago) {
+        previewDepositoTexto.textContent = `DEPÓSITO: ${formatarMoeda(deposito)}`;
         previewDeposito.style.display = 'block';
     } else {
         previewDeposito.style.display = 'none';
@@ -587,6 +601,7 @@ function atualizarPreview() {
         previewObservacoes.style.display = 'none';
     }
 }
+
 
 function atualizarListaProdutos() {
     const tbody = document.getElementById('listaProdutos');
@@ -632,6 +647,12 @@ function atualizarListaPedidos() {
             </td>
             <td class="px-6 py-4 whitespace-nowrap font-semibold">${formatarMoeda(pedido.valor)}</td>
             <td class="px-6 py-4 whitespace-nowrap">
+                <button onclick="alternarStatusPagamento(${pedido.id})" class="${pedido.pago ? 'status-pago' : 'status-pendente'}" title="${pedido.pago ? 'Pedido Pago - Clique para marcar como pendente' : 'Pedido Pendente - Clique para marcar como pago'}">
+                    <i class="fas ${pedido.pago ? 'fa-check-circle' : 'fa-clock'}"></i>
+                    ${pedido.pago ? 'PAGO' : 'PENDENTE'}
+                </button>
+            </td>
+            <td class="px-6 py-4 whitespace-nowrap">
                 <button onclick="visualizarComanda(${pedido.id})" class="text-blue-600 hover:text-blue-900 mr-2" title="Visualizar Comanda">
                     <i class="fas fa-eye"></i>
                 </button>
@@ -648,6 +669,21 @@ function atualizarListaPedidos() {
         </tr>
     `).join('');
 }
+
+// Função para alternar status de pagamento do pedido
+function alternarStatusPagamento(id) {
+    const pedido = pedidos.find(p => p.id === id);
+    if (pedido) {
+        pedido.pago = !pedido.pago;
+        atualizarListaPedidos();
+        showNotification(
+            pedido.pago ? 'Pedido Pago!' : 'Pedido Pendente!', 
+            `O pedido de ${pedido.cliente} foi marcado como ${pedido.pago ? 'PAGO' : 'PENDENTE'}.`, 
+            pedido.pago ? 'success' : 'warning'
+        );
+    }
+}
+
 
 // Funções auxiliares
 function formatarMoeda(valor) {
@@ -714,14 +750,28 @@ function visualizarComanda(id) {
             previewObservacoes.style.display = 'none';
         }
 
-        // Atualizar seção de depósito
+        // Atualizar seção de depósito (esconder se pedido estiver pago)
         const previewDeposito = document.getElementById('previewDeposito');
         const previewDepositoTexto = document.getElementById('previewDepositoTexto');
-        if (pedido.deposito && pedido.deposito > 0) {
+        if (pedido.deposito && pedido.deposito > 0 && !pedido.pago) {
             previewDepositoTexto.textContent = `DEPÓSITO: ${formatarMoeda(pedido.deposito)}`;
             previewDeposito.style.display = 'block';
         } else {
             previewDeposito.style.display = 'none';
+        }
+
+        // Atualizar checkbox de pedido pago na visualização
+        document.getElementById('pedidoPago').checked = pedido.pago || false;
+
+        // Atualizar preview para mostrar "PAGO" se necessário
+        if (pedido.pago) {
+            document.getElementById('previewTotal').textContent = 'PAGO';
+            document.getElementById('previewTotal').className = 'font-bold text-lg text-green-600';
+            const previewTotalPrint = document.getElementById('previewTotalPrint');
+            if (previewTotalPrint) {
+                previewTotalPrint.textContent = 'PAGO';
+                previewTotalPrint.className = 'valor-amount status-pago-texto';
+            }
         }
 
         // Abre a aba de pedidos e rola para a pré-visualização
@@ -729,6 +779,7 @@ function visualizarComanda(id) {
         document.querySelector('.kitchen-receipt').scrollIntoView({ behavior: 'smooth' });
     }
 }
+
 
 function imprimirComanda() {
     // Temporariamente ativar modo impressão se não estiver ativo
@@ -1096,9 +1147,11 @@ function adicionarProdutoAoPedido() {
 
     // Atualizar preview
     atualizarPreviewProdutos();
+    atualizarPreview();
 
     const nomeExibir = produto.nome === 'DIVERSOS' ? itemPedido.nomePersonalizado : produto.nome;
     showNotification('Produto Adicionado!', `${nomeExibir} foi adicionado ao pedido.`, 'success');
+
 }
 
 function atualizarListaProdutosPedido() {
@@ -1183,21 +1236,9 @@ function removerProdutoPedido(index) {
 
 function atualizarPreviewProdutos() {
     const previewItens = document.getElementById('previewItens');
-    const totalProdutos = produtosPedido.reduce((sum, item) => sum + item.total, 0);
-    const deposito = parseFloat(document.getElementById('depositoPedido').value) || 0;
-    const valorRestante = totalProdutos - deposito;
-
-    // Atualizar total na preview (valor restante a pagar)
-    const valorTotalFormatado = formatarMoeda(valorRestante);
-    document.getElementById('previewTotal').textContent = valorTotalFormatado;
-
-    // Sincronizar valor total para modo de impressão SEMPRE
-    const previewTotalPrint = document.getElementById('previewTotalPrint');
-    if (previewTotalPrint) {
-        previewTotalPrint.textContent = valorTotalFormatado;
-    }
-
+    
     if (produtosPedido.length === 0) {
+
         previewItens.innerHTML = '<p class="text-gray-500 italic">Aguardando produtos do pedido...</p>';
         return;
     }
