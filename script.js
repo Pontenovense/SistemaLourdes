@@ -187,7 +187,12 @@ function recalcularPrecosCalculadora() {
 function recalcularPrecosPedido() {
     const precoSalgadoFrito = calcularPrecoSalgadoFrito(produtosPedido);
     
+    console.log('Recalculando preços - Salgado frito:', precoSalgadoFrito);
+    
     produtosPedido.forEach(item => {
+        // Skip kits (fixed price)
+        if (item.isKit) return;
+        
         const produto = produtos.find(p => p.id === item.id);
         if (produto && produto.tipoSalgado === 'frito_promocional') {
             item.preco = precoSalgadoFrito;
@@ -1604,6 +1609,12 @@ function adicionarKitAoPedido() {
         return;
     }
 
+    // Safeguard: Validate kit exists
+    if (!kitAtual.tamanho || !kitsFestas[kitAtual.tamanho]) {
+        showNotification('Erro!', 'Kit inválido. Selecione o kit novamente.', 'error');
+        return;
+    }
+
     const kit = kitsFestas[kitAtual.tamanho];
 
     // Criar descrição detalhada do kit com quantidades específicas
@@ -1641,9 +1652,9 @@ function adicionarKitAoPedido() {
     const itemKit = {
         id: `kit_${Date.now()}`, // ID único para o kit
         nome: `Kit Festa ${kit.pessoas} Pessoas`,
-        preco: kit.preco,
+        preco: parseFloat(kit.preco) || 0,
         quantidade: 1,
-        total: kit.preco,
+        total: parseFloat(kit.preco) || 0,
         isKit: true,
         kitDetalhes: {
             tamanho: kitAtual.tamanho,
@@ -1655,7 +1666,20 @@ function adicionarKitAoPedido() {
         }
     };
 
+    // Debug log
+    console.log('=== KIT ADICIONADO ===', {
+        tamanho: kitAtual.tamanho,
+        pessoas: kit.pessoas,
+        preco: itemKit.preco,
+        total: itemKit.total,
+        kitAtual,
+        itemKit
+    });
+
     produtosPedido.push(itemKit);
+    console.log('produtosPedido após push:', produtosPedido.map(p => ({nome: p.nome, total: p.total})));
+    atualizarListaProdutosPedido();
+    atualizarPreview();
 
     // Atualizar displays
     atualizarListaProdutosPedido();
