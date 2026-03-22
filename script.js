@@ -1235,7 +1235,9 @@ function removerProdutoPedido(index) {
     
     // Recalcular preços após remoção
     recalcularPrecosPedido();
+    atualizarListaProdutosPedido();
     atualizarPreviewProdutos();
+    atualizarPreview();
     
     showNotification('Produto Removido!', `${produto.nome} foi removido do pedido.`, 'warning');
 }
