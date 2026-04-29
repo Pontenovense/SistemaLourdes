@@ -570,10 +570,20 @@ function atualizarPreview() {
     const pedidoPago = document.getElementById('pedidoPago').checked;
 
     // Mostrar sempre o valor, mas com indicador de PAGO quando marcado
-    const valorTotal = formatarMoeda(valorRestante);
-    const valorDisplay = pedidoPago ? `${valorTotal} (PAGO)` : valorTotal;
-    document.getElementById('previewTotal').textContent = valorDisplay;
-    document.getElementById('previewTotal').className = pedidoPago ? 'font-bold text-lg text-green-600' : 'font-bold text-lg';
+        const valorTotal = formatarMoeda(valorRestante);
+                const valorDisplay = pedidoPago ? `${valorTotal} (PAGO)` : valorTotal;
+                        document.getElementById('previewTotal').textContent = valorDisplay;
+                                document.getElementById('previewTotal').className = pedidoPago ? 'font-bold text-lg text-green-600' : 'font-bold text-lg';
+                                       // Update labels based on sinal (deposito)
+                                               const labelValorPreview = document.getElementById('labelValorPreview');
+                                                       const labelValorPrint = document.getElementById('labelValorPrint');
+                                                             const hasSinal = deposito > 0 && !pedidoPago;
+                                                                     if (labelValorPreview) {
+                                                                            labelValorPreview.textContent = hasSinal ? 'VALOR RESTANTE:' : 'VALOR:';
+                                                                                }
+                                                                                       if (labelValorPrint) {
+                                                                                                   labelValorPrint.textContent = hasSinal ? 'VALOR RESTANTE:' : 'VALOR TOTAL:';
+                                                                                                        }
 
     // Sincronizar valor total para modo de impressão SEMPRE
     const previewTotalPrint = document.getElementById('previewTotalPrint');
