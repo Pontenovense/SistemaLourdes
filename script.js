@@ -109,6 +109,7 @@ let proximoNumeroPedido = 1;
 let produtosCalculadora = [];
 let produtosPedido = [];
 let filtroCategoria = 'todos';
+let valorPedidoEditadoManualmente = false;
 
 // Dados dos Kits Festas
 const kitsFestas = {
@@ -352,7 +353,13 @@ document.addEventListener('DOMContentLoaded', function() {
 
         const totalCalculado = produtosPedido.reduce((sum, item) => sum + item.total, 0);
         const deposito = parseFloat(document.getElementById('depositoPedido').value) || 0;
-        const valorRestante = totalCalculado - deposito;
+        // Usar valor do campo valorPedido se foi editado manualmente, senão usar o calculado
+        let valorFinal;
+        if (valorPedidoEditadoManualmente && document.getElementById('valorPedido').value) {
+            valorFinal = parseFloat(document.getElementById('valorPedido').value) || 0;
+        } else {
+            valorFinal = totalCalculado - deposito;
+        }
         const descricaoGerada = produtosPedido.map(item =>
             `${item.quantidade}x ${item.nome} - ${formatarMoeda(item.preco)} = ${formatarMoeda(item.total)}`
         ).join('\n');
@@ -362,7 +369,7 @@ document.addEventListener('DOMContentLoaded', function() {
             numero: proximoNumeroPedido++,
             cliente: document.getElementById('clientePedido').value,
             horario: document.getElementById('horarioPedido').value,
-            valor: valorRestante,
+            valor: valorFinal,
             deposito: deposito,
             pago: document.getElementById('pedidoPago').checked,
             produtos: [...produtosPedido],
@@ -377,6 +384,7 @@ document.addEventListener('DOMContentLoaded', function() {
         // Limpar formulário e produtos
         this.reset();
         produtosPedido = [];
+        valorPedidoEditadoManualmente = false;
         atualizarListaProdutosPedido();
         atualizarPreview();
 
@@ -504,6 +512,14 @@ function calcularTotalItemPedidoDiversos() {
     document.getElementById('depositoPedido').addEventListener('input', atualizarPreview);
     document.getElementById('pedidoPago').addEventListener('change', atualizarPreview);
 
+    // Marcar como editado manualmente quando o usuário digitar no campo valor
+    document.getElementById('valorPedido').addEventListener('input', function() {
+        if (this.value && this.value !== '') {
+            valorPedidoEditadoManualmente = true;
+        }
+        atualizarPreview();
+    });
+
 
     // Inicialização
     atualizarListaProdutos();
@@ -566,8 +582,15 @@ function atualizarPreview() {
     // Calcular total dos produtos e depósito
     const totalProdutos = produtosPedido.reduce((sum, item) => sum + item.total, 0);
     const deposito = parseFloat(document.getElementById('depositoPedido').value) || 0;
-    const valorRestante = totalProdutos - deposito;
     const pedidoPago = document.getElementById('pedidoPago').checked;
+
+    // Usar valor do campo valorPedido se foi editado manualmente, senão usar o calculado
+    let valorRestante;
+    if (valorPedidoEditadoManualmente && document.getElementById('valorPedido').value) {
+        valorRestante = parseFloat(document.getElementById('valorPedido').value) || 0;
+    } else {
+        valorRestante = totalProdutos - deposito;
+    }
 
     // Mostrar sempre o valor, mas com indicador de PAGO quando marcado
         const valorTotal = formatarMoeda(valorRestante);
@@ -1235,8 +1258,10 @@ function atualizarListaProdutosPedido() {
 
     totalPedido.textContent = formatarMoeda(valorRestante);
 
-    // Atualizar campo valor total do pedido (valor restante a pagar)
-    document.getElementById('valorPedido').value = valorRestante.toFixed(2);
+    // Atualizar campo valor total do pedido somente se não foi editado manualmente
+    if (!valorPedidoEditadoManualmente) {
+        document.getElementById('valorPedido').value = valorRestante.toFixed(2);
+    }
 }
 
 function removerProdutoPedido(index) {
@@ -1893,6 +1918,7 @@ function limparTudoPedido() {
             document.getElementById('clientePedido').value = '';
             document.getElementById('horarioPedido').value = '';
             document.getElementById('valorPedido').value = '';
+            valorPedidoEditadoManualmente = false;
             document.getElementById('depositoPedido').value = '';
             document.getElementById('observacoesPedido').value = '';
             document.getElementById('pedidoPago').checked = false;
