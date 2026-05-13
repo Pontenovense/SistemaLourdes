@@ -54,7 +54,7 @@ function closeNotification(button) {
 
 // Dados iniciais
 let produtos = [
-    { id: 1, nome: "Salgado Mix", nomeAbreviado: "salg mix", preco: 0.95, descricao: "Salgado frito - valor por unidade", categoria: "Salgados", tipoSalgado: "null" },
+    { id: 1, nome: "Salgado Mix", nomeAbreviado: "salg mix", preco: 0.95, descricao: "Salgado frito - valor por unidade", categoria: "Salgados", tipoSalgado: null },
     { id: 2, nome: "Doce Mix", nomeAbreviado: "doce mix", preco: 1.70, descricao: "Doce - valor por unidade", categoria: "Doces", tipoSalgado: null },
     { id: 3, nome: "Coxinha", nomeAbreviado: "Coxinha", preco: 0.95, descricao: "Salgado frito - valor por unidade", categoria: "Salgados", tipoSalgado: "frito_promocional" },
     { id: 4, nome: "Risoles de carne", nomeAbreviado: "Risoles carne", preco: 0.95, descricao: "Salgado frito - valor por unidade", categoria: "Salgados", tipoSalgado: "frito_promocional" },

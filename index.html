@@ -5,7 +5,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <title>Login - Sistema Confeitaria Lourdes</title>
     <script src="https://cdn.tailwindcss.com"></script>
-    <link rel="icon" href="assets/cake.png" type="image/png">
+<link rel="icon" href="assets/cake.png" type="image/png">
+    <link rel="apple-touch-icon" href="assets/cake.png">
     <link
         rel="stylesheet"
         href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
@@ -217,12 +218,12 @@
                 redirecionarParaSistema();
             }
 
-            // Carregar dados salvos se "lembrar-me" estava marcado
+// Carregar dados salvos se "lembrar-me" estava marcado
             const dadosSalvos = localStorage.getItem("dadosLogin");
             if (dadosSalvos) {
                 const dados = JSON.parse(dadosSalvos);
-                usuarioInput.value = dados.usuario;
-                senhaInput.value = dados.senha;
+                usuarioInput.value = dados.usuario || '';
+                // Senha não é mais carregada por segurança
                 lembrarMe.checked = true;
             }
         });
@@ -255,13 +256,15 @@
                 localStorage.setItem("usuarioLogado", usuario);
                 localStorage.setItem("dataLogin", new Date().toISOString());
 
-                // Salvar dados se "lembrar-me" estiver marcado
+// Salvar dados se "lembrar-me" estiver marcado
+                // IMPORTANTE: Em um sistema real, senhas DEVEM ser validadas no servidor
+                // nunca salvas em localStorage. Isso é apenas para fins demonstrativos.
                 if (lembrarMe.checked) {
+                    // Apenas salvar o nome de usuário, nunca a senha em texto plano
                     localStorage.setItem(
                         "dadosLogin",
                         JSON.stringify({
-                            usuario: usuario,
-                            senha: senha,
+                            usuario: usuario
                         })
                     );
                 } else {
