@@ -509,6 +509,12 @@ function calcularTotalItemPedidoDiversos() {
     document.getElementById('clientePedido').addEventListener('input', atualizarPreview);
     document.getElementById('horarioPedido').addEventListener('input', atualizarPreview);
     document.getElementById('observacoesPedido').addEventListener('input', atualizarPreview);
+    document.getElementById('descricaoBolo').addEventListener('keydown', function(event) {
+        if (event.key === 'Enter') {
+            event.preventDefault();
+            adicionarProdutoAoPedido();
+        }
+    });
     document.getElementById('depositoPedido').addEventListener('input', atualizarPreview);
     document.getElementById('pedidoPago').addEventListener('change', atualizarPreview);
 
@@ -518,6 +524,18 @@ function calcularTotalItemPedidoDiversos() {
             valorPedidoEditadoManualmente = true;
         }
         atualizarPreview();
+    });
+
+    // Adicionar produto ao pedido quando pressionar ENTER no campo de valor do produto DIVERSOS
+    document.getElementById('precoDiversos').addEventListener('keydown', function(event) {
+        if (event.key === 'Enter') {
+            event.preventDefault();
+            const produtoId = parseInt(document.getElementById('produtoPedido').value);
+            const produto = produtos.find(p => p.id === produtoId);
+            if (produto && produto.nome === 'DIVERSOS') {
+                adicionarProdutoAoPedido();
+            }
+        }
     });
 
 
