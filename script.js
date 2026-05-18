@@ -111,6 +111,10 @@ let produtosPedido = [];
 let filtroCategoria = 'todos';
 let valorPedidoEditadoManualmente = false;
 
+// Variáveis de controle da contagem de produção
+let contagemAtiva = false;
+let inicioContagemTimestamp = null;
+
 // Dados dos Kits Festas
 const kitsFestas = {
     10: { pessoas: 10, preco: 295.00, bolo: '1,5kg', salgados: 100, doces: 42, caixasDoces: 1 },
@@ -374,7 +378,8 @@ document.addEventListener('DOMContentLoaded', function() {
             pago: document.getElementById('pedidoPago').checked,
             produtos: [...produtosPedido],
             descricao: descricaoGerada,
-            observacoes: document.getElementById('observacoesPedido').value
+            observacoes: document.getElementById('observacoesPedido').value,
+            dataCriacao: new Date().toISOString()
         };
 
 
@@ -503,8 +508,6 @@ function calcularTotalItemPedidoDiversos() {
         }
     });
     document.getElementById('adicionarProdutoPedido').addEventListener('click', adicionarProdutoAoPedido);
-    document.getElementById('limparPedido').addEventListener('click', limparTudoPedido);
-
     // Atualizar preview em tempo real
     document.getElementById('clientePedido').addEventListener('input', atualizarPreview);
     document.getElementById('horarioPedido').addEventListener('input', atualizarPreview);
@@ -1818,7 +1821,7 @@ function limparSelecaoKit() {
 }
 
 // Função para criar e mostrar modal de confirmação personalizado
-function showConfirmationModal(title, message, onConfirm, onCancel = null) {
+function showConfirmationModal(title, message, onConfirm, onCancel = null, confirmText = 'Sim, Limpar', cancelText = 'Cancelar') {
     // Criar elementos do modal
     const modal = document.createElement('div');
     modal.className = 'confirmation-modal';
@@ -1833,10 +1836,10 @@ function showConfirmationModal(title, message, onConfirm, onCancel = null) {
             <div class="confirmation-modal-message">${message}</div>
             <div class="confirmation-modal-buttons">
                 <button class="confirmation-modal-button cancel" id="confirmCancel">
-                    <i class="fas fa-times mr-2"></i>Cancelar
+                    <i class="fas fa-times mr-2"></i>${cancelText}
                 </button>
                 <button class="confirmation-modal-button confirm" id="confirmOk">
-                    <i class="fas fa-check mr-2"></i>Sim, Limpar
+                    <i class="fas fa-check mr-2"></i>${confirmText}
                 </button>
             </div>
         </div>
@@ -1969,7 +1972,7 @@ function limparTudoPedido() {
 
             showNotification('Pedido Limpo!', 'Todas as informações do pedido foram removidas com sucesso.', 'success');
 
-            // Resetar flag após um pequeno delay para permitir nova execução se necessário
+// Resetar flag após um pequeno delay para permitir nova execução se necessário
             setTimeout(() => {
                 isLimpandoPedido = false;
             }, 1000);
@@ -1981,4 +1984,462 @@ function limparTudoPedido() {
             isLimpandoPedido = false;
         }
     );
+}
+
+// ===== FUNÇÕES DE DETALHES DE PRODUÇÃO =====
+
+// Função para alternar (ativar) a contagem do dia
+function toggleContagemDia() {
+    if (!contagemAtiva) {
+        // Ativar contagem
+        contagemAtiva = true;
+        inicioContagemTimestamp = new Date().toISOString();
+        
+        // Atualizar botão
+        const btnIniciarContagem = document.getElementById('btnIniciarContagem');
+        if (btnIniciarContagem) {
+            btnIniciarContagem.style.display = 'none';
+        }
+        
+        // Mostrar botão de reiniciar
+        const btnReiniciarContagem = document.getElementById('btnReiniciarContagem');
+        if (btnReiniciarContagem) {
+            btnReiniciarContagem.style.display = 'block';
+        }
+        
+        // Atualizar status
+        const statusContagemTexto = document.getElementById('statusContagemTexto');
+        if (statusContagemTexto) {
+            const dataInicio = new Date(inicioContagemTimestamp);
+            statusContagemTexto.innerHTML = `<span class="text-green-600">✅ Contagem ativa desde: ${dataInicio.toLocaleTimeString('pt-BR')}</span>`;
+        }
+        
+        showNotification('Contagem Iniciada!', 'A contagem de produção foi iniciada. Todos os pedidos feitos a partir de agora serão contabilizados.', 'success');
+    }
+}
+
+// Função para reiniciar a contagem
+function reiniciarContagem() {
+    if (confirm('Tem certeza que deseja reiniciar a contagem? Todos os totais serão zerados.')) {
+        // Resetar variáveis
+        contagemAtiva = false;
+        inicioContagemTimestamp = null;
+        
+        // Atualizar botão Iniciar
+        const btnIniciarContagem = document.getElementById('btnIniciarContagem');
+        if (btnIniciarContagem) {
+            btnIniciarContagem.style.display = 'block';
+        }
+        
+        // Esconder botão de reiniciar
+        const btnReiniciarContagem = document.getElementById('btnReiniciarContagem');
+        if (btnReiniciarContagem) {
+            btnReiniciarContagem.style.display = 'none';
+        }
+        
+        // Atualizar status
+        const statusContagemTexto = document.getElementById('statusContagemTexto');
+        if (statusContagemTexto) {
+            statusContagemTexto.innerHTML = '<span class="text-gray-500">Contagem inativa</span>';
+        }
+        
+        // Limpar conteúdo
+        const detalhesConteudo = document.getElementById('detalhesConteudo');
+        if (detalhesConteudo) {
+            detalhesConteudo.innerHTML = `
+                <div class="text-center text-gray-500 py-8">
+                    <i class="fas fa-hourglass-start text-4xl mb-3"></i>
+                    <p>Ative a contagem do dia para começar.</p>
+                </div>
+            `;
+        }
+        
+        showNotification('Contagem Reiniciada!', 'A contagem foi reiniciada. Todos os totais foram zerados.', 'warning');
+    }
+}
+
+// Função para distribuir Salgado Mix em tipos individuais
+function distribuirSalgadoMix(quantidade) {
+    const distribuicao = [
+        { tipo: 'Coxinha', quantidade: 20 },
+        { tipo: 'Risoles de carne', quantidade: 20 },
+        { tipo: 'Bolinha de queijo', quantidade: 20 },
+        { tipo: 'Kibe', quantidade: 20 },
+        { tipo: 'Croquete de presunto e queijo', quantidade: 20 }
+    ];
+    
+    // Se a quantidade for diferente de 100, ajustar a distribuição proporcionalmente
+    if (quantidade !== 100 && quantidade > 0) {
+        const fator = quantidade / 100;
+        return distribuicao.map(d => ({
+            tipo: d.tipo,
+            quantidade: Math.round(d.quantidade * fator)
+        }));
+    }
+    
+    return distribuicao;
+}
+
+// Função para distribuir Doce Mix 100un em tipos individuais
+function distribuirDoceMix100(quantidade) {
+    const distribuicao = [
+        { tipo: 'Brigadeiro', quantidade: 20 },
+        { tipo: 'Beijinho', quantidade: 16 },
+        { tipo: 'Dois Amores', quantidade: 16 },
+        { tipo: 'Brigadeiro de Churros', quantidade: 16 },
+        { tipo: 'Leite ninho com nutella', quantidade: 16 },
+        { tipo: 'Surpresa de Uva', quantidade: 16 }
+    ];
+    
+    // Se a quantidade for diferente de 100, ajustar a distribuição proporcionalmente
+    if (quantidade !== 100 && quantidade > 0) {
+        const fator = quantidade / 100;
+        return distribuicao.map(d => ({
+            tipo: d.tipo,
+            quantidade: Math.round(d.quantidade * fator)
+        }));
+    }
+    
+    return distribuicao;
+}
+
+// Função para distribuir Doce Mix 42un em tipos individuais
+function distribuirDoceMix42(quantidade) {
+    const distribuicao = [
+        { tipo: 'Brigadeiro', quantidade: 7 },
+        { tipo: 'Beijinho', quantidade: 7 },
+        { tipo: 'Dois Amores', quantidade: 7 },
+        { tipo: 'Brigadeiro de Churros', quantidade: 7 },
+        { tipo: 'Leite ninho com nutella', quantidade: 7 },
+        { tipo: 'Surpresa de Uva', quantidade: 7 }
+    ];
+    
+    // Se a quantidade for diferente de 42, ajustar a distribuição proporcionalmente
+    if (quantidade !== 42 && quantidade > 0) {
+        const fator = quantidade / 42;
+        return distribuicao.map(d => ({
+            tipo: d.tipo,
+            quantidade: Math.round(d.quantidade * fator)
+        }));
+    }
+    
+    return distribuicao;
+}
+
+// Função para distribuir Kit Festa salgados (igual ao Salgado Mix)
+function distribuirKitSalgados(quantidadeKit) {
+    // Usar a mesma lógica do salgado mix
+    return distribuirSalgadoMix(quantidadeKit);
+}
+
+// Função para distribuir Kit Festa doces (igual ao Doce Mix 42un por caixa)
+function distribuirKitDoces(quantidadeKit, numeroCaixas) {
+    const distribuicao = [];
+    const docePorCaixa = distribuirDoceMix42(42);
+    
+    for (let i = 0; i < numeroCaixas; i++) {
+        for (const doce of docePorCaixa) {
+            distribuicao.push({ tipo: doce.tipo, quantidade: doce.quantidade });
+        }
+    }
+    
+    return distribuicao;
+}
+
+// Função para limpar e registrar o pedido
+function limparERegistrarPedido() {
+    // Primeiro registra o pedidos
+    const formPedido = document.getElementById('formPedido');
+
+    // Simular o submit do formulário
+    if (produtosPedido.length === 0) {
+        showNotification('Erro!', 'Adicione pelo menos um produto ao pedido antes de finalizar.', 'error');
+        return;
+    }
+
+    // Dispara o evento de submit do formulário
+    // O handler do formulário já limpa automaticamente após registrar
+    // Então não precisa chamar limparTudoPedido() novamente
+    formPedido.dispatchEvent(new Event('submit'));
+}
+
+// Função para registrar e limpar (botão Limpar Tudo)
+function registrarELimpar() {
+    // Se não há produtos no pedido, apenas limpar
+    if (produtosPedido.length === 0) {
+        limparTudoPedido();
+        return;
+    }
+
+    // Se há produtos, primeiro registrar o pedido e depois limpar
+    showConfirmationModal(
+        'Registrar Pedido',
+        'Deseja REGISTRAR este pedido antes de limpar? Clique em "Sim, Registrar" para registrar ou "Não, apenas limpar" para apenas limpar.',
+        function() {
+            // Sim, registrar - dispara o submit do formulário
+            // O handler do formulário já limpa automaticamente após registrar
+            const formPedido = document.getElementById('formPedido');
+            formPedido.dispatchEvent(new Event('submit'));
+            
+            // Não precisa chamar limparTudoPedido() aqui - o formulário já faz isso automaticamente
+            showNotification('Pedido Registrado!', 'O pedido foi registrado e o formulário foi limpo.', 'success');
+        },
+        function() {
+            // Não, apenas limpar
+            limparTudoPedido();
+        },
+        'Sim, Registrar',
+        'Não, apenas limpar'
+    );
+}
+
+// Função para calcular os detalhes de produção
+function calcularDetalhesProducao() {
+    // Objetos para armazenar os totais
+    const totais = {
+        salgadosTotais: 0,
+        docesTotais: 0,
+        boloKgTotal: 0,
+        salgadosPorTipo: {},
+        docesPorTipo: {}
+    };
+    
+    // Filter pedidos made after the start timestamp
+    const pedidosFiltrados = pedidos.filter(pedido => {
+        if (!inicioContagemTimestamp) return false;
+        return pedido.dataCriacao && pedido.dataCriacao >= inicioContagemTimestamp;
+    });
+    
+// Process each order
+    for (const pedido of pedidosFiltrados) {
+        // Process each product in the order
+        for (const item of pedido.produtos) {
+            // Find the product info from our products array
+            const produtoInfo = produtos.find(p => p.id === item.id);
+            
+            // Handle kits
+            if (item.isKit && item.kitDetalhes) {
+                const kit = kitsFestas[item.kitDetalhes.tamanho];
+                if (!kit) continue;
+                
+                // === DISTRIBUIR SALGADOS DO KIT (igual ao Salgado Mix) ===
+                const salgadosKit = distribuirKitSalgados(kit.salgados);
+                for (const salgado of salgadosKit) {
+                    totais.salgadosTotais += salgado.quantidade;
+                    totais.salgadosPorTipo[salgado.tipo] = (totais.salgadosPorTipo[salgado.tipo] || 0) + salgado.quantidade;
+                }
+                
+                // === DISTRIBUIR DOCES DO KIT (igual ao Doce Mix 42un por caixa) ===
+                const docesKit = distribuirKitDoces(kit.doces, kit.caixasDoces);
+                for (const doce of docesKit) {
+                    totais.docesTotais += doce.quantidade;
+                    totais.docesPorTipo[doce.tipo] = (totais.docesPorTipo[doce.tipo] || 0) + doce.quantidade;
+                }
+                
+                // === INCLUIR BOLO DO KIT ===
+                // Extrair kg do bolo do kit (ex: "1,5kg" -> 1.5)
+                const boloKg = parseFloat(kit.bolo.replace('kg', '').replace(',', '.'));
+                if (!isNaN(boloKg)) {
+                    totais.boloKgTotal += boloKg;
+                }
+                continue;
+            }
+            
+            // Skip if product not found
+            if (!produtoInfo) continue;
+            
+            // Get the category from product info
+            const categoria = produtoInfo.categoria;
+            const nomeProduto = item.nome;
+            const quantidade = item.quantidade || 0;
+            
+            // === TRATAR SALGADO MIX ===
+            if (nomeProduto && nomeProduto.toLowerCase() === 'salgado mix') {
+                // Distribuir em tipos individuais
+                const salgadosDistribuidos = distribuirSalgadoMix(quantidade);
+                for (const salgado of salgadosDistribuidos) {
+                    totais.salgadosTotais += salgado.quantidade;
+                    totais.salgadosPorTipo[salgado.tipo] = (totais.salgadosPorTipo[salgado.tipo] || 0) + salgado.quantidade;
+                }
+                continue;
+            }
+            
+            // === TRATAR DOCE MIX 100UN ===
+            if (nomeProduto && nomeProduto.toLowerCase() === 'caixa doce mix 100un') {
+                // Distribuir em tipos individuais (100un)
+                const docesDistribuidos = distribuirDoceMix100(quantidade);
+                for (const doce of docesDistribuidos) {
+                    totais.docesTotais += doce.quantidade;
+                    totais.docesPorTipo[doce.tipo] = (totais.docesPorTipo[doce.tipo] || 0) + doce.quantidade;
+                }
+                continue;
+            }
+            
+            // === TRATAR DOCE MIX 42UN ===
+            if (nomeProduto && nomeProduto.toLowerCase() === 'caixa doce mix 42un') {
+                // Distribuir em tipos individuais (42un)
+                const docesDistribuidos = distribuirDoceMix42(quantidade);
+                for (const doce of docesDistribuidos) {
+                    totais.docesTotais += doce.quantidade;
+                    totais.docesPorTipo[doce.tipo] = (totais.docesPorTipo[doce.tipo] || 0) + doce.quantidade;
+                }
+                continue;
+            }
+            
+            // Check if it's Bolo (special case - counted in KG)
+            if (nomeProduto && nomeProduto.toLowerCase() === 'bolo') {
+                totais.boloKgTotal += quantidade;
+                continue;
+            }
+            
+            // Categorize based on type
+            if (categoria === 'Salgados') {
+                totais.salgadosTotais += quantidade;
+                totais.salgadosPorTipo[nomeProduto] = (totais.salgadosPorTipo[nomeProduto] || 0) + quantidade;
+            } else if (categoria === 'Doces') {
+                totais.docesTotais += quantidade;
+                totais.docesPorTipo[nomeProduto] = (totais.docesPorTipo[nomeProduto] || 0) + quantidade;
+            }
+        }
+    }
+    
+    return totais;
+}
+
+// Função para abrir o modal de detalhes
+function abrirModalDetalhes() {
+    const modal = document.getElementById('modalDetalhes');
+    
+    if (!modal) {
+        showNotification('Erro!', 'Modal de detalhes não encontrado.', 'error');
+        return;
+    }
+    
+    // Mostrar modal
+    modal.classList.add('show');
+    
+    // Atualizar estado dos botões baseado na contagem
+    const btnIniciarContagem = document.getElementById('btnIniciarContagem');
+    const btnReiniciarContagem = document.getElementById('btnReiniciarContagem');
+    const statusContagemTexto = document.getElementById('statusContagemTexto');
+    
+    if (contagemAtiva && inicioContagemTimestamp) {
+        // Contagem ativa - mostrar botão Reiniciar
+        if (btnIniciarContagem) {
+            btnIniciarContagem.style.display = 'none';
+        }
+        if (btnReiniciarContagem) {
+            btnReiniciarContagem.style.display = 'block';
+        }
+        
+        // Atualizar status
+        if (statusContagemTexto) {
+            const dataInicio = new Date(inicioContagemTimestamp);
+            statusContagemTexto.innerHTML = `<span class="text-green-600">✅ Contagem ativa desde: ${dataInicio.toLocaleTimeString('pt-BR')}</span>`;
+        }
+        
+        // Calcular e mostrar detalhes
+        const totais = calcularDetalhesProducao();
+        exibirDetalhesProducao(totais);
+    } else {
+        // Contagem inativa - mostrar botão Iniciar
+        if (btnIniciarContagem) {
+            btnIniciarContagem.style.display = 'block';
+        }
+        if (btnReiniciarContagem) {
+            btnReiniciarContagem.style.display = 'none';
+        }
+        
+        // Atualizar status
+        if (statusContagemTexto) {
+            statusContagemTexto.innerHTML = '<span class="text-gray-500">Contagem inativa</span>';
+        }
+        
+        // Mostrar mensagem de ativação
+        const detalhesConteudo = document.getElementById('detalhesConteudo');
+        if (detalhesConteudo) {
+            detalhesConteudo.innerHTML = `
+                <div class="text-center text-gray-500 py-8">
+                    <i class="fas fa-hourglass-start text-4xl mb-3"></i>
+                    <p>Ative a contagem do dia para começar.</p>
+                </div>
+            `;
+        }
+    }
+}
+
+// Função auxiliar para exibir os detalhes de produção no modal
+function exibirDetalhesProducao(totais) {
+    const detalhesConteudo = document.getElementById('detalhesConteudo');
+    
+    if (!detalhesConteudo) return;
+    
+    // Build HTML for salgados
+    let salgadosHtml = '';
+    if (Object.keys(totais.salgadosPorTipo).length > 0) {
+        const salgadosOrdenados = Object.entries(totais.salgadosPorTipo)
+            .sort((a, b) => b[1] - a[1]);
+        
+        salgadosHtml = salgadosOrdenados
+            .map(([nome, qty]) => `<div class="flex justify-between"><span>${nome}</span><span class="font-bold">${qty}</span></div>`)
+            .join('');
+    } else {
+        salgadosHtml = '<p class="text-gray-500 italic">Nenhum salgado registrado</p>';
+    }
+    
+    // Build HTML for doces
+    let docesHtml = '';
+    if (Object.keys(totais.docesPorTipo).length > 0) {
+        const docesOrdenados = Object.entries(totais.docesPorTipo)
+            .sort((a, b) => b[1] - a[1]);
+        
+        docesHtml = docesOrdenados
+            .map(([nome, qty]) => `<div class="flex justify-between"><span>${nome}</span><span class="font-bold">${qty}</span></div>`)
+            .join('');
+    } else {
+        docesHtml = '<p class="text-gray-500 italic">Nenhum doce registrado</p>';
+    }
+    
+    // Render the content
+    detalhesConteudo.innerHTML = `
+        <!-- Resumo Geral -->
+        <div class="bg-gradient-to-r from-pink-50 to-purple-50 p-4 rounded-lg border border-pink-200 mb-4">
+            <h3 class="font-bold text-lg text-pink-700 mb-3 text-center">📊 RESUMO DE PRODUÇÃO</h3>
+            <div class="grid grid-cols-3 gap-2 text-center">
+                <div class="bg-white p-2 rounded shadow-sm">
+                    <div class="text-2xl font-bold text-pink-600">${totais.salgadosTotais}</div>
+                    <div class="text-xs text-gray-600">Salgados</div>
+                </div>
+                <div class="bg-white p-2 rounded shadow-sm">
+                    <div class="text-2xl font-bold text-yellow-600">${totais.docesTotais}</div>
+                    <div class="text-xs text-gray-600">Doces</div>
+                </div>
+                <div class="bg-white p-2 rounded shadow-sm">
+                    <div class="text-2xl font-bold text-green-600">${totais.boloKgTotal}</div>
+                    <div class="text-xs text-gray-600">KG Bolo</div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Detalhamento Salgados -->
+        <div class="bg-white p-3 rounded border border-gray-200">
+            <h4 class="font-semibold text-pink-700 mb-2">🥟 Salgados por Tipo:</h4>
+            <div class="space-y-1 text-sm">${salgadosHtml}</div>
+        </div>
+        
+        <!-- Detalhamento Doces -->
+        <div class="bg-white p-3 rounded border border-gray-200">
+            <h4 class="font-semibold text-yellow-700 mb-2">🍬 Doces por Tipo:</h4>
+            <div class="space-y-1 text-sm">${docesHtml}</div>
+        </div>
+    `;
+}
+
+// Função para fechar o modal de detalhes
+function fecharModalDetalhes() {
+    const modal = document.getElementById('modalDetalhes');
+    
+    if (modal) {
+        modal.classList.remove('show');
+    }
 }

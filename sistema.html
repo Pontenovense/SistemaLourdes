@@ -457,14 +457,9 @@
                                 <textarea id="observacoesPedido" rows="3" placeholder="Ex: Sem açúcar, entrega às 15h, embalagem especial..." class="block w-full px-3 py-2 text-base rounded-md border-gray-300 shadow-sm focus:border-pink-500 focus:ring-pink-500"></textarea>
                             </div>
                             
-                            <div class="flex gap-2">
-                                <button type="button" id="limparPedido" class="inline-flex items-center justify-center px-4 py-2.5 bg-red-600 border border-transparent rounded-md font-semibold text-white hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500 flex-1 text-sm sm:text-base">
-                                    <i class="fas fa-trash mr-2"></i> Limpar Tudo
-                                </button>
-                                <button type="submit" class="inline-flex items-center justify-center px-4 py-2.5 bg-pink-600 border border-transparent rounded-md font-semibold text-white hover:bg-pink-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-pink-500 flex-1 text-sm sm:text-base">
-                                    <i class="fas fa-check-circle mr-2"></i> Finalizar Pedido
-                                </button>
-                            </div>
+                            <button type="submit" class="w-full inline-flex items-center justify-center px-4 py-2.5 bg-pink-600 border border-transparent rounded-md font-semibold text-white hover:bg-pink-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-pink-500 text-sm sm:text-base">
+                                <i class="fas fa-check-circle mr-2"></i> Finalizar Pedido
+                            </button>
                         </form>
                     </div>
 
@@ -537,11 +532,22 @@
                         </div>
                         
                         <div class="text-center mt-3 sm:mt-4 no-print space-x-2">
-                            <button onclick="imprimirComanda()" class="inline-flex items-center justify-center px-4 py-2.5 bg-blue-600 border border-transparent rounded-md font-semibold text-white hover:bg-blue-700 text-sm sm:text-base">
+<button onclick="imprimirComanda()" class="inline-flex items-center justify-center px-4 py-2 bg-blue-600 border border-transparent rounded-md font-semibold text-white hover:bg-blue-700 text-sm sm:text-base">
                                 <i class="fas fa-print mr-2"></i> Imprimir Comanda
                             </button>
-                            <button onclick="copiarComandaImagem()" class="inline-flex items-center justify-center px-4 py-2.5 bg-green-600 border border-transparent rounded-md font-semibold text-white hover:bg-green-700 text-sm sm:text-base">
+                            <button onclick="copiarComandaImagem()" class="inline-flex items-center justify-center px-4 py-2 bg-green-600 border border-transparent rounded-md font-semibold text-white hover:bg-green-700 text-sm sm:text-base">
                                 <i class="fas fa-copy mr-2"></i> Copiar Imagem
+                            </button>
+                        </div>
+<div class="mt-2 no-print">
+                            <button type="button" id="limparPedido" onclick="registrarELimpar()" class="w-full inline-flex items-center justify-center px-4 py-2 bg-red-600 border border-transparent rounded-md font-semibold text-white hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500 text-sm sm:text-base">
+                                <i class="fas fa-trash mr-2"></i> Limpar Tudo
+                            </button>
+                        </div>
+                        <!-- Botão Detalhes -->
+                        <div class="mt-1 no-print">
+                            <button type="button" onclick="abrirModalDetalhes()" id="btnDetalhes" class="w-full inline-flex items-center justify-center px-4 py-2 bg-purple-600 border border-transparent rounded-md font-semibold text-white hover:bg-purple-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-purple-500 text-sm sm:text-base">
+                                <i class="fas fa-chart-bar mr-2"></i> Detalhes
                             </button>
                         </div>
                     </div>
@@ -569,6 +575,40 @@
                         </table>
                     </div>
                 </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal de Detalhes de Produção -->
+    <div id="modalDetalhes" class="confirmation-modal">
+        <div class="confirmation-modal-content" style="max-width: 500px; text-align: left;">
+            <div class="confirmation-modal-icon" style="background: linear-gradient(135deg, #ede9fe 0%, #e0e7ff 100%);">
+                <i class="fas fa-chart-bar" style="color: #7c3aed;"></i>
+            </div>
+            <div class="confirmation-modal-title" style="text-align: center; color: #7c3aed;">Detalhes de Produção</div>
+
+            <div id="detalhesStatusContagem" class="text-center mb-4">
+                <span id="statusContagemTexto" class="text-sm font-medium text-gray-500">Contagem inativa</span>
+            </div>
+
+            <div id="detalhesConteudo" class="space-y-4">
+                <!-- Conteúdo será preenchido via JavaScript -->
+                <div class="text-center text-gray-500 py-8">
+                    <i class="fas fa-hourglass-start text-4xl mb-3"></i>
+                    <p>Ative a contagem do dia para começar.</p>
+                </div>
+            </div>
+
+            <div class="flex flex-col gap-2 mt-4">
+                <button id="btnIniciarContagem" onclick="toggleContagemDia()" class="w-full inline-flex items-center justify-center px-4 py-2.5 bg-indigo-600 border border-transparent rounded-md font-semibold text-white hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 text-sm sm:text-base">
+                    <i class="fas fa-play mr-2"></i> Iniciar Contagem do Dia
+                </button>
+                <button id="btnReiniciarContagem" onclick="reiniciarContagem()" style="display: none;" class="w-full inline-flex items-center justify-center px-4 py-2.5 bg-orange-600 border border-transparent rounded-md font-semibold text-white hover:bg-orange-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-orange-500 text-sm sm:text-base">
+                    <i class="fas fa-redo mr-2"></i> Reiniciar Contagem
+                </button>
+                <button onclick="fecharModalDetalhes()" class="w-full inline-flex items-center justify-center px-4 py-2.5 bg-gray-200 border border-transparent rounded-md font-semibold text-gray-700 hover:bg-gray-300 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-400 text-sm sm:text-base">
+                    <i class="fas fa-times mr-2"></i> Fechar
+                </button>
             </div>
         </div>
     </div>
