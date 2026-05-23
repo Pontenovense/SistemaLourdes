@@ -239,12 +239,13 @@
     transform: none !important;
 }
 
-/* Responsividade Mobile */
+/* Responsividade Mobile - Telas até 768px */
 @media (max-width: 768px) {
     .container {
         padding: 0.5rem !important;
     }
     
+    /* Notification container - tela cheia no mobile */
     .notification-container {
         bottom: 10px;
         right: 10px;
@@ -266,8 +267,7 @@
     
     /* Nome do cliente ainda maior em mobile no modo impressão */
     .kitchen-receipt.print-mode #previewCliente {
-        font-size: 1.25rem !important; /* Ajustado para mobile */
-        /* Manter as propriedades de quebra de linha */
+        font-size: 1.25rem !important;
         word-wrap: break-word !important;
         word-break: break-word !important;
         white-space: normal !important;
@@ -275,18 +275,37 @@
         hyphens: auto !important;
     }
     
-    /* Tabelas responsivas */
+    /* Tabelas responsivas com scroll */
+    .overflow-x-auto {
+        overflow-x: auto;
+        -webkit-overflow-scrolling: touch;
+    }
+    
     table {
         font-size: 0.875rem;
+        min-width: 600px; /* Garante scroll horizontal */
     }
     
     th, td {
         padding: 0.5rem 0.75rem !important;
+        white-space: nowrap; /* Evita quebra irregular */
     }
     
-    /* Formulários mais compactos */
+    /* Formulários - Evita zoom no iOS */
     input, textarea, select {
-        font-size: 16px !important; /* Evita zoom no iOS */
+        font-size: 16px !important;
+        -webkit-appearance: none;
+        -moz-appearance: none;
+        appearance: none;
+    }
+    
+    /* Melhorar selects no mobile */
+    select {
+        background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 20 20'%3e%3cpath stroke='%236b7280' stroke-linecap='round' stroke-linejoin='round' stroke-width='1.5' d='M6 8l4 4 4-4'/%3e%3c/svg%3e");
+        background-position: right 0.5rem center;
+        background-repeat: no-repeat;
+        background-size: 1.5em 1.5em;
+        padding-right: 2.5rem;
     }
     
     /* Cards com menos padding */
@@ -309,6 +328,45 @@
     
     #selecaoSalgados {
         max-height: 150px;
+    }
+    
+    /* Botões com target grande para toque */
+    button, .tab-btn {
+        min-height: 44px;
+        touch-action: manipulation;
+        -webkit-tap-highlight-color: transparent;
+    }
+    
+    /* Inputs com height مناسب */
+    input, textarea, select {
+        min-height: 44px;
+    }
+    
+    /* Labels mais legíveis */
+    label {
+        font-size: 0.875rem;
+    }
+    
+    /* Grid empilhado no mobile */
+    .grid {
+        gap: 1rem !important;
+    }
+    
+    /* Header responsivo */
+    header {
+        text-align: center;
+    }
+    
+    /* Tabs em scroll horizontal */
+    .flex.border-b {
+        overflow-x: auto;
+        -webkit-overflow-scrolling: touch;
+        scrollbar-width: thin;
+    }
+    
+    .tab-btn {
+        flex-shrink: 0;
+        padding: 0.75rem 1rem;
     }
 }
 
@@ -599,5 +657,229 @@
 @media (-webkit-min-device-pixel-ratio: 2), (min-resolution: 192dpi) {
     .kitchen-receipt {
         border-width: 1px;
+    }
+}
+
+/* Suporte para Dark Mode (prefere-color-scheme) */
+@media (prefers-color-scheme: dark) {
+    .login-bg {
+        background: linear-gradient(135deg, #1f2937 0%, #111827 100%);
+    }
+    
+    .login-card {
+        background: rgba(31, 41, 55, 0.95);
+        border-color: rgba(55, 65, 81, 0.3);
+    }
+    
+    .notification {
+        background: #1f2937;
+        color: #f3f4f6;
+    }
+    
+    .notification-message {
+        color: #9ca3af;
+    }
+    
+    .confirmation-modal-content {
+        background: #1f2937;
+        border-color: #374151;
+    }
+    
+    .confirmation-modal-title {
+        color: #f472b6;
+    }
+    
+    .confirmation-modal-message {
+        color: #d1d5db;
+    }
+    
+    table, th, td {
+        background: #1f2937;
+        color: #f3f4f6;
+    }
+    
+    .bg-gray-50, .bg-pink-50, .bg-white {
+        background: #1f2937 !important;
+    }
+}
+
+/* Suporte para Landscape no Mobile */
+@media (max-width: 768px) and (orientation: landscape) {
+    .container {
+        padding: 0.25rem !important;
+    }
+    
+    .login-card {
+        margin: 0.5rem;
+        padding: 0.75rem !important;
+        max-height: 90vh;
+        overflow-y: auto;
+    }
+    
+    .confirmation-modal-content {
+        max-height: 85vh;
+        overflow-y: auto;
+    }
+    
+    /* Tabs mais compactos em landscape */
+    .tab-btn {
+        padding: 0.5rem 0.75rem;
+        font-size: 0.75rem;
+    }
+    
+    /* Layouts em grid mais compactos */
+    .grid {
+        gap: 0.5rem !important;
+    }
+    
+    header {
+        flex-direction: row !important;
+        gap: 0.5rem;
+    }
+}
+
+/* iOS Safari specific fixes */
+@supports (-webkit-touch-callout: none) {
+    /* Ajustar scroll no iOS */
+    html, body {
+        -webkit-overflow-scrolling: touch;
+        overscroll-behavior: none;
+    }
+    
+    /* Inputs no iOS */
+    input, textarea, select {
+        font-size: 16px !important;
+        -webkit-appearance: none;
+        border-radius: 8px !important;
+    }
+    
+    /* Fix para select no iOS Safari */
+    select {
+        -webkit-appearance: none;
+        appearance: none;
+        background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 20 20'%3e%3cpath stroke='%236b7280' stroke-linecap='round' stroke-linejoin='round' stroke-width='1.5' d='M6 8l4 4 4-4'/%3e%3c/svg%3e") !important;
+        background-position: right 0.5rem center !important;
+        background-repeat: no-repeat !important;
+        background-size: 1.25em !important;
+        padding-right: 2rem !important;
+    }
+    
+    /* Botões com feedback visual no iOS */
+    button, .tab-btn {
+        -webkit-appearance: none;
+        -webkit-border-radius: 8px;
+    }
+    
+    button:active {
+        opacity: 0.7;
+    }
+    
+    /* Tabelas com scroll suave no iOS */
+    .overflow-x-auto {
+        -webkit-overflow-scrolling: touch;
+    }
+}
+
+/* Suporte para telas muito pequenas (iPhone SE, etc) */
+@media (max-width: 320px) {
+    .container {
+        padding: 0.15rem !important;
+    }
+    
+    .login-card {
+        margin: 0.25rem;
+        padding: 0.75rem !important;
+    }
+    
+    h1 {
+        font-size: 1.5rem !important;
+    }
+    
+    .floating-icon {
+        font-size: 2rem !important;
+    }
+    
+    button {
+        padding: 0.5rem 0.75rem;
+        font-size: 0.875rem;
+    }
+    
+    .tab-btn {
+        padding: 0.5rem;
+        font-size: 0.75rem;
+    }
+    
+    /* Reduzir padding geral */
+    .p-2, .p-3, .p-4, .p-6 {
+        padding: 0.5rem !important;
+    }
+    
+    /* Inputs menores */
+    input, textarea, select {
+        font-size: 14px !important;
+        padding: 0.5rem !important;
+    }
+    
+    /* Notification menor */
+    .notification {
+        padding: 8px 10px;
+        font-size: 0.75rem;
+    }
+    
+    /* Modal menor */
+    .confirmation-modal-content {
+        padding: 1rem;
+        margin: 0.5rem;
+    }
+    
+    .confirmation-modal-icon {
+        width: 50px;
+        height: 50px;
+        font-size: 1.5rem;
+    }
+}
+
+/* Suporte para browsers antigos */
+@media screen and (max-width: 0px) {
+    /* Fallback para browsers que não suportam media queries modernas */
+}
+
+/* Fix para overflow-x em tabelas */
+table {
+    border-collapse: collapse;
+    width: 100%;
+}
+
+/* Garantir scroll horizontal em todas as situações */
+.overflow-x-auto {
+    overflow-x: auto;
+    overflow-y: hidden;
+}
+
+/* Melhorar scrollbar appearance */
+::-webkit-scrollbar {
+    width: 8px;
+    height: 8px;
+}
+
+::-webkit-scrollbar-track {
+    background: #f1f1f1;
+    border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb {
+    background: #c4c4c4;
+    border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+    background: #a0a0a0;
+}
+
+/* Fix para Firefox */
+@-moz-document url-prefix() {
+    .overflow-x-auto {
+        overflow-x: auto;
+        scrollbar-width: thin;
     }
 }
