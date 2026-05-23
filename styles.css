@@ -637,6 +637,102 @@
     }
 }
 
+/* Modal de Produção - Responsividade */
+.confirmation-modal-content[style*="max-width: 500px"] {
+    max-height: 90vh;
+    overflow-y: auto;
+    display: flex;
+    flex-direction: column;
+}
+
+/* ModalDetalhes específico - mais robusto */
+#modalDetalhes .confirmation-modal-content {
+    max-height: 90vh;
+    overflow-y: auto;
+    display: flex;
+    flex-direction: column;
+    max-width: 500px;
+}
+
+#modalDetalhes .confirmation-modal-content > * {
+    flex-shrink: 0;
+}
+
+#modalDetalhes .confirmation-modal-buttons {
+    margin-top: auto;
+    flex-shrink: 0;
+}
+
+/* Garantir que o conteúdo do modalROLE não exceda a tela */
+@media (max-height: 700px) {
+    .confirmation-modal-content {
+        max-height: 85vh !important;
+        overflow-y: auto !important;
+    }
+    
+    .confirmation-modal-content > *:not(.confirmation-modal-icon):not(.confirmation-modal-title):not(.confirmation-modal-buttons) {
+        flex-shrink: 0;
+    }
+}
+
+@media (max-width: 600px) {
+    .confirmation-modal-content[style*="max-width: 500px"] {
+        width: 95% !important;
+        margin: 0.5rem !important;
+        padding: 1rem !important;
+        max-height: 90vh;
+        overflow-y: auto;
+    }
+    
+    .confirmation-modal-content[style*="max-width: 500px"] .confirmation-modal-icon {
+        width: 50px;
+        height: 50px;
+        font-size: 1.5rem;
+        margin: 0.5rem auto;
+    }
+    
+    .confirmation-modal-content[style*="max-width: 500px"] .confirmation-modal-title {
+        font-size: 1rem;
+        text-align: center;
+    }
+    
+    .confirmation-modal-content[style*="max-width: 500px"] .confirmation-modal-buttons {
+        flex-direction: column;
+        gap: 0.5rem;
+        margin-top: auto;
+    }
+    
+    .confirmation-modal-content[style*="max-width: 500px"] .confirmation-modal-buttons button {
+        width: 100%;
+        padding: 0.625rem 1rem;
+        font-size: 0.875rem;
+    }
+}
+
+@media (max-width: 400px) {
+    .confirmation-modal-content[style*="max-width: 500px"] {
+        padding: 0.75rem !important;
+    }
+    
+    .confirmation-modal-content[style*="max-width: 500px"] .confirmation-modal-icon {
+        width: 40px;
+        height: 40px;
+        font-size: 1.25rem;
+    }
+    
+    .confirmation-modal-content[style*="max-width: 500px"] .confirmation-modal-title {
+        font-size: 0.9rem;
+    }
+    
+    .confirmation-modal-content[style*="max-width: 500px"] #detalhesStatusContagem {
+        font-size: 0.75rem;
+    }
+    
+    .confirmation-modal-content[style*="max-width: 500px"] #detalhesConteudo {
+        font-size: 0.875rem;
+    }
+}
+
 /* Melhorias de acessibilidade */
 @media (prefers-reduced-motion: reduce) {
     .notification {
