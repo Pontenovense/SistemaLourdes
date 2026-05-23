@@ -803,12 +803,20 @@ function editarProduto(id) {
 }
 
 function excluirProduto(id) {
-    if (confirm('Tem certeza que deseja excluir este produto?')) {
-        produtos = produtos.filter(p => p.id !== id);
-        atualizarListaProdutos();
-        atualizarSelectProdutos();
-        showNotification('Produto Excluído!', 'O produto foi removido do catálogo.', 'warning');
-    }
+    const produto = produtos.find(p => p.id === id);
+    showConfirmationModal(
+        'Excluir Produto',
+        `Tem certeza que deseja excluir o produto "${produto.nome}"? Esta ação não pode ser desfeita.`,
+        function() {
+            produtos = produtos.filter(p => p.id !== id);
+            atualizarListaProdutos();
+            atualizarSelectProdutos();
+            showNotification('Produto Excluído!', 'O produto foi removido do catálogo.', 'warning');
+        },
+        null,
+        'Sim, Excluir',
+        'Cancelar'
+    );
 }
 
 function visualizarComanda(id) {
@@ -979,12 +987,19 @@ function copiarComandaPedidoImagem(id) {
 }
 
 function cancelarPedido(id) {
-    if (confirm('Tem certeza que deseja cancelar este pedido?')) {
-        const pedido = pedidos.find(p => p.id === id);
-        pedidos = pedidos.filter(p => p.id !== id);
-        atualizarListaPedidos();
-        showNotification('Pedido Cancelado!', `Pedido de ${pedido.cliente} foi cancelado.`, 'error');
-    }
+    const pedido = pedidos.find(p => p.id === id);
+    showConfirmationModal(
+        'Cancelar Pedido',
+        `Tem certeza que deseja cancelar o pedido de "${pedido.cliente}"?`,
+        function() {
+            pedidos = pedidos.filter(p => p.id !== id);
+            atualizarListaPedidos();
+            showNotification('Pedido Cancelado!', `Pedido de ${pedido.cliente} foi cancelado.`, 'error');
+        },
+        null,
+        'Sim, Cancelar',
+        'Manter'
+    );
 }
 
 // Funções da Calculadora
@@ -2046,42 +2061,49 @@ function toggleContagemDia() {
 
 // Função para reiniciar a contagem
 function reiniciarContagem() {
-    if (confirm('Tem certeza que deseja reiniciar a contagem? Todos os totais serão zerados.')) {
-        // Resetar variáveis
-        contagemAtiva = false;
-        inicioContagemTimestamp = null;
-        
-        // Atualizar botão Iniciar
-        const btnIniciarContagem = document.getElementById('btnIniciarContagem');
-        if (btnIniciarContagem) {
-            btnIniciarContagem.style.display = 'block';
-        }
-        
-        // Esconder botão de reiniciar
-        const btnReiniciarContagem = document.getElementById('btnReiniciarContagem');
-        if (btnReiniciarContagem) {
-            btnReiniciarContagem.style.display = 'none';
-        }
-        
-        // Atualizar status
-        const statusContagemTexto = document.getElementById('statusContagemTexto');
-        if (statusContagemTexto) {
-            statusContagemTexto.innerHTML = '<span class="text-gray-500">Contagem inativa</span>';
-        }
-        
-        // Limpar conteúdo
-        const detalhesConteudo = document.getElementById('detalhesConteudo');
-        if (detalhesConteudo) {
-            detalhesConteudo.innerHTML = `
-                <div class="text-center text-gray-500 py-8">
-                    <i class="fas fa-hourglass-start text-4xl mb-3"></i>
-                    <p>Ative a contagem do dia para começar.</p>
-                </div>
-            `;
-        }
-        
-        showNotification('Contagem Reiniciada!', 'A contagem foi reiniciada. Todos os totais foram zerados.', 'warning');
-    }
+    showConfirmationModal(
+        'Reiniciar Contagem',
+        'Tem certeza que deseja reiniciar a contagem? Todos os totais serão zerados.',
+        function() {
+            // Resetar variáveis
+            contagemAtiva = false;
+            inicioContagemTimestamp = null;
+
+            // Atualizar botão Iniciar
+            const btnIniciarContagem = document.getElementById('btnIniciarContagem');
+            if (btnIniciarContagem) {
+                btnIniciarContagem.style.display = 'block';
+            }
+
+            // Esconder botão de reiniciar
+            const btnReiniciarContagem = document.getElementById('btnReiniciarContagem');
+            if (btnReiniciarContagem) {
+                btnReiniciarContagem.style.display = 'none';
+            }
+
+            // Atualizar status
+            const statusContagemTexto = document.getElementById('statusContagemTexto');
+            if (statusContagemTexto) {
+                statusContagemTexto.innerHTML = '<span class="text-gray-500">Contagem inativa</span>';
+            }
+
+            // Limpar conteúdo
+            const detalhesConteudo = document.getElementById('detalhesConteudo');
+            if (detalhesConteudo) {
+                detalhesConteudo.innerHTML = `
+                    <div class="text-center text-gray-500 py-8">
+                        <i class="fas fa-hourglass-start text-4xl mb-3"></i>
+                        <p>Ative a contagem do dia para começar.</p>
+                    </div>
+                `;
+            }
+            
+            showNotification('Contagem Reiniciada!', 'A contagem foi reiniciada. Todos os totais foram zerados.', 'warning');
+        },
+        null,
+        'Sim, Reiniciar',
+        'Cancelar'
+    );
 }
 
 // Função para distribuir Salgado Mix em tipos individuais

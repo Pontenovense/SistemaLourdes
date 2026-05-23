@@ -634,11 +634,16 @@
             // Exibir nome do usuário
             document.getElementById('nomeUsuario').textContent = usuarioLogado.charAt(0).toUpperCase() + usuarioLogado.slice(1);
 
-            // Configurar botão de logout
+// Configurar botão de logout
             document.getElementById('btnLogout').addEventListener('click', function() {
-                if (confirm('Tem certeza que deseja sair do sistema?')) {
-                    logout();
-                }
+                showConfirmationModal(
+                    'Sair do Sistema',
+                    'Tem certeza que deseja sair do sistema?',
+                    function() { logout(); },
+                    null,
+                    'Sim, Sair',
+                    'Cancelar'
+                );
             });
         }
 
@@ -661,7 +666,7 @@
                 
                 // Se passou mais de 8 horas, fazer logout automático
                 if (diferencaHoras > 8) {
-                    alert('Sua sessão expirou. Faça login novamente.');
+showNotification('Sessão Expirada!', 'Sua sessão expirou. Faça login novamente.', 'warning');
                     logout();
                 }
             }
