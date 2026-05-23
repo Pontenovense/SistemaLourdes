@@ -115,7 +115,7 @@ let valorPedidoEditadoManualmente = false;
 let contagemAtiva = false;
 let inicioContagemTimestamp = null;
 
-// Dados dos Kits Festas
+// Dados dos Kits Festas (preços normais)
 const kitsFestas = {
     10: { pessoas: 10, preco: 295.00, bolo: '1,5kg', salgados: 100, doces: 42, caixasDoces: 1 },
     15: { pessoas: 15, preco: 460.00, bolo: '2kg', salgados: 150, doces: 84, caixasDoces: 2 },
@@ -124,6 +124,30 @@ const kitsFestas = {
     40: { pessoas: 40, preco: 1085.00, bolo: '4kg', salgados: 400, doces: 210, caixasDoces: 5 },
     50: { pessoas: 50, preco: 1340.00, bolo: '5kg', salgados: 500, doces: 252, caixasDoces: 6 }
 };
+
+// Dados dos Kits Festas com bolo de MORANGO (preços especiais)
+const kitsFestasMorango = {
+    10: { pessoas: 10, preco: 310.00, bolo: '1,5kg', salgados: 100, doces: 42, caixasDoces: 1 },
+    15: { pessoas: 15, preco: 480.00, bolo: '2kg', salgados: 150, doces: 84, caixasDoces: 2 },
+    20: { pessoas: 20, preco: 645.00, bolo: '2,5kg', salgados: 200, doces: 126, caixasDoces: 3 },
+    30: { pessoas: 30, preco: 860.00, bolo: '3kg', salgados: 300, doces: 168, caixasDoces: 4 },
+    40: { pessoas: 40, preco: 1125.00, bolo: '4kg', salgados: 400, doces: 210, caixasDoces: 5 },
+    50: { pessoas: 50, preco: 1390.00, bolo: '5kg', salgados: 500, doces: 252, caixasDoces: 6 }
+};
+
+// Função para verificar se o sabor do bolo contém morango
+function isSaborMorango(sabor) {
+    if (!sabor) return false;
+    return sabor.toLowerCase().includes('morango');
+}
+
+// Função para obter o objeto de kit correto baseado no sabor
+function getKitPorSabor(tamanho, sabor) {
+    if (isSaborMorango(sabor)) {
+        return kitsFestasMorango[tamanho] || kitsFestas[tamanho];
+    }
+    return kitsFestas[tamanho];
+}
 
 // Sabores de bolo disponíveis
 const saboresBolo = [
@@ -1532,13 +1556,14 @@ function atualizarPreviewKit() {
         return;
     }
     
-    const kit = kitsFestas[kitAtual.tamanho];
+    // Obter o kit correto baseado no sabor (verifica se é morango)
+    const kit = getKitPorSabor(kitAtual.tamanho, kitAtual.sabor);
     
     // Esconder mensagem inicial e mostrar detalhes
     kitPreview.style.display = 'none';
     kitDetalhes.classList.remove('hidden');
     
-    // Atualizar informações básicas
+    // Atualizar informações básica
     document.getElementById('kitTitulo').textContent = `KIT ${kit.pessoas} PESSOAS`;
     document.getElementById('kitPreco').textContent = formatarMoeda(kit.preco);
     document.getElementById('kitBolo').textContent = kit.bolo;
@@ -1673,7 +1698,8 @@ function adicionarKitAoPedido() {
         return;
     }
 
-    const kit = kitsFestas[kitAtual.tamanho];
+    // Obter o kit correto baseado no sabor (verifica se é morango)
+    const kit = getKitPorSabor(kitAtual.tamanho, kitAtual.sabor);
 
     // Criar descrição detalhada do kit com quantidades específicas
     let descricaoKit = `KIT ${kit.pessoas} PESSOAS:\n`;
