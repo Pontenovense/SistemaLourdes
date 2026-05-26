@@ -756,48 +756,7 @@
     }
 }
 
-/* Suporte para Dark Mode (prefere-color-scheme) */
-@media (prefers-color-scheme: dark) {
-    .login-bg {
-        background: linear-gradient(135deg, #1f2937 0%, #111827 100%);
-    }
-    
-    .login-card {
-        background: rgba(31, 41, 55, 0.95);
-        border-color: rgba(55, 65, 81, 0.3);
-    }
-    
-    .notification {
-        background: #1f2937;
-        color: #f3f4f6;
-    }
-    
-    .notification-message {
-        color: #9ca3af;
-    }
-    
-    .confirmation-modal-content {
-        background: #1f2937;
-        border-color: #374151;
-    }
-    
-    .confirmation-modal-title {
-        color: #f472b6;
-    }
-    
-    .confirmation-modal-message {
-        color: #d1d5db;
-    }
-    
-    table, th, td {
-        background: #1f2937;
-        color: #f3f4f6;
-    }
-    
-    .bg-gray-50, .bg-pink-50, .bg-white {
-        background: #1f2937 !important;
-    }
-}
+
 
 /* Suporte para Landscape no Mobile */
 @media (max-width: 768px) and (orientation: landscape) {
