@@ -101,7 +101,8 @@ let produtos = [
     { id: 45 ,nome: 'Bolo de Pote',nomeAbreviado:'Bolo Pote',preco : 15.00,descricao:'Bolo de Pote',categoria:'Doces',tipoSalgado:null},
     { id: 46 ,nome: 'Copo da Felicidade',nomeAbreviado:'Copo Felicidade',preco : 15.00,descricao:'Copo da Felicidade',categoria:'Doces',tipoSalgado:null},
     { id: 47 ,nome: 'Brownie',nomeAbreviado:'Brownie',preco : 10.00,descricao:'Brownie',categoria:'Doces',tipoSalgado:null},
-    { id: 48, nome: "DIVERSOS", nomeAbreviado: "DIVERSOS", preco: 0.00, descricao: "Produto personalizado - nome e preço definidos no pedido", categoria: "Diversos", tipoSalgado: null }
+    { id: 48, nome: "DIVERSOS", nomeAbreviado: "DIVERSOS", preco: 0.00, descricao: "Produto personalizado - nome e preço definidos no pedido", categoria: "Diversos", tipoSalgado: null },
+    { id: 49, nome: "Combo Copa 92,00", nomeAbreviado: "copa 92", preco: 92.00, descricao: "Produto personalizado - nome e preço definidos no pedido", categoria: "Doces", tipoSalgado: null }
 ];
 
 let pedidos = [];
