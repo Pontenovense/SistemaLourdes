@@ -1,2 +1,4 @@
-node_modules/
-.claude/
+/node_modules
+/.claude
+/.openclaude
+CLAUDE.md
