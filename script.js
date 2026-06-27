@@ -111,6 +111,121 @@ let produtosPedido = [];
 let filtroCategoria = 'todos';
 let valorPedidoEditadoManualmente = false;
 
+// Sistema de Undo (CTRL+Z)
+let undoStack = [];
+const UNDO_LIMIT = 30;
+
+function registrarUndo(type, data) {
+    undoStack.push({ type, data, timestamp: Date.now() });
+    if (undoStack.length > UNDO_LIMIT) {
+        undoStack.shift();
+    }
+    atualizarIndicadorUndo();
+}
+
+function executarUndo() {
+    if (undoStack.length === 0) {
+        showNotification('Nada para desfazer', 'A pilha de ações está vazia.', 'info');
+        return;
+    }
+
+    const acao = undoStack.pop();
+
+    switch (acao.type) {
+        case 'excluirProduto': {
+            const { produto } = acao.data;
+            produtos.push(produto);
+            atualizarListaProdutos();
+            atualizarSelectProdutos();
+            showNotification('Desfeito!', `Produto "${produto.nome}" restaurado ao catálogo.`, 'success');
+            break;
+        }
+        case 'cancelarPedido': {
+            const { pedido } = acao.data;
+            pedidos.push(pedido);
+            atualizarListaPedidos();
+            showNotification('Desfeito!', `Pedido de "${pedido.cliente}" restaurado.`, 'success');
+            break;
+        }
+        case 'removerProdutoPedido': {
+            const { produto, index } = acao.data;
+            produtosPedido.splice(index, 0, produto);
+            recalcularPrecosPedido();
+            atualizarListaProdutosPedido();
+            atualizarPreviewProdutos();
+            atualizarPreview();
+            showNotification('Desfeito!', `"${produto.nome}" restaurado ao pedido.`, 'success');
+            break;
+        }
+        case 'removerProdutoCalculadora': {
+            const { produto, index } = acao.data;
+            produtosCalculadora.splice(index, 0, produto);
+            recalcularPrecosCalculadora();
+            atualizarListaCalculadora();
+            showNotification('Desfeito!', `"${produto.nome}" restaurado à calculadora.`, 'success');
+            break;
+        }
+        case 'limparCalculadora': {
+            const { produtos: produtosAntigos } = acao.data;
+            produtosCalculadora = [...produtosAntigos];
+            recalcularPrecosCalculadora();
+            atualizarListaCalculadora();
+            showNotification('Desfeito!', 'Todos os produtos restaurados à calculadora.', 'success');
+            break;
+        }
+        case 'limparTudoPedido': {
+            const s = acao.data;
+            document.getElementById('clientePedido').value = s.cliente;
+            document.getElementById('horarioPedido').value = s.horario;
+            document.getElementById('valorPedido').value = s.valor;
+            valorPedidoEditadoManualmente = s.valorEditadoManualmente;
+            document.getElementById('depositoPedido').value = s.deposito;
+            document.getElementById('observacoesPedido').value = s.observacoes;
+            document.getElementById('pedidoPago').checked = s.pago;
+            document.getElementById('produtoPedido').value = s.produtoPedido;
+            document.getElementById('quantidadePedido').value = s.quantidadePedido;
+            document.getElementById('descricaoBolo').value = s.descricaoBolo;
+            document.getElementById('nomeDiversos').value = s.nomeDiversos;
+            document.getElementById('precoDiversos').value = s.precoDiversos;
+            const boloContainer = document.getElementById('descricaoBoloContainer');
+            const diversosContainer = document.getElementById('diversosContainer');
+            if (s.descricaoBoloContainerHidden) boloContainer.classList.add('hidden');
+            else boloContainer.classList.remove('hidden');
+            if (s.diversosContainerHidden) diversosContainer.classList.add('hidden');
+            else diversosContainer.classList.remove('hidden');
+            document.getElementById('labelQuantidadePedido').textContent = s.labelQuantidadePedido;
+            produtosPedido = s.produtosPedidoSnapshot.map(p => ({ ...p }));
+            atualizarListaProdutosPedido();
+            atualizarPreviewProdutos();
+            atualizarPreview();
+            showNotification('Desfeito!', 'Todas as informações do pedido foram restauradas.', 'success');
+            break;
+        }
+    }
+
+    atualizarIndicadorUndo();
+}
+
+function atualizarIndicadorUndo() {
+    const indicador = document.getElementById('undoIndicator');
+    if (!indicador) return;
+    if (undoStack.length > 0) {
+        indicador.classList.remove('hidden');
+        indicador.textContent = `↩ ${undoStack.length}`;
+        indicador.title = `${undoStack.length} ação(ões) podem ser desfeitas — CTRL+Z`;
+    } else {
+        indicador.classList.add('hidden');
+    }
+}
+
+// Listener global de CTRL+Z
+document.addEventListener('keydown', function(e) {
+    if ((e.ctrlKey || e.metaKey) && e.key === 'z') {
+        e.preventDefault();
+        executarUndo();
+    }
+});
+
 // Variáveis de controle da contagem de produção
 let contagemAtiva = false;
 let inicioContagemTimestamp = null;
@@ -391,6 +506,27 @@ document.addEventListener('DOMContentLoaded', function() {
         const descricaoGerada = produtosPedido.map(item =>
             `${item.quantidade}x ${item.nome} - ${formatarMoeda(item.preco)} = ${formatarMoeda(item.total)}`
         ).join('\n');
+
+        // Snapshot completo ANTES de registrar + limpar, para suportar undo
+        const snapshotSubmit = {
+            cliente: document.getElementById('clientePedido').value,
+            horario: document.getElementById('horarioPedido').value,
+            valor: document.getElementById('valorPedido').value,
+            valorEditadoManualmente: valorPedidoEditadoManualmente,
+            deposito: document.getElementById('depositoPedido').value,
+            observacoes: document.getElementById('observacoesPedido').value,
+            pago: document.getElementById('pedidoPago').checked,
+            produtoPedido: document.getElementById('produtoPedido').value,
+            quantidadePedido: document.getElementById('quantidadePedido').value,
+            descricaoBolo: document.getElementById('descricaoBolo').value,
+            nomeDiversos: document.getElementById('nomeDiversos').value,
+            precoDiversos: document.getElementById('precoDiversos').value,
+            descricaoBoloContainerHidden: document.getElementById('descricaoBoloContainer').classList.contains('hidden'),
+            diversosContainerHidden: document.getElementById('diversosContainer').classList.contains('hidden'),
+            labelQuantidadePedido: document.getElementById('labelQuantidadePedido').textContent,
+            produtosPedidoSnapshot: produtosPedido.map(p => ({ ...p }))
+        };
+        registrarUndo('limparTudoPedido', snapshotSubmit);
 
         const novoPedido = {
             id: pedidos.length > 0 ? Math.max(...pedidos.map(p => p.id)) + 1 : 1,
@@ -806,8 +942,9 @@ function excluirProduto(id) {
     const produto = produtos.find(p => p.id === id);
     showConfirmationModal(
         'Excluir Produto',
-        `Tem certeza que deseja excluir o produto "${produto.nome}"? Esta ação não pode ser desfeita.`,
+        `Tem certeza que deseja excluir o produto "${produto.nome}"? Use CTRL+Z para desfazer.`,
         function() {
+            registrarUndo('excluirProduto', { produto: { ...produto } });
             produtos = produtos.filter(p => p.id !== id);
             atualizarListaProdutos();
             atualizarSelectProdutos();
@@ -990,8 +1127,9 @@ function cancelarPedido(id) {
     const pedido = pedidos.find(p => p.id === id);
     showConfirmationModal(
         'Cancelar Pedido',
-        `Tem certeza que deseja cancelar o pedido de "${pedido.cliente}"?`,
+        `Tem certeza que deseja cancelar o pedido de "${pedido.cliente}"? Use CTRL+Z para desfazer.`,
         function() {
+            registrarUndo('cancelarPedido', { pedido: { ...pedido, produtos: [...(pedido.produtos || [])] } });
             pedidos = pedidos.filter(p => p.id !== id);
             atualizarListaPedidos();
             showNotification('Pedido Cancelado!', `Pedido de ${pedido.cliente} foi cancelado.`, 'error');
@@ -1057,6 +1195,7 @@ function adicionarProdutoCalculadora() {
 }
 
 function limparCalculadora() {
+    registrarUndo('limparCalculadora', { produtos: [...produtosCalculadora] });
     produtosCalculadora = [];
     atualizarListaCalculadora();
     showNotification('Lista Limpa!', 'Todos os produtos foram removidos da calculadora.', 'info');
@@ -1064,6 +1203,7 @@ function limparCalculadora() {
 
 function removerProdutoCalculadora(index) {
     const produto = produtosCalculadora[index];
+    registrarUndo('removerProdutoCalculadora', { produto: { ...produto }, index });
     produtosCalculadora.splice(index, 1);
     
     // Recalcular preços após remoção
@@ -1326,6 +1466,7 @@ function atualizarListaProdutosPedido() {
 
 function removerProdutoPedido(index) {
     const produto = produtosPedido[index];
+    registrarUndo('removerProdutoPedido', { produto: { ...produto }, index });
     produtosPedido.splice(index, 1);
     
     // Recalcular preços após remoção
@@ -1973,8 +2114,29 @@ function limparTudoPedido() {
 
     showConfirmationModal(
         'Limpar Pedido',
-        'Tem certeza que deseja limpar todas as informações do pedido? Esta ação não pode ser desfeita.',
+        'Tem certeza que deseja limpar todas as informações do pedido? Use CTRL+Z para desfazer.',
         function() {
+            // Snapshot completo do estado do pedido ANTES de limpar, para o undo
+            const snapshot = {
+                cliente: document.getElementById('clientePedido').value,
+                horario: document.getElementById('horarioPedido').value,
+                valor: document.getElementById('valorPedido').value,
+                valorEditadoManualmente: valorPedidoEditadoManualmente,
+                deposito: document.getElementById('depositoPedido').value,
+                observacoes: document.getElementById('observacoesPedido').value,
+                pago: document.getElementById('pedidoPago').checked,
+                produtoPedido: document.getElementById('produtoPedido').value,
+                quantidadePedido: document.getElementById('quantidadePedido').value,
+                descricaoBolo: document.getElementById('descricaoBolo').value,
+                nomeDiversos: document.getElementById('nomeDiversos').value,
+                precoDiversos: document.getElementById('precoDiversos').value,
+                descricaoBoloContainerHidden: document.getElementById('descricaoBoloContainer').classList.contains('hidden'),
+                diversosContainerHidden: document.getElementById('diversosContainer').classList.contains('hidden'),
+                labelQuantidadePedido: document.getElementById('labelQuantidadePedido').textContent,
+                produtosPedidoSnapshot: produtosPedido.map(p => ({ ...p }))
+            };
+            registrarUndo('limparTudoPedido', snapshot);
+
             // Função executada quando confirmar
             // Limpar todos os campos do formulário
             document.getElementById('clientePedido').value = '';
