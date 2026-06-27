@@ -2407,19 +2407,23 @@ function registrarELimpar() {
 function calcularDetalhesProducao() {
     // Objetos para armazenar os totais
     const totais = {
+        pedidosContados: 0,
         salgadosTotais: 0,
         docesTotais: 0,
         boloKgTotal: 0,
         salgadosPorTipo: {},
         docesPorTipo: {}
     };
-    
+
     // Filter pedidos made after the start timestamp
     const pedidosFiltrados = pedidos.filter(pedido => {
         if (!inicioContagemTimestamp) return false;
         return pedido.dataCriacao && pedido.dataCriacao >= inicioContagemTimestamp;
     });
-    
+
+    // Contar total de pedidos que serão produzidos
+    totais.pedidosContados = pedidosFiltrados.length;
+
 // Process each order
     for (const pedido of pedidosFiltrados) {
         // Process each product in the order
@@ -2615,7 +2619,11 @@ function exibirDetalhesProducao(totais) {
         <!-- Resumo Geral -->
         <div class="bg-gradient-to-r from-pink-50 to-purple-50 p-4 rounded-lg border border-pink-200 mb-4">
             <h3 class="font-bold text-lg text-pink-700 mb-3 text-center">📊 RESUMO DE PRODUÇÃO</h3>
-            <div class="grid grid-cols-3 gap-2 text-center">
+            <div class="grid grid-cols-4 gap-2 text-center">
+                <div class="bg-white p-2 rounded shadow-sm">
+                    <div class="text-2xl font-bold text-blue-600">${totais.pedidosContados}</div>
+                    <div class="text-xs text-gray-600">Pedidos</div>
+                </div>
                 <div class="bg-white p-2 rounded shadow-sm">
                     <div class="text-2xl font-bold text-pink-600">${totais.salgadosTotais}</div>
                     <div class="text-xs text-gray-600">Salgados</div>
@@ -2630,13 +2638,24 @@ function exibirDetalhesProducao(totais) {
                 </div>
             </div>
         </div>
-        
+
+        <!-- Detalhamento Pedidos -->
+        <div class="bg-white p-3 rounded border border-gray-200">
+            <h4 class="font-semibold text-blue-700 mb-2">📦 Pedidos a Produzir:</h4>
+            <div class="text-sm">
+                <div class="flex justify-between">
+                    <span>Total de pedidos contabilizados</span>
+                    <span class="font-bold">${totais.pedidosContados}</span>
+                </div>
+            </div>
+        </div>
+
         <!-- Detalhamento Salgados -->
         <div class="bg-white p-3 rounded border border-gray-200">
             <h4 class="font-semibold text-pink-700 mb-2">🥟 Salgados por Tipo:</h4>
             <div class="space-y-1 text-sm">${salgadosHtml}</div>
         </div>
-        
+
         <!-- Detalhamento Doces -->
         <div class="bg-white p-3 rounded border border-gray-200">
             <h4 class="font-semibold text-yellow-700 mb-2">🍬 Doces por Tipo:</h4>
