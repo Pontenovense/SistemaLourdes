@@ -938,3 +938,8 @@ table {
         scrollbar-width: thin;
     }
 }
+
+/* Inputs em maiúsculo na aba de pedidos */
+.uppercase-input {
+    text-transform: uppercase;
+}
