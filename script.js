@@ -371,6 +371,35 @@ function calcularDistribuicaoSalgados(totalSalgados, tiposSalgados) {
 
 // Dom Ready
 document.addEventListener('DOMContentLoaded', function() {
+    // Dark Mode Toggle
+    const toggleDarkMode = document.getElementById('toggleDarkMode');
+    if (toggleDarkMode) {
+        // Restaurar modo salvo
+        const isDark = localStorage.getItem('darkMode') === 'true';
+        if (isDark) {
+            document.body.classList.add('dark-mode');
+            updateToggleIcon(true);
+        }
+
+        toggleDarkMode.addEventListener('click', () => {
+            document.body.classList.toggle('dark-mode');
+            const dark = document.body.classList.contains('dark-mode');
+            localStorage.setItem('darkMode', dark);
+            updateToggleIcon(dark);
+        });
+    }
+
+    function updateToggleIcon(isDark) {
+        const icon = toggleDarkMode.querySelector('i');
+        if (isDark) {
+            icon.classList.remove('fa-moon');
+            icon.classList.add('fa-sun');
+        } else {
+            icon.classList.remove('fa-sun');
+            icon.classList.add('fa-moon');
+        }
+    }
+
     // Tabs
     const tabs = document.querySelectorAll('.tab-btn');
     tabs.forEach(tab => {

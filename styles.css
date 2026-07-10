@@ -943,3 +943,387 @@ table {
 .uppercase-input {
     text-transform: uppercase;
 }
+
+/* ============================================
+   DARK MODE - SistemaLourdes
+   Importante: NÃO afeta o preview da comanda (#previewNotinha, .kitchen-receipt)
+   ============================================ */
+
+/* CSS Variables */
+:root {
+  --dm-bg-primary: #ffffff;
+  --dm-bg-secondary: #f9fafb;
+  --dm-bg-tertiary: #f3f4f6;
+  --dm-text-primary: #111827;
+  --dm-text-secondary: #374151;
+  --dm-text-muted: #6b7280;
+  --dm-border-color: #e5e7eb;
+  --dm-accent: #db2777;
+  --dm-accent-light: #fdf2f8;
+  --dm-card-bg: #ffffff;
+  --dm-input-bg: #ffffff;
+  --dm-input-border: #d1d5db;
+  --dm-success: #22c55e;
+}
+
+body.dark-mode {
+  --dm-bg-primary: #111827;
+  --dm-bg-secondary: #1f2937;
+  --dm-bg-tertiary: #374151;
+  --dm-text-primary: #f9fafb;
+  --dm-text-secondary: #e5e7eb;
+  --dm-text-muted: #9ca3af;
+  --dm-border-color: #374151;
+  --dm-accent-light: #4c0519;
+  --dm-card-bg: #1f2937;
+  --dm-input-bg: #374151;
+  --dm-input-border: #4b5563;
+}
+
+/* Body e containers principais */
+body.dark-mode {
+  background-color: var(--dm-bg-primary) !important;
+  color: var(--dm-text-primary) !important;
+}
+
+body.dark-mode.bg-gray-50 {
+  background-color: var(--dm-bg-primary) !important;
+}
+
+/* Toggle Button */
+#toggleDarkMode {
+  position: fixed;
+  top: 1rem;
+  right: 1rem;
+  z-index: 9999;
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+  border: 2px solid var(--dm-border-color);
+  background-color: var(--dm-bg-secondary);
+  color: var(--dm-text-secondary);
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.3s ease;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
+
+#toggleDarkMode:hover {
+  transform: scale(1.1);
+}
+
+body.dark-mode #toggleDarkMode {
+  background-color: var(--dm-bg-secondary);
+  border-color: var(--dm-border-color);
+  color: var(--dm-text-primary);
+}
+
+#toggleDarkMode .fa-sun {
+  color: #f59e0b;
+}
+
+body.dark-mode #toggleDarkMode .fa-moon {
+  color: #fbbf24;
+}
+
+/* Cards brancos */
+body.dark-mode .bg-white {
+  background-color: var(--dm-card-bg) !important;
+}
+
+body.dark-mode .bg-white.rounded-lg,
+body.dark-mode .bg-white.rounded-lg.shadow-md {
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.15) !important;
+}
+
+/* Header */
+body.dark-mode header h1,
+body.dark-mode header p,
+body.dark-mode .text-gray-600 {
+  color: var(--dm-text-muted) !important;
+}
+
+body.dark-mode .text-gray-700,
+body.dark-mode .text-gray-800 {
+  color: var(--dm-text-secondary) !important;
+}
+
+/* Tabs */
+body.dark-mode .tab-btn {
+  color: var(--dm-text-muted) !important;
+  border-color: transparent !important;
+}
+
+body.dark-mode .tab-btn:hover {
+  color: var(--dm-accent) !important;
+  background-color: var(--dm-bg-tertiary) !important;
+}
+
+body.dark-mode .tab-btn.active {
+  color: var(--dm-accent) !important;
+  border-color: var(--dm-accent) !important;
+  background-color: var(--dm-accent-light) !important;
+}
+
+/* Backgrounds */
+body.dark-mode .bg-gray-50 {
+  background-color: var(--dm-bg-secondary) !important;
+}
+
+body.dark-mode .bg-gray-100 {
+  background-color: var(--dm-bg-tertiary) !important;
+}
+
+body.dark-mode .bg-pink-50 {
+  background-color: var(--dm-accent-light) !important;
+}
+
+/* Borders */
+body.dark-mode .border,
+body.dark-mode .border-gray-200,
+body.dark-mode .border-gray-300 {
+  border-color: var(--dm-border-color) !important;
+}
+
+/* Inputs */
+body.dark-mode input[type="text"],
+body.dark-mode input[type="number"],
+body.dark-mode input[type="password"],
+body.dark-mode input[type="datetime-local"],
+body.dark-mode select,
+body.dark-mode textarea {
+  background-color: var(--dm-input-bg) !important;
+  border-color: var(--dm-input-border) !important;
+  color: var(--dm-text-primary) !important;
+}
+
+body.dark-mode input::placeholder,
+body.dark-mode textarea::placeholder {
+  color: var(--dm-text-muted) !important;
+}
+
+/* Select options */
+body.dark-mode select option {
+  background-color: var(--dm-input-bg);
+  color: var(--dm-text-primary);
+}
+
+/* Labels */
+body.dark-mode label {
+  color: var(--dm-text-secondary) !important;
+}
+
+/* Tables */
+body.dark-mode table {
+  color: var(--dm-text-primary);
+}
+
+body.dark-mode table thead {
+  background-color: var(--dm-bg-secondary) !important;
+}
+
+body.dark-mode table thead th {
+  color: var(--dm-text-muted) !important;
+}
+
+body.dark-mode table tbody tr {
+  background-color: var(--dm-card-bg) !important;
+  border-color: var(--dm-border-color) !important;
+}
+
+body.dark-mode table tbody tr:hover {
+  background-color: var(--dm-bg-tertiary) !important;
+}
+
+/* ============================================
+   KITS FESTAS
+   ============================================ */
+body.dark-mode .kit-card {
+  background-color: var(--dm-card-bg) !important;
+  border-color: var(--dm-border-color) !important;
+  color: var(--dm-text-primary) !important;
+}
+
+body.dark-mode .kit-card:hover {
+  border-color: var(--dm-accent) !important;
+}
+
+body.dark-mode .kit-card label {
+  color: var(--dm-text-primary) !important;
+}
+
+body.dark-mode .kit-card .text-gray-500,
+body.dark-mode .kit-card .text-gray-600 {
+  color: var(--dm-text-muted) !important;
+}
+
+body.dark-mode .kit-card .text-pink-600,
+body.dark-mode .kit-card .text-pink-700 {
+  color: var(--dm-accent) !important;
+}
+
+body.dark-mode .kit-card .text-green-600 {
+  color: var(--dm-success) !important;
+}
+
+body.dark-mode .kit-card .font-semibold {
+  color: var(--dm-text-primary) !important;
+}
+
+body.dark-mode .kit-option input[type="radio"]:checked + .kit-card {
+  border-color: var(--dm-accent) !important;
+  background-color: var(--dm-accent-light) !important;
+}
+
+/* ============================================
+   PEDIDOS - Checkbox Pago
+   ============================================ */
+body.dark-mode input[type="checkbox"]#pedidoPago {
+  accent-color: var(--dm-success);
+}
+
+body.dark-mode label[for="pedidoPago"] {
+  color: var(--dm-success) !important;
+}
+
+/* Depósito/Pago */
+body.dark-mode #depositoPedido {
+  background-color: var(--dm-input-bg) !important;
+  border-color: var(--dm-input-border) !important;
+  color: var(--dm-text-primary) !important;
+}
+
+/* Badges */
+body.dark-mode .bg-red-100 {
+  background-color: rgba(239, 68, 68, 0.2) !important;
+}
+
+body.dark-mode .text-red-700 {
+  color: #f87171 !important;
+}
+
+/* Total do pedido */
+body.dark-mode .bg-pink-50 .text-pink-700,
+body.dark-mode .bg-pink-50 .text-pink-600 {
+  color: var(--dm-accent) !important;
+}
+
+body.dark-mode .bg-pink-50 .text-2xl,
+body.dark-mode .bg-pink-50 .text-3xl {
+  color: var(--dm-accent) !important;
+}
+
+/* Lista de produtos do pedido */
+body.dark-mode #produtosPedidoLista {
+  background-color: var(--dm-card-bg) !important;
+  border-color: var(--dm-border-color) !important;
+}
+
+body.dark-mode #produtosPedidoLista p {
+  color: var(--dm-text-muted) !important;
+}
+
+/* ============================================
+   MODAIS
+   ============================================ */
+body.dark-mode .confirmation-modal {
+  background-color: rgba(0, 0, 0, 0.75) !important;
+}
+
+body.dark-mode .confirmation-modal-content {
+  background-color: var(--dm-card-bg) !important;
+  color: var(--dm-text-primary) !important;
+  border: 1px solid var(--dm-border-color) !important;
+}
+
+body.dark-mode .confirmation-modal-icon {
+  background-color: var(--dm-bg-tertiary) !important;
+}
+
+body.dark-mode .confirmation-modal-title {
+  color: var(--dm-text-primary) !important;
+}
+
+body.dark-mode .confirmation-modal-message {
+  color: var(--dm-text-muted) !important;
+}
+
+body.dark-mode .confirmation-modal-button {
+  background-color: var(--dm-bg-tertiary) !important;
+  color: var(--dm-text-primary) !important;
+  border-color: var(--dm-border-color) !important;
+}
+
+body.dark-mode .confirmation-modal-button:hover {
+  background-color: var(--dm-bg-secondary) !important;
+}
+
+body.dark-mode .confirmation-modal-button.confirm {
+  background-color: var(--dm-accent) !important;
+  color: white !important;
+  border-color: var(--dm-accent) !important;
+}
+
+/* ============================================
+   NOTIFICAÇÕES
+   ============================================ */
+body.dark-mode .notification {
+  background-color: var(--dm-card-bg) !important;
+  color: var(--dm-text-primary) !important;
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.3) !important;
+}
+
+body.dark-mode .notification-message {
+  color: var(--dm-text-muted) !important;
+}
+
+body.dark-mode .notification-close:hover {
+  background: var(--dm-bg-tertiary) !important;
+}
+
+/* ============================================
+   SCROLLBAR
+   ============================================ */
+body.dark-mode ::-webkit-scrollbar-track {
+  background: var(--dm-bg-tertiary);
+}
+
+body.dark-mode ::-webkit-scrollbar-thumb {
+  background: var(--dm-text-muted);
+}
+
+/* ============================================
+   PREVIEW COMANDA - SEMPRE LIGHT MODE
+   Importante: Estes elementos são EXCLUÍDOS do dark mode
+   ============================================ */
+body.dark-mode #previewNotinha,
+body.dark-mode #previewNotinha * {
+  background-color: #ffffff !important;
+  color: #111827 !important;
+  border-color: #e5e7eb !important;
+}
+
+body.dark-mode #previewNotinha .text-gray-500,
+body.dark-mode #previewNotinha .text-gray-600 {
+  color: #6b7280 !important;
+}
+
+body.dark-mode #previewNotinha .bg-green-100 {
+  background-color: #dcfce7 !important;
+}
+
+body.dark-mode #previewNotinha .bg-yellow-100 {
+  background-color: #fef9c3 !important;
+}
+
+body.dark-mode .kitchen-receipt,
+body.dark-mode .kitchen-receipt * {
+  background-color: #ffffff !important;
+  color: #111827 !important;
+}
+
+/* ============================================
+   FIM DARK MODE
+   ============================================ */
