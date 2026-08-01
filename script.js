@@ -2708,6 +2708,10 @@ function gerarConteudoRelatorioProducao() {
         return "Contagem inativa\nAtive a contagem do dia para começar.";
     }
 
+    // Calcular data de amanhã para o relatório
+    const dataRelatorio = new Date();
+    dataRelatorio.setDate(dataRelatorio.getDate() + 1);
+
     // Objetos para armazenar os totais
     const totais = {
         pedidosContados: 0,
@@ -2822,7 +2826,7 @@ function gerarConteudoRelatorioProducao() {
 
     // Gerar conteúdo do relatório
     let conteudo = `RELATÓRIO DE PRODUÇÃO - SISTEMA CONFEITARIA LOURDES
-Data: ${new Date().toLocaleDateString('pt-BR')}
+Data: ${dataRelatorio.toLocaleDateString('pt-BR')}
 Hora: ${new Date().toLocaleTimeString('pt-BR')}
 ==================================================
 
