@@ -2696,8 +2696,207 @@ function exibirDetalhesProducao(totais) {
 // Função para fechar o modal de detalhes
 function fecharModalDetalhes() {
     const modal = document.getElementById('modalDetalhes');
-    
+
     if (modal) {
         modal.classList.remove('show');
+    }
+}
+
+// Função para gerar o conteúdo do relatório em texto simples
+function gerarConteudoRelatorioProducao() {
+    if (!contagemAtiva || !inicioContagemTimestamp) {
+        return "Contagem inativa\nAtive a contagem do dia para começar.";
+    }
+
+    // Objetos para armazenar os totais
+    const totais = {
+        pedidosContados: 0,
+        salgadosTotais: 0,
+        docesTotais: 0,
+        boloKgTotal: 0,
+        salgadosPorTipo: {},
+        docesPorTipo: {}
+    };
+
+    // Filter pedidos made after the start timestamp
+    const pedidosFiltrados = pedidos.filter(pedido => {
+        if (!inicioContagemTimestamp) return false;
+        return pedido.dataCriacao && pedido.dataCriacao >= inicioContagemTimestamp;
+    });
+
+    // Contar total de pedidos que serão produzidos
+    totais.pedidosContados = pedidosFiltrados.length;
+
+    // Process each order
+    for (const pedido of pedidosFiltrados) {
+        // Process each product in the order
+        for (const item of pedido.produtos) {
+            // Find the product info from our products array
+            const produtoInfo = produtos.find(p => p.id === item.id);
+
+            // Handle kits
+            if (item.isKit && item.kitDetalhes) {
+                const kit = kitsFestas[item.kitDetalhes.tamanho];
+                if (!kit) continue;
+
+                // === DISTRIBUIR SALGADOS DO KIT (igual ao Salgado Mix) ===
+                const salgadosKit = distribuirKitSalgados(kit.salgados);
+                for (const salgado of salgadosKit) {
+                    totais.salgadosTotais += salgado.quantidade;
+                    totais.salgadosPorTipo[salgado.tipo] = (totais.salgadosPorTipo[salgado.tipo] || 0) + salgado.quantidade;
+                }
+
+                // === DISTRIBUIR DOCES DO KIT (igual ao Doce Mix 42un por caixa) ===
+                const docesKit = distribuirKitDoces(kit.doces, kit.caixasDoces);
+                for (const doce of docesKit) {
+                    totais.docesTotais += doce.quantidade;
+                    totais.docesPorTipo[doce.tipo] = (totais.docesPorTipo[doce.tipo] || 0) + doce.quantidade;
+                }
+
+                // === INCLUIR BOLO DO KIT ===
+                // Extrair kg do bolo do kit (ex: "1,5kg" -> 1.5)
+                const boloKg = parseFloat(kit.bolo.replace('kg', '').replace(',', '.'));
+                if (!isNaN(boloKg)) {
+                    totais.boloKgTotal += boloKg;
+                }
+                continue;
+            }
+
+            // Skip if product not found
+            if (!produtoInfo) continue;
+
+            // Get the category from product info
+            const categoria = produtoInfo.categoria;
+            const nomeProduto = item.nome;
+            const quantidade = item.quantidade || 0;
+
+            // === TRATAR SALGADO MIX ===
+            if (nomeProduto && nomeProduto.toLowerCase() === 'salgado mix') {
+                // Distribuir em tipos individuais
+                const salgadosDistribuidos = distribuirSalgadoMix(quantidade);
+                for (const salgado of salgadosDistribuidos) {
+                    totais.salgadosTotais += salgado.quantidade;
+                    totais.salgadosPorTipo[salgado.tipo] = (totais.salgadosPorTipo[salgado.tipo] || 0) + salgado.quantidade;
+                }
+                continue;
+            }
+
+            // === TRATAR DOCE MIX 100UN ===
+            if (nomeProduto && nomeProduto.toLowerCase() === 'caixa doce mix 100un') {
+                // Distribuir em tipos individuais (100un)
+                const docesDistribuidos = distribuirDoceMix100(quantidade);
+                for (const doce of docesDistribuidos) {
+                    totais.docesTotais += doce.quantidade;
+                    totais.docesPorTipo[doce.tipo] = (totais.docesPorTipo[doce.tipo] || 0) + doce.quantidade;
+                }
+                continue;
+            }
+
+            // === TRATAR DOCE MIX 42UN ===
+            if (nomeProduto && nomeProduto.toLowerCase() === 'caixa doce mix 42un') {
+                // Distribuir em tipos individuais (42un)
+                const docesDistribuidos = distribuirDoceMix42(quantidade);
+                for (const doce of docesDistribuidos) {
+                    totais.docesTotais += doce.quantidade;
+                    totais.docesPorTipo[doce.tipo] = (totais.docesPorTipo[doce.tipo] || 0) + doce.quantidade;
+                }
+                continue;
+            }
+
+            // Check if it's Bolo (special case - counted in KG)
+            if (nomeProduto && nomeProduto.toLowerCase() === 'bolo') {
+                totais.boloKgTotal += quantidade;
+                continue;
+            }
+
+            // Categorize based on type
+            if (categoria === 'Salgados') {
+                totais.salgadosTotais += quantidade;
+                totais.salgadosPorTipo[nomeProduto] = (totais.salgadosPorTipo[nomeProduto] || 0) + quantidade;
+            } else if (categoria === 'Doces') {
+                totais.docesTotais += quantidade;
+                totais.docesPorTipo[nomeProduto] = (totais.docesPorTipo[nomeProduto] || 0) + quantidade;
+            }
+        }
+    }
+
+    // Gerar conteúdo do relatório
+    let conteudo = `RELATÓRIO DE PRODUÇÃO - SISTEMA CONFEITARIA LOURDES
+Data: ${new Date().toLocaleDateString('pt-BR')}
+Hora: ${new Date().toLocaleTimeString('pt-BR')}
+==================================================
+
+📊 RESUMO DE PRODUÇÃO
+Pedidos Contados: ${totais.pedidosContados}
+Salgados Totais: ${totais.salgadosTotais}
+Doces Totais: ${totais.docesTotais}
+KG Bolo: ${totais.boloKgTotal.toFixed(2)}
+
+📦 Pedidos a Produzir:
+Total de pedidos contabilizados: ${totais.pedidosContados}
+
+🥟 Salgados por Tipo:
+${Object.keys(totais.salgadosPorTipo).length > 0
+    ? Object.entries(totais.salgadosPorTipo)
+        .sort((a, b) => b[1] - a[1])
+        .map(([nome, qty]) => `${nome}: ${qty}`)
+        .join('\n')
+    : 'Nenhum salgado registrado'
+}
+
+🍬 Doces por Tipo:
+${Object.keys(totais.docesPorTipo).length > 0
+    ? Object.entries(totais.docesPorTipo)
+        .sort((a, b) => b[1] - a[1])
+        .map(([nome, qty]) => `${nome}: ${qty}`)
+        .join('\n')
+    : 'Nenhum doce registrado'}
+`;
+
+    return conteudo;
+}
+
+// Função para baixar o relatório de produção
+function baixarRelatorioProducao() {
+    if (!contagemAtiva || !inicioContagemTimestamp) {
+        showNotification('Erro!', 'Ative a contagem do dia para gerar o relatório.', 'error');
+        return;
+    }
+
+    const conteudo = gerarConteudoRelatorioProducao();
+    const blob = new Blob([conteudo], { type: 'text/plain;charset=utf-8' });
+    const hoje = new Date();
+    const dataFormatada = hoje.toLocaleDateString('pt-BR').replace(/\//g, '-');
+    const horaFormatada = hoje.toLocaleTimeString('pt-BR').replace(/:/g, '-');
+    const nomeArquivo = `Relatorio_Producao_${dataFormatada}_${horaFormatada}.txt`;
+
+    // Criar link de download
+    const link = document.createElement('a');
+    link.href = URL.createObjectURL(blob);
+    link.download = nomeArquivo;
+
+    // Adicionar ao documento, clicar e remover
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+
+    showNotification('Sucesso!', `Relatório baixado como ${nomeArquivo}`, 'success');
+}
+
+// Função para copiar o relatório de produção para a área de transferência
+async function copiarRelatorioProducao() {
+    if (!contagemAtiva || !inicioContagemTimestamp) {
+        showNotification('Erro!', 'Ative a contagem do dia para gerar o relatório.', 'error');
+        return;
+    }
+
+    const conteudo = gerarConteudoRelatorioProducao();
+
+    try {
+        await navigator.clipboard.writeText(conteudo);
+        showNotification('Sucesso!', 'Relatório copiado para a área de transferência', 'success');
+    } catch (err) {
+        showNotification('Erro!', 'Falha ao copiar para a área de transferência', 'error');
+        console.error('Falha ao copiar: ', err);
     }
 }

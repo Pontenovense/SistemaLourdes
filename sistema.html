@@ -613,6 +613,14 @@
                 <button id="btnReiniciarContagem" onclick="reiniciarContagem()" style="display: none;" class="w-full inline-flex items-center justify-center px-4 py-2.5 bg-orange-600 border border-transparent rounded-md font-semibold text-white hover:bg-orange-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-orange-500 text-sm sm:text-base">
                     <i class="fas fa-redo mr-2"></i> Reiniciar Contagem
                 </button>
+                <div class="flex flex-col space-y-2">
+                    <button id="btnBaixarRelatorio" onclick="baixarRelatorioProducao()" class="w-full inline-flex items-center justify-center px-4 py-2 bg-blue-600 border border-transparent rounded-md font-semibold text-white hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 text-sm sm:text-base">
+                        <i class="fas fa-download mr-2"></i> Baixar Relatório (.txt)
+                    </button>
+                    <button id="btnCopiarRelatorio" onclick="copiarRelatorioProducao()" class="w-full inline-flex items-center justify-center px-4 py-2 bg-green-600 border border-transparent rounded-md font-semibold text-white hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500 text-sm sm:text-base">
+                        <i class="fas fa-copy mr-2"></i> Copiar Relatório
+                    </button>
+                </div>
                 <button onclick="fecharModalDetalhes()" class="w-full inline-flex items-center justify-center px-4 py-2.5 bg-gray-200 border border-transparent rounded-md font-semibold text-gray-700 hover:bg-gray-300 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-400 text-sm sm:text-base">
                     <i class="fas fa-times mr-2"></i> Fechar
                 </button>
