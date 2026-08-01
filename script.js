@@ -54,14 +54,14 @@ function closeNotification(button) {
 
 // Dados iniciais
 let produtos = [
-    { id: 1, nome: "Salgado Mix", nomeAbreviado: "salg mix", preco: 0.95, descricao: "Salgado frito - valor por unidade", categoria: "Salgados", tipoSalgado: null },
+    { id: 1, nome: "Salgado Mix", nomeAbreviado: "salg mix", preco: 1.00, descricao: "Salgado frito - valor por unidade", categoria: "Salgados", tipoSalgado: null },
     { id: 2, nome: "Doce Mix", nomeAbreviado: "doce mix", preco: 1.70, descricao: "Doce - valor por unidade", categoria: "Doces", tipoSalgado: null },
-    { id: 3, nome: "Coxinha", nomeAbreviado: "Coxinha", preco: 0.95, descricao: "Salgado frito - valor por unidade", categoria: "Salgados", tipoSalgado: "frito_promocional" },
-    { id: 4, nome: "Risoles de carne", nomeAbreviado: "Risoles carne", preco: 0.95, descricao: "Salgado frito - valor por unidade", categoria: "Salgados", tipoSalgado: "frito_promocional" },
+    { id: 3, nome: "Coxinha", nomeAbreviado: "Coxinha", preco: 1.00, descricao: "Salgado frito - valor por unidade", categoria: "Salgados", tipoSalgado: "frito_promocional" },
+    { id: 4, nome: "Risoles de carne", nomeAbreviado: "Risoles carne", preco: 1.00, descricao: "Salgado frito - valor por unidade", categoria: "Salgados", tipoSalgado: "frito_promocional" },
     { id: 5, nome: "Risoles de palmito", nomeAbreviado: "Risoles palmito", preco: 1.20, descricao: "Salgado frito - valor por unidade", categoria: "Salgados", tipoSalgado: "frito_promocional_count" },
-    { id: 6, nome: "Kibe", nomeAbreviado: "Kibe", preco: 0.95, descricao: "Salgado frito - valor por unidade", categoria: "Salgados", tipoSalgado: "frito_promocional" },
-    { id: 7, nome: "Bolinha de queijo", nomeAbreviado: "B.queijo", preco: 0.95, descricao: "Salgado frito - valor por unidade", categoria: "Salgados", tipoSalgado:"frito_promocional" },
-    { id: 8, nome: "Croquete de presunto e queijo", nomeAbreviado: "Balão", preco: 0.95, descricao: "Salgado frito - valor por unidade", categoria: "Salgados", tipoSalgado: "frito_promocional" },
+    { id: 6, nome: "Kibe", nomeAbreviado: "Kibe", preco: 1.00, descricao: "Salgado frito - valor por unidade", categoria: "Salgados", tipoSalgado: "frito_promocional" },
+    { id: 7, nome: "Bolinha de queijo", nomeAbreviado: "B.queijo", preco: 1.00, descricao: "Salgado frito - valor por unidade", categoria: "Salgados", tipoSalgado:"frito_promocional" },
+    { id: 8, nome: "Croquete de presunto e queijo", nomeAbreviado: "Balão", preco: 1.00, descricao: "Salgado frito - valor por unidade", categoria: "Salgados", tipoSalgado: "frito_promocional" },
     { id: 9, nome: "Enroladinho de vina", nomeAbreviado: "Enroladinho vina", preco: 0.90, descricao: "Salgado frito - valor por unidade", categoria: "Salgados", tipoSalgado: "frito_promocional" },
     { id: 10, nome: "Pastel de carne", nomeAbreviado: "Pastel carne", preco: 1.10, descricao: "Salgado frito - valor por unidade", categoria: "Salgados", tipoSalgado: "frito_normal" },
     { id: 11, nome: "Pastel de queijo", nomeAbreviado: "Pastel queijo", preco: 1.10, descricao: "Salgado frito - valor por unidade", categoria: "Salgados", tipoSalgado: "frito_normal" },
@@ -308,8 +308,8 @@ function calcularPrecoSalgadoFrito(listaProdutos) {
         })
         .reduce((total, item) => total + item.quantidade, 0);
 
-    // Retornar preço baseado na quantidade total
-    return totalSalgadosFritos >= 100 ? 0.95 : 1.00;
+    // Sempre retornar preço fixo de 1.00 (desconto removido)
+    return 1.00;
 }
 
 // Função para recalcular preços na calculadora
@@ -1187,9 +1187,9 @@ function adicionarProdutoCalculadora() {
     const produto = produtos.find(p => p.id === produtoId);
     let precoFinal = produto.preco;
 
-    // Para Salgado Mix, usar preço baseado na quantidade
+    // Para Salgado Mix, usar preço fixo de 1.00
     if (produto.id === 1) {
-        precoFinal = quantidade < 100 ? 1.00 : 0.95;
+        precoFinal = 1.00;
     }
 
     // Para salgados fritos promocionais, usar preço dinâmico
@@ -1286,8 +1286,8 @@ function atualizarListaCalculadora() {
             <div class="font-medium text-blue-800">📋 Regra de Preço Salgados Fritos:</div>
             <div class="text-blue-700">
                 Total salgados promocionais: ${totalSalgadosPromocionais} unidades<br>
-                Preço aplicado: ${formatarMoeda(totalSalgadosPromocionais >= 100 ? 0.95 : 1.00)} por unidade<br>
-                <span class="text-xs">${totalSalgadosPromocionais >= 100 ? '✅ Desconto ativo (≥100 un)' : '⚠️ Desconto inativo (<100 un)'}</span>
+                Preço aplicado: ${formatarMoeda(1.00)} por unidade<br>
+                <span class="text-xs">⚠️ Desconto removido (preço fixo)</span>
             </div>
         `;
         lista.appendChild(infoRegra);
@@ -1313,9 +1313,9 @@ function calcularTotalItemPedido() {
     if (produtoId) {
         const produto = produtos.find(p => p.id === produtoId);
         let precoFinal = produto.preco;
-        // Para Salgado Mix, usar preço baseado na quantidade
+        // Para Salgado Mix, usar preço fixo de 1.00
         if (produto.id === 1) {
-            precoFinal = quantidade < 100 ? 1.00 : 0.95;
+            precoFinal = 1.00;
         }
         document.getElementById('precoUnitarioPedido').textContent = formatarMoeda(precoFinal);
         if (quantidade > 0) {
@@ -1366,9 +1366,9 @@ function adicionarProdutoAoPedido() {
         precoFinal = precoPersonalizado;
     }
 
-    // Para Salgado Mix, usar preço baseado na quantidade
+    // Para Salgado Mix, usar preço fixo de 1.00
     if (produto.id === 1) {
-        precoFinal = quantidade < 100 ? 1.00 : 0.95;
+        precoFinal = 1.00;
     }
 
     // Para salgados fritos promocionais, usar preço dinâmico
