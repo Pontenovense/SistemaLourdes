@@ -232,11 +232,11 @@ let inicioContagemTimestamp = null;
 
 // Dados dos Kits Festas (preços normais)
 const kitsFestas = {
-    10: { pessoas: 10, preco: 295.00, bolo: '1,5kg', salgados: 100, doces: 42, caixasDoces: 1 },
+    10: { pessoas: 10, preco: 300.00, bolo: '1,5kg', salgados: 100, doces: 42, caixasDoces: 1 },
     15: { pessoas: 15, preco: 460.00, bolo: '2kg', salgados: 150, doces: 84, caixasDoces: 2 },
     20: { pessoas: 20, preco: 620.00, bolo: '2,5kg', salgados: 200, doces: 126, caixasDoces: 3 },
     30: { pessoas: 30, preco: 830.00, bolo: '3kg', salgados: 300, doces: 168, caixasDoces: 4 },
-    40: { pessoas: 40, preco: 1085.00, bolo: '4kg', salgados: 400, doces: 210, caixasDoces: 5 },
+    40: { pessoas: 40, preco: 1090.00, bolo: '4kg', salgados: 400, doces: 210, caixasDoces: 5 },
     50: { pessoas: 50, preco: 1340.00, bolo: '5kg', salgados: 500, doces: 252, caixasDoces: 6 }
 };
 
@@ -244,9 +244,9 @@ const kitsFestas = {
 const kitsFestasMorango = {
     10: { pessoas: 10, preco: 310.00, bolo: '1,5kg', salgados: 100, doces: 42, caixasDoces: 1 },
     15: { pessoas: 15, preco: 480.00, bolo: '2kg', salgados: 150, doces: 84, caixasDoces: 2 },
-    20: { pessoas: 20, preco: 645.00, bolo: '2,5kg', salgados: 200, doces: 126, caixasDoces: 3 },
+    20: { pessoas: 20, preco: 650.00, bolo: '2,5kg', salgados: 200, doces: 126, caixasDoces: 3 },
     30: { pessoas: 30, preco: 860.00, bolo: '3kg', salgados: 300, doces: 168, caixasDoces: 4 },
-    40: { pessoas: 40, preco: 1125.00, bolo: '4kg', salgados: 400, doces: 210, caixasDoces: 5 },
+    40: { pessoas: 40, preco: 1130.00, bolo: '4kg', salgados: 400, doces: 210, caixasDoces: 5 },
     50: { pessoas: 50, preco: 1390.00, bolo: '5kg', salgados: 500, doces: 252, caixasDoces: 6 }
 };
 
